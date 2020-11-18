@@ -24,7 +24,7 @@ FLAGS = flags.FLAGS
 
 # Dataset, model directory and run mode
 flags.DEFINE_string(
-    "train_dir", "/tmp/nerual_rendering", "Directory for model training."
+    "train_dir", "/tmp/neural_rendering", "Directory for model training."
 )
 flags.DEFINE_string("dataset_name", "sanmarco9k", "name ID for a dataset.")
 flags.DEFINE_string(
@@ -92,6 +92,12 @@ flags.DEFINE_string(
     "",
     "Model dir for training G with a fixed appearance net.",
 )
+flags.DEFINE_boolean(
+    "use_buffer_appearance",
+    True,
+    "Whether to use the rendered buffer for the appearance encoder.",
+)
+
 
 # -----------------------------------------------------------------------------
 
@@ -220,6 +226,9 @@ flags.DEFINE_string(
     "input_app_seg", "", "input appearance segmentation mask image name for" "inference"
 )
 flags.DEFINE_string("output_img_name", "", "[OPTIONAL] output image name for inference")
+flags.DEFINE_boolean(
+    "use_semantic_gt", True, "Whether to compute semantic masks from reference images"
+)
 
 # -----------------------------------------------------------------------------
 # Some validation and assertions

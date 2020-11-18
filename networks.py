@@ -49,7 +49,11 @@ class ModelPGGAN(RenderingModel):
     def __init__(self, use_appearance=True):
         self._use_appearance = use_appearance
         self._content_encoder = None
-        self._generator = GeneratorPGGAN(appearance_vec_size=opts.app_vector_size)
+        self._generator = GeneratorPGGAN(
+            appearance_vec_size=opts.app_vector_size,
+            input_nc=opts.deep_buffer_nc,
+            num_blocks=opts.pggan_n_blocks,
+        )
         if use_appearance:
             self._appearance_encoder = DRITAppearanceEncoderConcat(
                 "appearance_net", opts.appearance_nc, opts.normalize_drit_Ez

@@ -43,8 +43,13 @@ def create_computation_graph(
 
     rerenderer = networks.RenderingModel(arch_type, use_appearance)
     app_enc = rerenderer.get_appearance_encoder()
+
+    # discriminator = networks.MultiScaleDiscriminator(
+    #     "d_model", opts.appearance_nc, num_scales=3, nf=64, n_layers=3, get_fmaps=False
+    # )
+    disc_input_nc = opts.deep_buffer_nc + 3
     discriminator = networks.MultiScaleDiscriminator(
-        "d_model", opts.appearance_nc, num_scales=3, nf=64, n_layers=3, get_fmaps=False
+        "d_model", disc_input_nc, num_scales=3, nf=64, n_layers=3, get_fmaps=False
     )
 
     # ---------------------------------------------------------------------------
@@ -102,8 +107,11 @@ def create_computation_graph(
     # Show input appearance images
     if opts.use_appearance:
         x_app_rgb = tf.slice(x_app, [0, 0, 0, 0], [-1, -1, -1, 3])
-        x_app_sem = tf.slice(x_app, [0, 0, 0, 7], [-1, -1, -1, -1])
-        tb_app_visualization = tf.concat([x_app_rgb, x_app_sem], axis=2)
+        if opts.use_buffer_appearance:
+            x_app_sem = tf.slice(x_app, [0, 0, 0, 7], [-1, -1, -1, -1])
+            tb_app_visualization = tf.concat([x_app_rgb, x_app_sem], axis=2)
+        else:
+            tb_app_visualization = x_app_rgb
         tf.summary.image("input appearance image", tb_app_visualization)
 
     # Loss summaries

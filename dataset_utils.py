@@ -29,6 +29,11 @@ import tensorflow as tf
 import segment_dataset as segment_utils
 import utils
 
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
+
 FLAGS = flags.FLAGS
 flags.DEFINE_string("output_dir", None, "Directory to save exported tfrecords.")
 flags.DEFINE_string(
@@ -75,6 +80,8 @@ class AlignedRenderedDataset(object):
             img_depth = cv2.imread(depth_img_name, cv2.IMREAD_UNCHANGED)
             # Workaround as some depth images are read with a different data type!
             img_depth = img_depth.astype(np.uint16)
+            if len(img_depth.shape) > 2:
+                img_depth = img_depth[:, :, 0]
             # Read reference image if exists, otherwise replace with a zero image.
             if osp.exists(ref_img_name):
                 img_ref = cv2.imread(ref_img_name)
@@ -94,10 +101,13 @@ class AlignedRenderedDataset(object):
                     img_depth = utils.get_central_crop(img_depth)
 
             img_shape = img_depth.shape
-            assert img_seg.shape == (img_shape + (3,)), "error in seg image %s %s" % (
-                basename,
-                str(img_seg.shape),
-            )
+            if self.use_semantic_map:
+                assert img_seg.shape == (
+                    img_shape + (3,)
+                ), "error in seg image %s %s" % (
+                    basename,
+                    str(img_seg.shape),
+                )
             assert img_ref.shape == (img_shape + (3,)), "error in ref image %s %s" % (
                 basename,
                 str(img_ref.shape),
@@ -124,7 +134,9 @@ class AlignedRenderedDataset(object):
             raise StopIteration()
 
 
-def filter_out_sparse_renders(dataset_dir, splits, ratio_threshold=0.15):
+def filter_out_sparse_renders(
+    dataset_dir, splits, ratio_threshold=0.15, min_width=256, min_height=256
+):
     print("Filtering %s" % dataset_dir)
     if splits is None:
         imgs_dirs = [dataset_dir]
@@ -149,11 +161,11 @@ def filter_out_sparse_renders(dataset_dir, splits, ratio_threshold=0.15):
             mask = aggregate > 0
             density = np.sum(mask) * 1.0 / (height * width)
             sum_density += density
-            if density <= ratio_threshold:
+            if density <= ratio_threshold or width < min_width or height < min_height:
                 parent, basename = osp.split(img_path)
                 basename = basename[:-10]  # remove the '_color.png' suffix
                 srcs = sorted(glob.glob(osp.join(parent, basename + "_*")))
-                dest = unicode(filtered_dir + "/.")
+                dest = str(filtered_dir + "/.")
                 for src in srcs:
                     shutil.move(src, dest)
                 filtered_images.append(basename)
@@ -188,8 +200,8 @@ def _to_example(dictionary):
 
 def _generate_tfrecord_dataset(generator, output_name, output_dir):
     """Convert a dataset into TFRecord format."""
-    output_filename = os.path.join(output_dir, output_name)
-    output_file = os.path.join(output_dir, output_filename)
+    # output_filename = os.path.join(output_dir, output_name)
+    output_file = os.path.join(output_dir, output_name)
     tf.logging.info("Writing TFRecords to file %s", output_file)
     writer = tf.python_io.TFRecordWriter(output_file)
 
@@ -206,27 +218,40 @@ def _generate_tfrecord_dataset(generator, output_name, output_dir):
 
 
 def export_aligned_dataset_to_tfrecord(
-    dataset_dir, output_dir, output_basename, splits, xception_frozen_graph_path
+    dataset_dir,
+    output_dir,
+    output_basename,
+    splits,
+    xception_frozen_graph_path,
+    segment_reference=True,
 ):
 
     # Step 1: filter out sparse renders
     filter_out_sparse_renders(dataset_dir, splits, 0.15)
 
     # Step 2: generate semantic segmentation masks
-    segment_utils.segment_and_color_dataset(
-        dataset_dir, xception_frozen_graph_path, splits
-    )
+    if opts.use_semantic:
+        segment_utils.segment_and_color_dataset(
+            dataset_dir,
+            xception_frozen_graph_path,
+            splits,
+            segment_reference=segment_reference,
+        )
 
     # Step 3: export dataset to TFRecord
     if splits is None:
         input_filepattern = osp.join(dataset_dir, "*_color.png")
-        dataset_iter = AlignedRenderedDataset(input_filepattern)
+        dataset_iter = AlignedRenderedDataset(
+            input_filepattern, use_semantic_map=opts.use_semantic
+        )
         output_name = output_basename + ".tfrecord"
         _generate_tfrecord_dataset(dataset_iter, output_name, output_dir)
     else:
         for split in splits:
             input_filepattern = osp.join(dataset_dir, split, "*_color.png")
-            dataset_iter = AlignedRenderedDataset(input_filepattern)
+            dataset_iter = AlignedRenderedDataset(
+                input_filepattern, use_semantic_map=opts.use_semantic
+            )
             output_name = "%s_%s.tfrecord" % (output_basename, split)
             _generate_tfrecord_dataset(dataset_iter, output_name, output_dir)
 
@@ -235,12 +260,18 @@ def main(argv):
     # Read input flags
     dataset_name = opts.dataset_name
     dataset_parent_dir = opts.dataset_parent_dir
+    use_reference_img = opts.use_semantic_gt
     output_dir = FLAGS.output_dir
     xception_frozen_graph_path = FLAGS.xception_frozen_graph_path
-    splits = ["train", "val"]
+    splits = None if opts.run_mode == "eval_dir" else ["train", "val"]
     # Run the preprocessing pipeline
     export_aligned_dataset_to_tfrecord(
-        dataset_parent_dir, output_dir, dataset_name, splits, xception_frozen_graph_path
+        dataset_parent_dir,
+        output_dir,
+        dataset_name,
+        splits,
+        xception_frozen_graph_path,
+        segment_reference=use_reference_img,
     )
 
 

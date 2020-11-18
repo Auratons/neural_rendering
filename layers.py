@@ -19,7 +19,7 @@ import tensorflow as tf
 
 class LayerInstanceNorm(object):
     def __init__(self, scope_suffix="instance_norm"):
-        curr_scope = tf.get_variable_scope().name
+        curr_scope = tf.compat.v1.get_variable_scope().name
         self._scope = curr_scope + "/" + scope_suffix
 
     def __call__(self, x):
@@ -42,7 +42,7 @@ def pixel_norm(x):
     Returns:
       4D tensor with pixel normalized channels.
     """
-    return x * tf.rsqrt(tf.reduce_mean(tf.square(x), [-1], keepdims=True) + 1e-8)
+    return x * tf.math.rsqrt(tf.reduce_mean(tf.square(x), [-1], keepdims=True) + 1e-8)
 
 
 def global_avg_pooling(x):
@@ -54,7 +54,7 @@ class FullyConnected(object):
         weight_init = tf.random_normal_initializer(mean=0.0, stddev=0.02)
         weight_regularizer = tf.contrib.layers.l2_regularizer(scale=0.0001)
 
-        curr_scope = tf.get_variable_scope().name
+        curr_scope = tf.compat.v1.get_variable_scope().name
         self._scope = curr_scope + "/" + scope_suffix
         self.fc_layer = functools.partial(
             tf.layers.dense,
@@ -117,12 +117,12 @@ class LayerConv(object):
                 init_scale, pre_scale = pre_scale, init_scale
             self._stride = stride
             self._pre_scale = pre_scale
-            self._weight = tf.get_variable(
+            self._weight = tf.compat.v1.get_variable(
                 "weight",
                 shape=shape,
                 initializer=tf.random_normal_initializer(stddev=init_scale),
             )
-            self._bias = tf.get_variable(
+            self._bias = tf.compat.v1.get_variable(
                 "bias", shape=[n[1]], initializer=tf.zeros_initializer
             )
 
@@ -185,12 +185,12 @@ class LayerTransposedConv(object):
             if use_scaling:
                 init_scale, pre_scale = pre_scale, init_scale
             self._pre_scale = pre_scale
-            self._weight = tf.get_variable(
+            self._weight = tf.compat.v1.get_variable(
                 "weight",
                 shape=kernel_shape,
                 initializer=tf.random_normal_initializer(stddev=init_scale),
             )
-            self._bias = tf.get_variable(
+            self._bias = tf.compat.v1.get_variable(
                 "bias", shape=[self.nc_out], initializer=tf.zeros_initializer
             )
 
@@ -331,12 +331,12 @@ class LayerDense(object):
             if use_scaling:
                 init_scale, pre_scale = pre_scale, init_scale
             self._pre_scale = pre_scale
-            self._weight = tf.get_variable(
+            self._weight = tf.compat.v1.get_variable(
                 "weight",
                 shape=n,
                 initializer=tf.random_normal_initializer(stddev=init_scale),
             )
-            self._bias = tf.get_variable(
+            self._bias = tf.compat.v1.get_variable(
                 "bias", shape=[n[1]], initializer=tf.zeros_initializer
             )
 
@@ -376,7 +376,7 @@ def downscale(x, n=2):
     """
     if n == 1:
         return x
-    return tf.nn.avg_pool(x, [1, n, n, 1], [1, n, n, 1], "VALID")
+    return tf.nn.avg_pool2d(x, [1, n, n, 1], [1, n, n, 1], "VALID")
 
 
 def upscale(x, n):

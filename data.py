@@ -122,7 +122,10 @@ def _parser_rendered_dataset(
     appearance_input = []
     if use_appearance:
         # Concatenate the deep buffer to the real image.
-        appearance_input = tf.concat([real, conditional_input], axis=-1)
+        if opts.use_buffer_appearance:
+            appearance_input = tf.concat([real, conditional_input], axis=-1)
+        else:
+            appearance_input = real
         # Verify that the parsed input has the correct number of channels.
         assert appearance_input.shape[-1] == opts.appearance_nc, (
             "num channels "

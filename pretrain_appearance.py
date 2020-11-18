@@ -26,6 +26,8 @@ import style_loss
 import tensorflow as tf
 import utils
 
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
+
 
 def _load_and_concatenate_image_channels(
     rgb_path=None, rendered_path=None, depth_path=None, seg_path=None, crop_size=512
@@ -43,23 +45,26 @@ def _load_and_concatenate_image_channels(
         rgb_img = np.array(Image.open(rgb_path)).astype(np.float32)
         rgb_img = utils.get_central_crop(rgb_img, crop_size, crop_size)
         channels = channels + (rgb_img,)
-    if rendered_path is not None:
+    if opts.use_buffer_appearance and rendered_path is not None:
         rendered_img = np.array(Image.open(rendered_path)).astype(np.float32)
         rendered_img = utils.get_central_crop(rendered_img, crop_size, crop_size)
         if not opts.use_alpha:
             rendered_img = rendered_img[:, :, :3]  # drop the alpha channel
         channels = channels + (rendered_img,)
-    if depth_path is not None:
+    if opts.use_buffer_appearance and depth_path is not None:
         depth_img = np.array(Image.open(depth_path))
+        if len(depth_img.shape) > 2:
+            depth_img = depth_img[:, :, 0]
         depth_img = depth_img.astype(np.float32)
         depth_img = utils.get_central_crop(depth_img, crop_size, crop_size)
         channels = channels + (depth_img,)
-    if seg_path is not None:
+    if opts.use_buffer_appearance and seg_path is not None:
         seg_img = np.array(Image.open(seg_path)).astype(np.float32)
         channels = channels + (seg_img,)
     # Concatenate and normalize channels
     img = np.dstack(channels)
     img = img * (2.0 / 255) - 1.0
+
     return img
 
 
@@ -108,13 +113,16 @@ def get_triplet_input_fn(
         positive_img_idx = sorted_neighbors[anchor_idx][positive_neighbor_idx]
         negative_img_idx = sorted_neighbors[anchor_idx][negative_neighbor_idx]
         # Read anchor image
-        anchor_rgb_path = osp.join(dataset_path, filenames[anchor_idx])
+        # anchor_rgb_path = osp.join(dataset_path, filenames[anchor_idx])
+        anchor_rgb_path = filenames[anchor_idx]
         anchor_input = read_single_appearance_input(anchor_rgb_path)
         # Read positive image
-        positive_rgb_path = osp.join(dataset_path, filenames[positive_img_idx])
+        # positive_rgb_path = osp.join(dataset_path, filenames[positive_img_idx])
+        positive_rgb_path = filenames[positive_img_idx]
         positive_input = read_single_appearance_input(positive_rgb_path)
         # Read negative image
-        negative_rgb_path = osp.join(dataset_path, filenames[negative_img_idx])
+        # negative_rgb_path = osp.join(dataset_path, filenames[negative_img_idx])
+        negative_rgb_path = filenames[negative_img_idx]
         negative_input = read_single_appearance_input(negative_rgb_path)
         # Return triplet
         return anchor_input, positive_input, negative_input
@@ -172,7 +180,7 @@ def build_model_fn(batch_size, lr_app_pretrain=0.0001, adam_beta1=0.0, adam_beta
     def model_fn(features, labels, mode, params):
         del labels, params
 
-        step = tf.train.get_global_step()
+        step = tf.compat.v1.train.get_global_step()
         app_func = networks.DRITAppearanceEncoderConcat(
             "appearance_net", opts.appearance_nc, opts.normalize_drit_Ez
         )
@@ -258,8 +266,9 @@ def compute_dist_matrix(imageset_dir, dist_file_path, recompute_dist=False):
 
 
 def train_appearance(train_dir, imageset_dir, dist_file_path):
-    batch_size = 8
+    batch_size = opts.batch_size
     lr_app_pretrain = 0.001
+    steps = (500 << 10) // batch_size
 
     trainset_size = len(glob.glob(osp.join(imageset_dir, "*_reference.png")))
     resume_step = utils.load_global_step_from_checkpoint_dir(train_dir)
@@ -268,9 +277,9 @@ def train_appearance(train_dir, imageset_dir, dist_file_path):
     model_fn = build_model_fn(batch_size, lr_app_pretrain)
     config = tf.estimator.RunConfig(
         save_summary_steps=50,
-        save_checkpoints_steps=500,
+        save_checkpoints_steps=100,
         keep_checkpoint_max=5,
-        log_step_count_steps=100,
+        log_step_count_steps=10,
     )
     est = tf.estimator.Estimator(
         tf.contrib.estimator.replicate_model_fn(model_fn), train_dir, config, params={}
@@ -280,7 +289,7 @@ def train_appearance(train_dir, imageset_dir, dist_file_path):
         imageset_dir, trainset_size, dist_file_path, batch_size=batch_size
     ).get_next()
     print("Starting pretraining steps...")
-    est.train(input_train_fn, steps=None, hooks=None)  # train indefinitely
+    est.train(input_train_fn, steps=steps, hooks=None)  # train indefinitely
 
 
 def main(argv):

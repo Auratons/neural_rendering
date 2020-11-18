@@ -16,6 +16,7 @@ from PIL import Image
 from absl import app
 from options import FLAGS as opts
 import data
+import os
 import datetime
 import functools
 import glob
@@ -30,6 +31,8 @@ import staged_model
 import tensorflow as tf
 import time
 import utils
+
+os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 
 def build_model_fn(use_exponential_moving_average=True):
@@ -224,9 +227,15 @@ def visualize_image_sequence(
 
     # Compute appearance embedding only once and use it for all input frames.
     app_rgb_path = app_base_path + "_reference.png"
-    app_rendered_path = app_base_path + "_color.png"
-    app_depth_path = app_base_path + "_depth.png"
-    app_sem_path = app_base_path + "_seg_rgb.png"
+    app_rendered_path = (
+        app_base_path + "_color.png" if opts.use_buffer_appearance else None
+    )
+    app_depth_path = (
+        app_base_path + "_depth.png" if opts.use_buffer_appearance else None
+    )
+    app_sem_path = (
+        app_base_path + "_seg_rgb.png" if opts.use_buffer_appearance else None
+    )
     x_app = _load_and_concatenate_image_channels(
         app_rgb_path, app_rendered_path, app_depth_path, app_sem_path
     )
@@ -344,7 +353,7 @@ def train(
             "DBG: Saving a validation grid image %06d to %s" % (next_kimg, image_dir)
         )
         make_sample_grid_and_save(
-            est, dataset_name, dataset_parent_dir, (3, 3), image_dir, next_kimg << 10
+            est, dataset_name, dataset_parent_dir, (1, 1), image_dir, next_kimg << 10
         )
 
 
@@ -395,13 +404,16 @@ def evaluate_image_set(
     )
 
     print("Evaluating images for subset %s" % subset_suffix)
+    start = time.time()
     images = [x for x in est.predict(est_inp_fn)]
+    end = time.time()
     print("Evaluated %d images" % len(images))
     for i, img in enumerate(images):
         output_file_path = osp.join(output_dir, "out_%04d.png" % i)
         print("Saving file #%d: %s" % (i, output_file_path))
         with tf.gfile.Open(output_file_path, "wb") as f:
             f.write(utils.to_png(img))
+    print("\n\n\nElapsed time : {}\n\n\n".format((end - start) / len(images)))
 
 
 def _load_and_concatenate_image_channels(
@@ -419,17 +431,32 @@ def _load_and_concatenate_image_channels(
     channels = ()
     if rgb_path is not None:
         rgb_img = np.array(Image.open(rgb_path)).astype(np.float32)
+        rgb_img = utils.get_central_crop(
+            rgb_img, crop_height=opts.train_resolution, crop_width=opts.train_resolution
+        )
         rgb_img = utils.crop_to_multiple(rgb_img, size_multiple)
         channels = channels + (rgb_img,)
     if rendered_path is not None:
         rendered_img = np.array(Image.open(rendered_path)).astype(np.float32)
         if not opts.use_alpha:
             rendered_img = rendered_img[:, :, :3]  # drop the alpha channel
+        rendered_img = utils.get_central_crop(
+            rendered_img,
+            crop_height=opts.train_resolution,
+            crop_width=opts.train_resolution,
+        )
         rendered_img = utils.crop_to_multiple(rendered_img, size_multiple)
         channels = channels + (rendered_img,)
     if depth_path is not None:
         depth_img = np.array(Image.open(depth_path))
+        if len(depth_img.shape) > 2:
+            depth_img = depth_img[:, :, 0]
         depth_img = depth_img.astype(np.float32)
+        depth_img = utils.get_central_crop(
+            depth_img,
+            crop_height=opts.train_resolution,
+            crop_width=opts.train_resolution,
+        )
         depth_img = utils.crop_to_multiple(depth_img[:, :, np.newaxis], size_multiple)
         channels = channels + (depth_img,)
         # depth_img = depth_img * (2.0 / 255) - 1.0
@@ -451,11 +478,22 @@ def infer_dir(model_dir, input_dir, output_dir):
     def read_image(base_path, is_appearance=False):
         if is_appearance:
             ref_img_path = base_path + "_reference.png"
+            rendered_img_path = (
+                base_path + "_color.png" if opts.use_buffer_appearance else None
+            )
+            depth_img_path = (
+                base_path + "_depth.png" if opts.use_buffer_appearance else None
+            )
+            seg_img_path = (
+                base_path + "_seg_rgb.png"
+                if (opts.use_semantic and opts.use_buffer_appearance)
+                else None
+            )
         else:
             ref_img_path = None
-        rendered_img_path = base_path + "_color.png"
-        depth_img_path = base_path + "_depth.png"
-        seg_img_path = base_path + "_seg_rgb.png"
+            rendered_img_path = base_path + "_color.png"
+            depth_img_path = base_path + "_depth.png"
+            seg_img_path = base_path + "_seg_rgb.png" if opts.use_semantic else None
         img = _load_and_concatenate_image_channels(
             rgb_path=ref_img_path,
             rendered_path=rendered_img_path,
@@ -520,9 +558,21 @@ def joint_interpolation(
     app_inputs = []
     for app_basename in [st_app_basename, end_app_basename]:
         app_rgb_path = osp.join(app_input_dir, app_basename + "_reference.png")
-        app_rendered_path = osp.join(app_input_dir, app_basename + "_color.png")
-        app_depth_path = osp.join(app_input_dir, app_basename + "_depth.png")
-        app_seg_path = osp.join(app_input_dir, app_basename + "_seg_rgb.png")
+        app_rendered_path = (
+            osp.join(app_input_dir, app_basename + "_color.png")
+            if opts.use_buffer_appearance
+            else None
+        )
+        app_depth_path = (
+            osp.join(app_input_dir, app_basename + "_depth.png")
+            if opts.use_buffer_appearance
+            else None
+        )
+        app_seg_path = (
+            osp.join(app_input_dir, app_basename + "_seg_rgb.png")
+            if opts.use_buffer_appearance
+            else None
+        )
         app_in = _load_and_concatenate_image_channels(
             rgb_path=app_rgb_path,
             rendered_path=app_rendered_path,
@@ -616,9 +666,21 @@ def interpolate_appearance(
     app_inputs = []
     for app_basename in [appearance_img1_basename, appearance_img2_basename]:
         app_rgb_path = osp.join(input_dir, app_basename + "_reference.png")
-        app_rendered_path = osp.join(input_dir, app_basename + "_color.png")
-        app_depth_path = osp.join(input_dir, app_basename + "_depth.png")
-        app_seg_path = osp.join(input_dir, app_basename + "_seg_rgb.png")
+        app_rendered_path = (
+            osp.join(input_dir, app_basename + "_color.png")
+            if opts.use_buffer_appearance
+            else None
+        )
+        app_depth_path = (
+            osp.join(input_dir, app_basename + "_depth.png")
+            if opts.use_buffer_appearance
+            else None
+        )
+        app_seg_path = (
+            osp.join(input_dir, app_basename + "_seg_rgb.png")
+            if opts.use_buffer_appearance
+            else None
+        )
         app_in = _load_and_concatenate_image_channels(
             rgb_path=app_rgb_path,
             rendered_path=app_rendered_path,

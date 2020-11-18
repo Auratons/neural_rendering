@@ -29,6 +29,9 @@ import shutil
 import tensorflow as tf
 import utils
 
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+
 
 def get_semantic_color_coding():
     """
@@ -134,7 +137,12 @@ def _apply_colors(seg_images_path, save_dir, idx_to_color):
 # The frozen xception model only segments 512x512 images. But it would be better
 # to segment the full image instead!
 def segment_images(
-    images_path, xception_frozen_graph_path, save_dir, crop_height=512, crop_width=512
+    images_path,
+    xception_frozen_graph_path,
+    save_dir,
+    crop_height=512,
+    crop_width=512,
+    segment_reference=True,
 ):
     if not osp.exists(xception_frozen_graph_path):
         raise OSError(
@@ -165,10 +173,14 @@ def segment_images(
             print(
                 "Segmenting image %05d / %05d: %s" % (i + 1, len(images_path), img_path)
             )
-            img = np.array(Image.open(img_path))
+            if segment_reference:
+                img = np.array(Image.open(img_path))
+            else:
+                img = np.array(Image.open(img_path))[:, :, :3]
             if len(img.shape) == 2 or img.shape[2] != 3:
                 print("Warning! corrupted image %s" % img_path)
-                img_base_path = img_path[:-14]  # remove the '_reference.png' suffix
+                # img_base_path = img_path[:-14]  # remove the '_reference.png' suffix
+                img_base_path = img_path.split("_")[0]
                 srcs = sorted(glob.glob(img_base_path + "_*"))
                 dest = unicode(corrupted_dir + "/.")
                 for src in srcs:
@@ -183,7 +195,8 @@ def segment_images(
             seg = np.squeeze(np.uint8(seg))  # convert to uint8 and squeeze to WxH.
             parent_dir, filename = osp.split(img_path)
             basename, ext = osp.splitext(filename)
-            basename = basename[:-10]  # remove the '_reference' suffix
+            # basename = basename[:-10]  # remove the '_reference' suffix
+            basename = basename.split("_")[0]  # remove the '_reference' suffix
             seg_filename = basename + "_seg.png"
             seg_filepath = osp.join(save_dir, seg_filename)
             # Save segmentation image
@@ -191,7 +204,11 @@ def segment_images(
 
 
 def segment_and_color_dataset(
-    dataset_dir, xception_frozen_graph_path, splits=None, resegment_images=True
+    dataset_dir,
+    xception_frozen_graph_path,
+    splits=None,
+    resegment_images=True,
+    segment_reference=True,
 ):
     if splits is None:
         imgs_dirs = [dataset_dir]
@@ -199,7 +216,10 @@ def segment_and_color_dataset(
         imgs_dirs = [osp.join(dataset_dir, split) for split in splits]
 
     for cur_dir in imgs_dirs:
-        imgs_file_pattern = osp.join(cur_dir, "*_reference.png")
+        if segment_reference:
+            imgs_file_pattern = osp.join(cur_dir, "*_reference.png")
+        else:
+            imgs_file_pattern = osp.join(cur_dir, "*_color.png")
         images_path = sorted(glob.glob(imgs_file_pattern))
         if resegment_images:
             segment_images(
@@ -208,6 +228,7 @@ def segment_and_color_dataset(
                 cur_dir,
                 crop_height=512,
                 crop_width=512,
+                segment_reference=segment_reference,
             )
 
     idx_to_col = get_semantic_color_coding()
