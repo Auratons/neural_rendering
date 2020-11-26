@@ -139,3 +139,4 @@ cython_debug/
 
 # Project-specific stuff
 deeplabv3_xception_ade20k_train/
+.vscode/

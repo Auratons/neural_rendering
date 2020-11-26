@@ -118,7 +118,7 @@ def read_cameras_binary(path_to_model_file):
     cameras = {}
     with open(path_to_model_file, "rb") as fid:
         num_cameras = read_next_bytes(fid, 8, "Q")[0]
-        for camera_line_index in range(num_cameras):
+        for camera_line_index in range(num_cameras):  # pylint: disable=unused-variable
             camera_properties = read_next_bytes(
                 fid, num_bytes=24, format_char_sequence="iiQQ"
             )
@@ -188,7 +188,7 @@ def read_images_binary(path_to_model_file):
     images = {}
     with open(path_to_model_file, "rb") as fid:
         num_reg_images = read_next_bytes(fid, 8, "Q")[0]
-        for image_index in range(num_reg_images):
+        for image_index in range(num_reg_images):  # pylint: disable=unused-variable
             binary_image_properties = read_next_bytes(
                 fid, num_bytes=64, format_char_sequence="idddddddi"
             )
@@ -266,7 +266,7 @@ def read_points3d_binary(path_to_model_file):
     points3D = {}
     with open(path_to_model_file, "rb") as fid:
         num_points = read_next_bytes(fid, 8, "Q")[0]
-        for point_line_index in range(num_points):
+        for point_line_index in range(num_points):  # pylint: disable=unused-variable
             binary_point_line_properties = read_next_bytes(
                 fid, num_bytes=43, format_char_sequence="QdddBBBd"
             )

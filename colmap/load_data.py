@@ -7,6 +7,7 @@ import argparse
 import pyrender
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 from PIL import Image
 from skimage.transform import resize
 from skimage.io import imread
@@ -22,8 +23,10 @@ import read_model
 # colmap database and points3D.bin file from colmap sparse reconstruction
 def load_points_colmap(points3D_fp):
 
-    points3D = read_model.read_points3d_binary(points3D_fp)
-    keys = list(points3D.keys())
+    if points3D_fp.endswith(".bin"):
+        points3D = read_model.read_points3d_binary(points3D_fp)
+    else:  # .txt
+        points3D = read_model.read_points3D_text(points3D_fp)
 
     pcl_xyz = []
     pcl_rgb = []
@@ -41,8 +44,15 @@ def load_points_colmap(points3D_fp):
 # colmap images.bin and cameras.bin files from colmap sparse reconstruction
 def load_cameras_colmap(images_fp, cameras_fp):
 
-    images = read_model.read_images_binary(images_fp)
-    cameras = read_model.read_cameras_binary(cameras_fp)
+    if images_fp.endswith(".bin"):
+        images = read_model.read_images_binary(images_fp)
+    else:  # .txt
+        images = read_model.read_images_text(images_fp)
+
+    if cameras_fp.endswith(".bin"):
+        cameras = read_model.read_cameras_binary(cameras_fp)
+    else:  # .txt
+        cameras = read_model.read_cameras_text(cameras_fp)
 
     src_img_nms = []
     K = []
@@ -105,9 +115,19 @@ def render_from_camera(
     # Off-screen rendering
     flags = RenderFlags.FLAT | RenderFlags.RGBA
     r = pyrender.OffscreenRenderer(w, h, point_size=point_size)
-    rgb_rendering, depth_rendering = r.render(scene, flags=flags)
+    rgb_rendering, depth_rendering = r.render(  # pylint: disable=unused-variable
+        scene, flags=flags
+    )
     img_rendering = Image.fromarray(rgb_rendering)
     img_rendering.save(os.path.join(out_dir, "{}_rendered.png".format(src_img_nm[:-4])))
+
+
+def get_colmap_file(colmap_path, file_stem):
+    colmap_path = Path(colmap_path)
+    fp = colmap_path / f"{file_stem}.bin"
+    if not fp.exists():
+        fp = colmap_path / f"{file_stem}.txt"
+    return str(fp)
 
 
 def make_colmap_renderings(colmap_pt, ply_pt, out_dir, render_depth=True):
@@ -118,7 +138,7 @@ def make_colmap_renderings(colmap_pt, ply_pt, out_dir, render_depth=True):
     """
     os.makedirs(out_dir, exist_ok=True)
     K, R, T, H, W, src_img_nms = load_cameras_colmap(
-        os.path.join(colmap_pt, "images.bin"), os.path.join(colmap_pt, "cameras.bin")
+        get_colmap_file(colmap_pt, "images"), get_colmap_file(colmap_pt, "cameras")
     )
     m = trimesh.load(ply_pt)
     if isinstance(m, trimesh.PointCloud):
@@ -176,7 +196,7 @@ def build_dataset(
     os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     # Loading camera pose estimates
     K, R, T, H, W, src_img_nms = load_cameras_colmap(
-        os.path.join(src_colmap, "images.bin"), os.path.join(src_colmap, "cameras.bin")
+        get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
     )
     flags = RenderFlags.FLAT | RenderFlags.RGBA
     # Loading the mesh / pointcloud
