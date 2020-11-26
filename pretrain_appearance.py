@@ -25,6 +25,7 @@ import pickle
 import style_loss
 import tensorflow as tf
 import utils
+import options
 
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
@@ -295,6 +296,12 @@ def train_appearance(train_dir, imageset_dir, dist_file_path):
 def main(argv):
     if len(argv) > 1:
         raise app.UsageError("Too many command-line arguments.")
+
+    configs_str = options.list_options()
+    tf.gfile.MakeDirs(opts.train_dir)
+    with tf.gfile.Open(osp.join(opts.train_dir, "configs.txt"), "wb") as f:
+        f.write(configs_str)
+    tf.logging.info("Local configs\n%s" % configs_str)
 
     train_dir = opts.train_dir
     dataset_name = opts.dataset_name
