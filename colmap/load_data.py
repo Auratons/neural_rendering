@@ -7,6 +7,7 @@ import argparse
 import pyrender
 import numpy as np
 import matplotlib.pyplot as plt
+import open3d as o3d
 from pathlib import Path
 from PIL import Image
 from skimage.transform import resize
@@ -168,6 +169,23 @@ def load_depth_map(file_path, dtype=np.float16):
     return img.astype(np.float32)[:, :, 0]
 
 
+def o3d_to_pyrenderer(mesh_or_pt):
+    if isinstance(mesh_or_pt, o3d.geometry.PointCloud):
+        points = np.asarray(mesh_or_pt.points).copy()
+        colors = np.asarray(mesh_or_pt.colors).copy()
+        mesh = pyrender.Mesh.from_points(points, colors)
+    elif isinstance(mesh_or_pt, o3d.geometry.TriangleMesh):
+        mesh = trimesh.Trimesh(
+            np.asarray(mesh_or_pt.vertices),
+            np.asarray(mesh_or_pt.triangles),
+            vertex_colors=np.asarray(mesh_or_pt.vertex_colors),
+        )
+        mesh = pyrender.Mesh.from_trimesh(mesh)
+    else:
+        raise NotImplementedError()
+    return mesh
+
+
 def build_dataset(
     src_reference,
     ply_path,
@@ -178,6 +196,7 @@ def build_dataset(
     src_depth=None,
     point_size=3.0,
     verbose=False,
+    downsample=100,
 ):
     """Build the input dataset composed of the reference images, the RGBA and depth renderings.
     Args:
@@ -189,11 +208,8 @@ def build_dataset(
         - val_ratio : train / val ratio
         - src_depth : depth maps directory. If None, the depth maps are rendered along with RGB renderings.
         - point_size : Point size for rendering
+        - downsample : percentage of points/triangles to leave in for rendering (25, 50 supported)
     """
-    # Create output folders
-    os.makedirs(out_dir, exist_ok=True)
-    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
-    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     # Loading camera pose estimates
     K, R, T, H, W, src_img_nms = load_cameras_colmap(
         get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
@@ -202,15 +218,45 @@ def build_dataset(
     # Loading the mesh / pointcloud
     m = trimesh.load(ply_path)
     if isinstance(m, trimesh.PointCloud):
-        points = m.vertices.copy()
-        colors = m.colors.copy()
-        mesh = pyrender.Mesh.from_points(points, colors)
+        source = "point"
+        if downsample == 25 or downsample == 50:
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = o3d.utility.Vector3dVector(np.asarray(m.vertices))
+            pcd.colors = o3d.utility.Vector3dVector(
+                np.asarray(m.colors, dtype=np.float64)[:, :3] / 255
+            )
+            pcd = pcd.voxel_down_sample(voxel_size=0.012 if downsample == 50 else 0.022)
+            mesh = o3d_to_pyrenderer(pcd)
+        else:
+            points = m.vertices.copy()
+            colors = m.colors.copy()
+            mesh = pyrender.Mesh.from_points(points, colors)
     elif isinstance(m, trimesh.Trimesh):
-        mesh = pyrender.Mesh.from_trimesh(m)
+        source = "mesh"
+        if downsample == 25 or downsample == 50:
+            m2 = m.as_open3d
+            m2.vertex_colors = o3d.utility.Vector3dVector(
+                np.asarray(m.visual.vertex_colors, dtype=np.float64)[:, :3] / 255
+            )
+            m2 = m2.simplify_vertex_clustering(
+                voxel_size=0.005 if downsample == 50 else 0.01,
+                contraction=o3d.geometry.SimplificationContraction.Average,
+            )
+            mesh = o3d_to_pyrenderer(m2)
+        else:
+            mesh = pyrender.Mesh.from_trimesh(m)
     else:
         raise NotImplementedError(
             "Unsupported 3D object. Supported format is a `.ply` pointcloud or mesh."
         )
+    # Create output folders
+    os.makedirs(
+        out_dir
+        + f"minsz{min_size}_valr{val_ratio}_pts{point_size}_down{downsample}_src{source}",
+        exist_ok=True,
+    )
+    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     it = 0
 
     for i in range(len(H)):
@@ -304,6 +350,9 @@ def parse_args():
     parser.add_argument(
         "--min_size", type=int, default=512, help="Minimum size for images"
     )
+    parser.add_argument(
+        "--downsample", type=int, default=100, help="Downsample percentage 100,50,25"
+    )
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
     args = parser.parse_args()
 
@@ -324,4 +373,5 @@ if __name__ == "__main__":
         src_depth=None,
         point_size=args.point_size,
         verbose=args.verbose,
+        downsample=args.downsample,
     )
