@@ -253,10 +253,19 @@ def build_dataset(
                 raise NotImplementedError(
                     "Use renderings rather than depth maps estimated with COLMAP."
                 )
-            plt.imsave(
+            # cv2.imwrite saves depth map as a single channel img and as-is meaning
+            # if max depth is x, then max of the saved img values will be x as well.
+            # skimage.io.imsave saves the image normalized, so max value will always
+            # be 255 or 65k depending on the data type. plt.imsave saves RGBA image
+            # with depth remapped to a color depending on a colormap used.
+            cv2.imwrite(
                 os.path.join(output_dir, "{:04n}_depth.png".format(it)),
+                depth_rendering.astype(np.uint16),
+            )
+            # For possible further recalculation, npz with raw depth map is also saved.
+            np.save(
+                os.path.join(output_dir, "{:04n}_depth.npy".format(it)),
                 depth_rendering,
-                cmap="gray",
             )
 
             # rendered image
