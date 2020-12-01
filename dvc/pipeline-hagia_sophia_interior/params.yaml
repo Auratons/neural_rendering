@@ -1,0 +1,9 @@
+render_colmap:
+  root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+  ply_file: meshed-poisson.ply
+  src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior
+  val_ratio: 0.2
+  point_size: 2.0
+  min_size: 512
+  downsample: 50
+  verbose: True

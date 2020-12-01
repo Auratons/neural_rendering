@@ -1,0 +1,15 @@
+stages:
+  render_colmap:
+    cmd: bash -lc "sbatch --exclude=dgx-2 ../scripts/render_colmap.sh"
+    deps:
+    - ../../datasets/processed/imc/hagia_sophia_interior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap.root
+    - render_colmap.ply_file
+    - render_colmap.src_output
+    - render_colmap.val_ratio
+    - render_colmap.point_size
+    - render_colmap.min_size
+    - render_colmap.downsample
+    - render_colmap.verbose

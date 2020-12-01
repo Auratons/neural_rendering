@@ -244,4 +244,5 @@ dependencies:
     - trimesh==3.6.43
     - voluptuous==0.12.0
     - xmltodict==0.12.0
+    - yq==2.11.1
     - zc-lockfile==2.0

@@ -8,6 +8,7 @@ import pyrender
 import numpy as np
 import matplotlib.pyplot as plt
 import open3d as o3d
+import cv2
 from pathlib import Path
 from PIL import Image
 from skimage.transform import resize
@@ -210,6 +211,10 @@ def build_dataset(
         - point_size : Point size for rendering
         - downsample : percentage of points/triangles to leave in for rendering (25, 50 supported)
     """
+    # Create output folders
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     # Loading camera pose estimates
     K, R, T, H, W, src_img_nms = load_cameras_colmap(
         get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
@@ -218,7 +223,6 @@ def build_dataset(
     # Loading the mesh / pointcloud
     m = trimesh.load(ply_path)
     if isinstance(m, trimesh.PointCloud):
-        source = "point"
         if downsample == 25 or downsample == 50:
             pcd = o3d.geometry.PointCloud()
             pcd.points = o3d.utility.Vector3dVector(np.asarray(m.vertices))
@@ -232,7 +236,6 @@ def build_dataset(
             colors = m.colors.copy()
             mesh = pyrender.Mesh.from_points(points, colors)
     elif isinstance(m, trimesh.Trimesh):
-        source = "mesh"
         if downsample == 25 or downsample == 50:
             m2 = m.as_open3d
             m2.vertex_colors = o3d.utility.Vector3dVector(
@@ -249,14 +252,6 @@ def build_dataset(
         raise NotImplementedError(
             "Unsupported 3D object. Supported format is a `.ply` pointcloud or mesh."
         )
-    # Create output folders
-    os.makedirs(
-        out_dir
-        + f"minsz{min_size}_valr{val_ratio}_pts{point_size}_down{downsample}_src{source}",
-        exist_ok=True,
-    )
-    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
-    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     it = 0
 
     for i in range(len(H)):
@@ -361,6 +356,13 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
+    args.src_output += "_minsz-{}_valr-{}_pts-{}_down-{}_src-{}".format(
+        args.min_size,
+        args.val_ratio,
+        args.point_size,
+        args.downsample,
+        os.path.basename(args.ply_path.strip(".ply")),
+    )
 
     # Build dataset
     build_dataset(
