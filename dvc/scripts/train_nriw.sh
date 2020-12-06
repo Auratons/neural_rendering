@@ -90,7 +90,7 @@ time python $WORKSPACE/neural_rerendering.py \
     --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_app_encoder // "False"') \
     --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_from_another_ckpt // "False"') \
     --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_fixed_appearance_train_dir // ""') \
-    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_total_kimg // "100"') \
+    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_total_kimg // "400"') \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_use_buffer_appearance // "True"') \
     --use_semantic_gt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_use_semantic_gt // "True"') \
     --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_use_semantic // "True"') \
