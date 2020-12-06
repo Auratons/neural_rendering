@@ -356,13 +356,6 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
-    args.src_output += "_minsz-{}_valr-{}_pts-{}_down-{}_src-{}".format(
-        args.min_size,
-        args.val_ratio,
-        args.point_size,
-        args.downsample,
-        os.path.basename(args.ply_path.strip(".ply")),
-    )
 
     # Build dataset
     build_dataset(
