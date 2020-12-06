@@ -175,3 +175,66 @@ stages:
     - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused:
         cache: false
         persist: true
+
+
+  train_nriw_1:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 1"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../scripts/train_nriw.sh
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    params:
+    - train_nriw_1.dataset_name
+    - train_nriw_1.dataset_parent_dir
+    - train_nriw_1.model_parent_dir
+  train_nriw_2:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    params:
+    - train_nriw_2.dataset_name
+    - train_nriw_2.dataset_parent_dir
+    - train_nriw_2.model_parent_dir
+  train_nriw_3:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    params:
+    - train_nriw_3.dataset_name
+    - train_nriw_3.dataset_parent_dir
+    - train_nriw_3.model_parent_dir
+  train_nriw_4:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    params:
+    - train_nriw_4.dataset_name
+    - train_nriw_4.dataset_parent_dir
+    - train_nriw_4.model_parent_dir
+  train_nriw_5:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    params:
+    - train_nriw_5.dataset_name
+    - train_nriw_5.dataset_parent_dir
+    - train_nriw_5.model_parent_dir
+  train_nriw_6:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    params:
+    - train_nriw_6.dataset_name
+    - train_nriw_6.dataset_parent_dir
+    - train_nriw_6.model_parent_dir
