@@ -141,3 +141,4 @@ cython_debug/
 deeplabv3_xception_ade20k_train/
 .vscode/
 *.out
+vgg16_weights/
