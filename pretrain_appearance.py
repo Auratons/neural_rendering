@@ -61,6 +61,7 @@ def _load_and_concatenate_image_channels(
         channels = channels + (depth_img,)
     if opts.use_buffer_appearance and seg_path is not None:
         seg_img = np.array(Image.open(seg_path)).astype(np.float32)
+        seg_img = utils.get_central_crop(seg_img, crop_size, crop_size)
         channels = channels + (seg_img,)
     # Concatenate and normalize channels
     img = np.dstack(channels)
@@ -269,7 +270,10 @@ def compute_dist_matrix(imageset_dir, dist_file_path, recompute_dist=False):
 def train_appearance(train_dir, imageset_dir, dist_file_path):
     batch_size = opts.batch_size
     lr_app_pretrain = 0.001
-    steps = (500 << 10) // batch_size
+    if opts.appearance_pretrain_steps is not None:
+        steps = opts.appearance_pretrain_steps
+    else:
+        steps = (500 << 10) // batch_size
 
     trainset_size = len(glob.glob(osp.join(imageset_dir, "*_reference.png")))
     resume_step = utils.load_global_step_from_checkpoint_dir(train_dir)
@@ -290,7 +294,7 @@ def train_appearance(train_dir, imageset_dir, dist_file_path):
         imageset_dir, trainset_size, dist_file_path, batch_size=batch_size
     ).get_next()
     print("Starting pretraining steps...")
-    est.train(input_train_fn, steps=steps, hooks=None)  # train indefinitely
+    est.train(input_train_fn, steps=steps, hooks=None)
 
 
 def main(argv):

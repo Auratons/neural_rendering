@@ -76,6 +76,9 @@ flags.DEFINE_boolean(
 flags.DEFINE_string(
     "appearance_pretrain_dir", "", "Model dir for the pretrained appearance encoder."
 )
+flags.DEFINE_integer(
+    "appearance_pretrain_steps", None, "Number of steps for appearance pretraining."
+)
 flags.DEFINE_boolean(
     "train_app_encoder",
     False,
