@@ -28,3 +28,29 @@ render_colmap_6:
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   ply_file: fused.ply
   downsample: 100
+
+
+dataset_utils_1:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+dataset_utils_2:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+dataset_utils_3:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+dataset_utils_4:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+dataset_utils_5:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+dataset_utils_6:
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
