@@ -30,7 +30,7 @@ WORKSPACE=/home/kremeto1/neural_rendering
 
 echo
 echo "Running:"
-echo "/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
+echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_parent_dir')"
 echo "    --output_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir')"
@@ -42,7 +42,7 @@ echo
 
 mkdir -p $(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir')
 
-/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
+~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
     --dataset_name=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_parent_dir') \
     --output_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir') \

@@ -37,7 +37,7 @@ TRAIN_DIR=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.train_dir // (.evalua
 echo
 echo "Evaluating the validation set"
 echo "Running"
-echo "/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
+echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "   --dataset_name=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_name')"
 echo "   --dataset_parent_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_parent_dir')"
 echo "   --train_dir=${TRAIN_DIR}"
@@ -52,7 +52,7 @@ echo "   --deep_buffer_nc=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.deep_
 echo "   --logtostderr"
 echo
 
-/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
+~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_parent_dir') \
     --train_dir=${TRAIN_DIR} \
@@ -70,13 +70,13 @@ echo
 echo
 echo "Evaluate quantitative metrics"
 echo "Running"
-echo "/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py"
+echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py"
 echo "   --val_set_out_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.output_validation_dir // "'${TRAIN_DIR}'evaluation-'${VIRTUAL_SEQ_NAME}'"')"
 echo "   --experiment_title=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.experiment_title // (.evaluate_nriw_'$sub'.dataset_name | . += "-'${VIRTUAL_SEQ_NAME}'")')"
 echo "   --logtostderr"
 echo
 
-/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py \
+~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py \
     --val_set_out_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.output_validation_dir // "'${TRAIN_DIR}'evaluation-'${VIRTUAL_SEQ_NAME}'"') \
     --experiment_title=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.experiment_title // (.evaluate_nriw_'$sub'.dataset_name | . += "-'${VIRTUAL_SEQ_NAME}'")') \
     --logtostderr

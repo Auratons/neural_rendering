@@ -9,7 +9,7 @@ render_colmap_1:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -33,7 +33,7 @@ render_colmap_2:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -57,7 +57,7 @@ render_colmap_3:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -81,7 +81,7 @@ render_colmap_4:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -105,7 +105,7 @@ render_colmap_5:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -129,7 +129,7 @@ render_colmap_6:
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1775213c4d00acd230e44c2c7a93af2c
+    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
     size: 1986
   params:
     params.yaml:
@@ -153,7 +153,7 @@ dataset_utils_1:
     size: 4671992872
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2201
   params:
     params.yaml:
@@ -176,7 +176,7 @@ dataset_utils_2:
     size: 4762718749
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2207
   params:
     params.yaml:
@@ -199,7 +199,7 @@ dataset_utils_3:
     size: 4785765973
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2207
   params:
     params.yaml:
@@ -222,7 +222,7 @@ dataset_utils_4:
     size: 5177801088
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2207
   params:
     params.yaml:
@@ -245,7 +245,7 @@ dataset_utils_5:
     size: 5097831911
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2207
   params:
     params.yaml:
@@ -268,7 +268,7 @@ dataset_utils_6:
     size: 5098990134
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 128e7a32bb4054d350d15dc4c01ed663
+    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
     size: 2207
   params:
     params.yaml:
@@ -294,10 +294,64 @@ train_nriw_1:
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a9a6eb327e72ecd651ac02d7a745e464
+    md5: 563220fa096dbd09c9db00c04e7cf2da
     size: 11519
   params:
     params.yaml:
       train_nriw_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/
+train_nriw_3:
+  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 3"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 3377cabc3e197a0102ab875cf3ba485e.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  params:
+    params.yaml:
+      train_nriw_3.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/
+train_nriw_4:
+  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 4"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 5c580c59e3e946b32202fbec35b4105c.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  params:
+    params.yaml:
+      train_nriw_4.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/
+train_nriw_5:
+  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 5"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 8ac7db60a0413d6543853525d017f193.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  params:
+    params.yaml:
+      train_nriw_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/

@@ -30,7 +30,7 @@ WORKSPACE=/home/kremeto1/neural_rendering
 
 echo
 echo "Running:"
-echo "/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py"
+echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py"
 echo "    --src_reference=$DATASET_PATH/images"
 echo "    --src_colmap=$DATASET_PATH/sparse"
 echo "    --ply_path=$DATASET_PATH/$PLY_FILE"
@@ -42,7 +42,7 @@ echo "    --downsample=$(cat params.yaml | yq -r '.render_colmap_'$sub'.downsamp
 echo "    --verbose"
 echo
 
-/usr/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py \
+~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py \
     --src_reference=$DATASET_PATH/images \
     --src_colmap=$DATASET_PATH/sparse \
     --ply_path=$DATASET_PATH/$PLY_FILE \
