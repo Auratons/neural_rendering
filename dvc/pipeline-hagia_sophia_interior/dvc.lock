@@ -1,20 +1,303 @@
-render_colmap:
-  cmd: bash -lc "sbatch --exclude=dgx-2 ../scripts/render_colmap.sh"
+render_colmap_1:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
   deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 1f0cceb935049713fc5da4681462a6ed
-    size: 1839
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
   params:
     params.yaml:
-      render_colmap.downsample: 50
-      render_colmap.min_size: 512
-      render_colmap.ply_file: meshed-poisson.ply
-      render_colmap.point_size: 2.0
-      render_colmap.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
-      render_colmap.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior
-      render_colmap.val_ratio: 0.2
-      render_colmap.verbose: true
+      render_colmap_1.downsample: 25
+      render_colmap_1.ply_file: meshed-poisson.ply
+      render_colmap_1.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_1.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 59792a3e0d4e0757d99ed6870170d8ac.dir
+    size: 4671992872
+    nfiles: 5082
+render_colmap_2:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
+  - path: ../../datasets/processed/imc/hagia_sophia_interior
+    md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
+    size: 26760354702
+    nfiles: 5338
+  - path: ../scripts/render_colmap.sh
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
+  params:
+    params.yaml:
+      render_colmap_2.downsample: 50
+      render_colmap_2.ply_file: meshed-poisson.ply
+      render_colmap_2.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_2.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 8304901ef98b2855b3c83b9e9b1d1954.dir
+    size: 4762718749
+    nfiles: 5082
+render_colmap_3:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
+  - path: ../../datasets/processed/imc/hagia_sophia_interior
+    md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
+    size: 26760354702
+    nfiles: 5338
+  - path: ../scripts/render_colmap.sh
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
+  params:
+    params.yaml:
+      render_colmap_3.downsample: 100
+      render_colmap_3.ply_file: meshed-poisson.ply
+      render_colmap_3.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_3.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: d2062db41289dcf11554e5e7afbdb8e6.dir
+    size: 4785765973
+    nfiles: 5082
+render_colmap_4:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
+  - path: ../../datasets/processed/imc/hagia_sophia_interior
+    md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
+    size: 26760354702
+    nfiles: 5338
+  - path: ../scripts/render_colmap.sh
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
+  params:
+    params.yaml:
+      render_colmap_4.downsample: 25
+      render_colmap_4.ply_file: fused.ply
+      render_colmap_4.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_4.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: f4fdd96d95c4ccb2e677894f9ddc4456.dir
+    size: 5177801088
+    nfiles: 5082
+render_colmap_5:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
+  - path: ../../datasets/processed/imc/hagia_sophia_interior
+    md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
+    size: 26760354702
+    nfiles: 5338
+  - path: ../scripts/render_colmap.sh
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
+  params:
+    params.yaml:
+      render_colmap_5.downsample: 50
+      render_colmap_5.ply_file: fused.ply
+      render_colmap_5.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_5.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 3bb33f7cb1611903a82431db013529aa.dir
+    size: 5097831911
+    nfiles: 5082
+render_colmap_6:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 21df9d3764c6b515210f33dc0ffcef96
+    size: 13415
+  - path: ../../datasets/processed/imc/hagia_sophia_interior
+    md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
+    size: 26760354702
+    nfiles: 5338
+  - path: ../scripts/render_colmap.sh
+    md5: 1775213c4d00acd230e44c2c7a93af2c
+    size: 1986
+  params:
+    params.yaml:
+      render_colmap_6.downsample: 100
+      render_colmap_6.ply_file: fused.ply
+      render_colmap_6.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+      render_colmap_6.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  outs:
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 0f6fb3b099461991807cd7051a63cf5e.dir
+    size: 5098990134
+    nfiles: 5082
+dataset_utils_1:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 59792a3e0d4e0757d99ed6870170d8ac.dir
+    size: 4671992872
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2201
+  params:
+    params.yaml:
+      dataset_utils_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      dataset_utils_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      dataset_utils_1.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 8f211247937310fdcca1d8d65d45f5f5.dir
+    size: 2664556972
+    nfiles: 2
+dataset_utils_2:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 2"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 8304901ef98b2855b3c83b9e9b1d1954.dir
+    size: 4762718749
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2207
+  params:
+    params.yaml:
+      dataset_utils_2.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      dataset_utils_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      dataset_utils_2.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 9f7413df1ab439aa7966a9b0d48dc9b9.dir
+    size: 2664556972
+    nfiles: 2
+dataset_utils_3:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 3"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: d2062db41289dcf11554e5e7afbdb8e6.dir
+    size: 4785765973
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2207
+  params:
+    params.yaml:
+      dataset_utils_3.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      dataset_utils_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      dataset_utils_3.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 3377cabc3e197a0102ab875cf3ba485e.dir
+    size: 2664556972
+    nfiles: 2
+dataset_utils_4:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 4"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: f4fdd96d95c4ccb2e677894f9ddc4456.dir
+    size: 5177801088
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2207
+  params:
+    params.yaml:
+      dataset_utils_4.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      dataset_utils_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      dataset_utils_4.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 5c580c59e3e946b32202fbec35b4105c.dir
+    size: 2664556972
+    nfiles: 2
+dataset_utils_5:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 5"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 3bb33f7cb1611903a82431db013529aa.dir
+    size: 5097831911
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2207
+  params:
+    params.yaml:
+      dataset_utils_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      dataset_utils_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      dataset_utils_5.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 8ac7db60a0413d6543853525d017f193.dir
+    size: 2664556972
+    nfiles: 2
+dataset_utils_6:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 6"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 0f6fb3b099461991807cd7051a63cf5e.dir
+    size: 5098990134
+    nfiles: 5082
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 128e7a32bb4054d350d15dc4c01ed663
+    size: 2207
+  params:
+    params.yaml:
+      dataset_utils_6.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      dataset_utils_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      dataset_utils_6.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  outs:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 1be35eb255d9d212466ba250a8d606ed.dir
+    size: 2664556972
+    nfiles: 2
+train_nriw_1:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 1"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 8f211247937310fdcca1d8d65d45f5f5.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a9a6eb327e72ecd651ac02d7a745e464
+    size: 11519
+  params:
+    params.yaml:
+      train_nriw_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/

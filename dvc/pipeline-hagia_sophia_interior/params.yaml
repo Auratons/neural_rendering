@@ -80,3 +80,18 @@ train_nriw_6:
   model_parent_dir: /home/kremeto1/neural_rendering/models/
   dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+
+
+colmap_1:
+  dataset_root: /home/kremeto1/neural_rendering/datasets/raw/imc/prague_old_town_square/dense
+colmap_2:
+  dataset_root: /home/kremeto1/neural_rendering/datasets/raw/imc/grand_place_brussels/dense
+colmap_3:
+  dataset_root: /home/kremeto1/neural_rendering/datasets/raw/imc/pantheon_exterior/dense
+
+
+evaluate_nriw_1:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/
+  dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  timestamp: 2020-12-06-23-26-46
