@@ -301,8 +301,29 @@ train_nriw_1:
       train_nriw_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/
+train_nriw_2:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 9f7413df1ab439aa7966a9b0d48dc9b9.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
+    size: 11519
+  params:
+    params.yaml:
+      train_nriw_2.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_2.model_parent_dir: /home/kremeto1/neural_rendering/models/
 train_nriw_3:
-  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 3"
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
   deps:
   - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
     md5: 3377cabc3e197a0102ab875cf3ba485e.dir
@@ -323,7 +344,7 @@ train_nriw_3:
       train_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
       train_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/
 train_nriw_4:
-  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 4"
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
   deps:
   - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
     md5: 5c580c59e3e946b32202fbec35b4105c.dir
@@ -344,7 +365,7 @@ train_nriw_4:
       train_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
       train_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/
 train_nriw_5:
-  cmd: bash -lc "sbatch ../scripts/train_nriw.sh 5"
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
   deps:
   - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
     md5: 8ac7db60a0413d6543853525d017f193.dir
@@ -364,3 +385,24 @@ train_nriw_5:
       train_nriw_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       train_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       train_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/
+train_nriw_6:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
+  deps:
+  - path: ../../datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 1be35eb255d9d212466ba250a8d606ed.dir
+    size: 2664556972
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  - path: ../../pretrain_appearance.py
+    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
+    size: 11519
+  params:
+    params.yaml:
+      train_nriw_6.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/
