@@ -153,7 +153,7 @@ dataset_utils_1:
     size: 4671992872
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2201
   params:
     params.yaml:
@@ -176,7 +176,7 @@ dataset_utils_2:
     size: 4762718749
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2207
   params:
     params.yaml:
@@ -199,7 +199,7 @@ dataset_utils_3:
     size: 4785765973
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2207
   params:
     params.yaml:
@@ -222,7 +222,7 @@ dataset_utils_4:
     size: 5177801088
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2207
   params:
     params.yaml:
@@ -245,7 +245,7 @@ dataset_utils_5:
     size: 5097831911
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2207
   params:
     params.yaml:
@@ -268,7 +268,7 @@ dataset_utils_6:
     size: 5098990134
     nfiles: 5082
   - path: ../scripts/run_dataset_utils.sh
-    md5: 768f6d8cce2bc3dc38372937b0c2e8e8
+    md5: a1a4738e234e1fa656483689a754e63a
     size: 2207
   params:
     params.yaml:
@@ -294,7 +294,7 @@ train_nriw_1:
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: 563220fa096dbd09c9db00c04e7cf2da
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
     size: 11519
   params:
     params.yaml:
@@ -314,6 +314,9 @@ train_nriw_3:
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
+    size: 11519
   params:
     params.yaml:
       train_nriw_3.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
@@ -332,6 +335,9 @@ train_nriw_4:
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
+    size: 11519
   params:
     params.yaml:
       train_nriw_4.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
@@ -350,6 +356,9 @@ train_nriw_5:
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: 8c09f2c21e00c80c5f25b3aee7a13216
+    size: 11519
   params:
     params.yaml:
       train_nriw_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused

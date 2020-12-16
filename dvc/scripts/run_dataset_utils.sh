@@ -5,6 +5,7 @@
 #SBATCH --time=0-10:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
+#SBATCH --cpus-per-gpu=16
 
 set -e
 

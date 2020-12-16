@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=train_nriw
-#SBATCH --output=train_nriw_'$sub'%j.log
+#SBATCH --job-name=train_nriw_%j
+#SBATCH --output=train_nriw_%j.log
 #SBATCH --mem=128G
 #SBATCH --time=3-0:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:Volta100:4
+#SBATCH --cpus-per-gpu=16
 
 set -e
 
