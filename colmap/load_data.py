@@ -197,7 +197,7 @@ def build_dataset(
     src_depth=None,
     point_size=3.0,
     verbose=False,
-    downsample=100,
+    voxel_size=100,
 ):
     """Build the input dataset composed of the reference images, the RGBA and depth renderings.
     Args:
@@ -209,7 +209,8 @@ def build_dataset(
         - val_ratio : train / val ratio
         - src_depth : depth maps directory. If None, the depth maps are rendered along with RGB renderings.
         - point_size : Point size for rendering
-        - downsample : percentage of points/triangles to leave in for rendering (25, 50 supported)
+        - voxel_size : voxel size for voxel-based subsampling used on mesh or pointcloud
+                       (None means skipping subsampling)
     """
     # Create output folders
     os.makedirs(out_dir, exist_ok=True)
@@ -223,26 +224,26 @@ def build_dataset(
     # Loading the mesh / pointcloud
     m = trimesh.load(ply_path)
     if isinstance(m, trimesh.PointCloud):
-        if downsample == 25 or downsample == 50:
+        if voxel_size is not None:
             pcd = o3d.geometry.PointCloud()
             pcd.points = o3d.utility.Vector3dVector(np.asarray(m.vertices))
             pcd.colors = o3d.utility.Vector3dVector(
                 np.asarray(m.colors, dtype=np.float64)[:, :3] / 255
             )
-            pcd = pcd.voxel_down_sample(voxel_size=0.012 if downsample == 50 else 0.022)
+            pcd = pcd.voxel_down_sample(voxel_size=voxel_size)
             mesh = o3d_to_pyrenderer(pcd)
         else:
             points = m.vertices.copy()
             colors = m.colors.copy()
             mesh = pyrender.Mesh.from_points(points, colors)
     elif isinstance(m, trimesh.Trimesh):
-        if downsample == 25 or downsample == 50:
+        if voxel_size is not None:
             m2 = m.as_open3d
             m2.vertex_colors = o3d.utility.Vector3dVector(
                 np.asarray(m.visual.vertex_colors, dtype=np.float64)[:, :3] / 255
             )
             m2 = m2.simplify_vertex_clustering(
-                voxel_size=0.005 if downsample == 50 else 0.01,
+                voxel_size=voxel_size,
                 contraction=o3d.geometry.SimplificationContraction.Average,
             )
             mesh = o3d_to_pyrenderer(m2)
@@ -346,7 +347,10 @@ def parse_args():
         "--min_size", type=int, default=512, help="Minimum size for images"
     )
     parser.add_argument(
-        "--downsample", type=int, default=100, help="Downsample percentage 100,50,25"
+        "--voxel_size",
+        type=int,
+        default=None,
+        help="Voxel size used for downsampling mesh or pointcloud.",
     )
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
     args = parser.parse_args()
@@ -368,5 +372,5 @@ if __name__ == "__main__":
         src_depth=None,
         point_size=args.point_size,
         verbose=args.verbose,
-        downsample=args.downsample,
+        voxel_size=args.voxel_size,
     )

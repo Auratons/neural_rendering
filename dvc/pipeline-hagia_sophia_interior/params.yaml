@@ -2,32 +2,32 @@ render_colmap_1:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
   ply_file: meshed-poisson.ply
-  downsample: 25
+  voxel_size: 0.01
 render_colmap_2:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
   ply_file: meshed-poisson.ply
-  downsample: 50
+  voxel_size: 0.005
 render_colmap_3:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
   ply_file: meshed-poisson.ply
-  downsample: 100
+  voxel_size: None
 render_colmap_4:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
   ply_file: fused.ply
-  downsample: 25
+  voxel_size: 0.022
 render_colmap_5:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
   ply_file: fused.ply
-  downsample: 50
+  voxel_size: 0.012
 render_colmap_6:
   root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   ply_file: fused.ply
-  downsample: 100
+  voxel_size: None
 
 
 dataset_utils_1:

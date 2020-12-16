@@ -6,7 +6,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_1.downsample
+    - render_colmap_1.voxel_size
     - render_colmap_1.ply_file
     - render_colmap_1.root
     - render_colmap_1.src_output
@@ -21,7 +21,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_2.downsample
+    - render_colmap_2.voxel_size
     - render_colmap_2.ply_file
     - render_colmap_2.root
     - render_colmap_2.src_output
@@ -36,7 +36,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_3.downsample
+    - render_colmap_3.voxel_size
     - render_colmap_3.ply_file
     - render_colmap_3.root
     - render_colmap_3.src_output
@@ -51,7 +51,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_4.downsample
+    - render_colmap_4.voxel_size
     - render_colmap_4.ply_file
     - render_colmap_4.root
     - render_colmap_4.src_output
@@ -66,7 +66,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_5.downsample
+    - render_colmap_5.voxel_size
     - render_colmap_5.ply_file
     - render_colmap_5.root
     - render_colmap_5.src_output
@@ -81,7 +81,7 @@ stages:
     - ../../datasets/processed/imc/hagia_sophia_interior
     - ../scripts/render_colmap.sh
     params:
-    - render_colmap_6.downsample
+    - render_colmap_6.voxel_size
     - render_colmap_6.ply_file
     - render_colmap_6.root
     - render_colmap_6.src_output

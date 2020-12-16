@@ -2,18 +2,18 @@ render_colmap_1:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_1.downsample: 25
+      render_colmap_1.voxel_size: 0.01
       render_colmap_1.ply_file: meshed-poisson.ply
       render_colmap_1.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_1.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
@@ -26,18 +26,18 @@ render_colmap_2:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_2.downsample: 50
+      render_colmap_2.voxel_size: 0.005
       render_colmap_2.ply_file: meshed-poisson.ply
       render_colmap_2.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_2.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
@@ -50,18 +50,18 @@ render_colmap_3:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_3.downsample: 100
+      render_colmap_3.voxel_size: None
       render_colmap_3.ply_file: meshed-poisson.ply
       render_colmap_3.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_3.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
@@ -74,18 +74,18 @@ render_colmap_4:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_4.downsample: 25
+      render_colmap_4.voxel_size: 0.022
       render_colmap_4.ply_file: fused.ply
       render_colmap_4.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_4.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
@@ -98,18 +98,18 @@ render_colmap_5:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_5.downsample: 50
+      render_colmap_5.voxel_size: 0.012
       render_colmap_5.ply_file: fused.ply
       render_colmap_5.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_5.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
@@ -122,18 +122,18 @@ render_colmap_6:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 21df9d3764c6b515210f33dc0ffcef96
+    md5: ae89475639519b64d350f5700d908fbd
     size: 13415
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
     nfiles: 5338
   - path: ../scripts/render_colmap.sh
-    md5: 290ced3e08f5e8a83dd2c4b2aed0a582
+    md5: 531b3e7283932e405ad2fffbb5f99699
     size: 1986
   params:
     params.yaml:
-      render_colmap_6.downsample: 100
+      render_colmap_6.voxel_size: None
       render_colmap_6.ply_file: fused.ply
       render_colmap_6.root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
       render_colmap_6.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused

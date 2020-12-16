@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=preprocess_data_new_%j
+#SBATCH --job-name=render_colmap_%j
 #SBATCH --output=render_colmap_%j.out
 #SBATCH --mem=32G
-#SBATCH --time=0-3:00:00
+#SBATCH --time=0-5:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
+#SBATCH --cpus-per-gpu=16
 
 set -e
 
@@ -38,7 +39,7 @@ echo "    --src_output=$(cat params.yaml | yq -r '.render_colmap_'$sub'.src_outp
 echo "    --val_ratio=$(cat params.yaml | yq -r '.render_colmap_'$sub'.val_ratio // "0.2"')"
 echo "    --point_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.point_size // "2.0"')"
 echo "    --min_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.min_size // "512"')"
-echo "    --downsample=$(cat params.yaml | yq -r '.render_colmap_'$sub'.downsample')"
+echo "    --voxel_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.voxel_size')"
 echo "    --verbose"
 echo
 
@@ -50,5 +51,5 @@ echo
     --val_ratio=$(cat params.yaml | yq -r '.render_colmap_'$sub'.val_ratio // "0.2"') \
     --point_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.point_size // "2.0"') \
     --min_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.min_size // "512"') \
-    --downsample=$(cat params.yaml | yq -r '.render_colmap_'$sub'.downsample') \
+    --voxel_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.voxel_size') \
     --verbose
