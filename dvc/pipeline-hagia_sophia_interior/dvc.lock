@@ -301,6 +301,11 @@ train_nriw_1:
       train_nriw_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
       train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance
+    md5: c63fe22b6843cc36100d6fd09a2f509d.dir
+    size: 3885902532
+    nfiles: 16
 train_nriw_2:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
   deps:
@@ -322,6 +327,11 @@ train_nriw_2:
       train_nriw_2.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
       train_nriw_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
       train_nriw_2.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-11-19-53-57-finetune_appearance
+    md5: 2f04360b6e203473c36dd9138ef4e2a5.dir
+    size: 3526301304
+    nfiles: 16
 train_nriw_3:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
   deps:
@@ -343,6 +353,11 @@ train_nriw_3:
       train_nriw_3.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
       train_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
       train_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-13-22-27-03-finetune_appearance
+    md5: 2c37cab65acb8d9bd1eeab25aaf86900.dir
+    size: 3531305053
+    nfiles: 16
 train_nriw_4:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
   deps:
@@ -364,6 +379,11 @@ train_nriw_4:
       train_nriw_4.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
       train_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
       train_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-13-22-30-47-finetune_appearance
+    md5: eaa490f2daf3d45fc2f6787b06e93bb8.dir
+    size: 3531831687
+    nfiles: 16
 train_nriw_5:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
   deps:
@@ -385,6 +405,11 @@ train_nriw_5:
       train_nriw_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       train_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       train_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-14-12-03-17-finetune_appearance
+    md5: 3552f789eeb739b58afe9b3c6413d563.dir
+    size: 3529805919
+    nfiles: 16
 train_nriw_6:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
   deps:
@@ -406,3 +431,122 @@ train_nriw_6:
       train_nriw_6.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
       train_nriw_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
       train_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/
+  outs:
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance
+    md5: 54cae0b60c8e215ee4bd4db35f55dbd0.dir
+    size: 3531060447
+    nfiles: 16
+evaluate_nriw_1:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance
+    md5: c63fe22b6843cc36100d6fd09a2f509d.dir
+    size: 3523515943
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_1.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_1.timestamp: 2020-12-06-23-26-46
+evaluate_nriw_2:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 2"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-11-19-53-57-finetune_appearance
+    md5: fbb9a8a1ef6c60057733322b871f0cd3.dir
+    size: 3526301163
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_2.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_2.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_2.timestamp: 2020-12-11-19-53-57
+evaluate_nriw_3:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 3"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-13-22-27-03-finetune_appearance
+    md5: c6f3d0e7b8b1a6ef34986fc4f0f7c79c.dir
+    size: 3531304911
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_3.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_3.timestamp: 2020-12-13-22-27-03
+evaluate_nriw_4:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 4"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-13-22-30-47-finetune_appearance
+    md5: 8a8ad2e8073f73d6116d3d35aa925d4c.dir
+    size: 3531831555
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_4.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_4.timestamp: 2020-12-13-22-30-47
+evaluate_nriw_5:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 5"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-14-12-03-17-finetune_appearance
+    md5: d4fe1438b5cf32941b8b4aecc0bd843a.dir
+    size: 3529805787
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_5.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_5.timestamp: 2020-12-14-12-03-17
+evaluate_nriw_6:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 6"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance
+    md5: ee78f6af3320736d548bcaadeadeacd2.dir
+    size: 3531060314
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: 782c21a91894cf81b726b19c36522906
+    size: 31357
+  params:
+    params.yaml:
+      evaluate_nriw_6.dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/
+      evaluate_nriw_6.timestamp: 2020-12-14-05-23-51

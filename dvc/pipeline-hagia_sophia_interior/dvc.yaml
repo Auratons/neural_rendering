@@ -188,6 +188,10 @@ stages:
     - train_nriw_1.dataset_name
     - train_nriw_1.dataset_parent_dir
     - train_nriw_1.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance:
+        cache: false
+        persist: true
   train_nriw_2:
     cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
     deps:
@@ -198,6 +202,10 @@ stages:
     - train_nriw_2.dataset_name
     - train_nriw_2.dataset_parent_dir
     - train_nriw_2.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-11-19-53-57-finetune_appearance:
+        cache: false
+        persist: true
   train_nriw_3:
     cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
     deps:
@@ -208,6 +216,10 @@ stages:
     - train_nriw_3.dataset_name
     - train_nriw_3.dataset_parent_dir
     - train_nriw_3.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-13-22-27-03-finetune_appearance:
+        cache: false
+        persist: true
   train_nriw_4:
     cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
     deps:
@@ -218,6 +230,10 @@ stages:
     - train_nriw_4.dataset_name
     - train_nriw_4.dataset_parent_dir
     - train_nriw_4.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-13-22-30-47-finetune_appearance:
+        cache: false
+        persist: true
   train_nriw_5:
     cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
     deps:
@@ -228,6 +244,10 @@ stages:
     - train_nriw_5.dataset_name
     - train_nriw_5.dataset_parent_dir
     - train_nriw_5.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-14-12-03-17-finetune_appearance:
+        cache: false
+        persist: true
   train_nriw_6:
     cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
     deps:
@@ -238,3 +258,75 @@ stages:
     - train_nriw_6.dataset_name
     - train_nriw_6.dataset_parent_dir
     - train_nriw_6.model_parent_dir
+    outs:
+    - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance:
+        cache: false
+        persist: true
+
+
+  evaluate_nriw_1:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance
+      params:
+      - evaluate_nriw_1.model_parent_dir
+      - evaluate_nriw_1.dataset_name
+      - evaluate_nriw_1.dataset_parent_dir
+      - evaluate_nriw_1.timestamp
+  evaluate_nriw_2:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 2"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-11-19-53-57-finetune_appearance
+      params:
+      - evaluate_nriw_2.model_parent_dir
+      - evaluate_nriw_2.dataset_name
+      - evaluate_nriw_2.dataset_parent_dir
+      - evaluate_nriw_2.timestamp
+  evaluate_nriw_3:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 3"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-13-22-27-03-finetune_appearance
+      params:
+      - evaluate_nriw_3.model_parent_dir
+      - evaluate_nriw_3.dataset_name
+      - evaluate_nriw_3.dataset_parent_dir
+      - evaluate_nriw_3.timestamp
+  evaluate_nriw_4:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 4"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-13-22-30-47-finetune_appearance
+      params:
+      - evaluate_nriw_4.model_parent_dir
+      - evaluate_nriw_4.dataset_name
+      - evaluate_nriw_4.dataset_parent_dir
+      - evaluate_nriw_4.timestamp
+  evaluate_nriw_5:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 5"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-14-12-03-17-finetune_appearance
+      params:
+      - evaluate_nriw_5.model_parent_dir
+      - evaluate_nriw_5.dataset_name
+      - evaluate_nriw_5.dataset_parent_dir
+      - evaluate_nriw_5.timestamp
+  evaluate_nriw_6:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 6"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance
+      params:
+      - evaluate_nriw_6.model_parent_dir
+      - evaluate_nriw_6.dataset_name
+      - evaluate_nriw_6.dataset_parent_dir
+      - evaluate_nriw_6.timestamp
