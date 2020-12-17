@@ -1,6 +1,9 @@
 import os
 
 os.environ["PYOPENGL_PLATFORM"] = "egl"
+# When ran with SLURM on a multigpu node, scheduled on other than GPU0, we need
+# to set this or we get an egl initialization error.
+os.environ["EGL_DEVICE_ID"] = os.environ.get("SLURM_JOB_GPUS", "0").split(",")[0]
 
 import trimesh
 import argparse
