@@ -739,12 +739,12 @@ def interpolate_appearance(
 def main(argv):
     del argv
     configs_str = options.list_options()
-    tf.gfile.MakeDirs(opts.train_dir)
-    with tf.gfile.Open(osp.join(opts.train_dir, "configs.txt"), "wb") as f:
-        f.write(configs_str)
     tf.logging.info("Local configs\n%s" % configs_str)
 
     if opts.run_mode == "train":
+        tf.gfile.MakeDirs(opts.train_dir)
+        with tf.gfile.Open(osp.join(opts.train_dir, "configs.txt"), "wb") as f:
+            f.write(configs_str)
         dataset_name = opts.dataset_name
         dataset_parent_dir = opts.dataset_parent_dir
         load_pretrained_app_encoder = opts.load_pretrained_app_encoder
@@ -759,6 +759,9 @@ def main(argv):
     elif (
         opts.run_mode == "eval"
     ):  # generate a camera path output sequence from TFRecord inputs.
+        raise NotImplemented(
+            "Saving configs.txt for this is not implemented, check where it should be saved."
+        )
         dataset_name = opts.dataset_name
         dataset_parent_dir = opts.dataset_parent_dir
         virtual_seq_name = opts.virtual_seq_name
@@ -769,6 +772,11 @@ def main(argv):
     elif (
         opts.run_mode == "eval_subset"
     ):  # generate output for validation set (encoded as TFRecords)
+        tf.gfile.MakeDirs(opts.output_validation_dir)
+        with tf.gfile.Open(
+            osp.join(opts.output_validation_dir, "configs.txt"), "wb"
+        ) as f:
+            f.write(configs_str)
         dataset_name = opts.dataset_name
         dataset_parent_dir = opts.dataset_parent_dir
         virtual_seq_name = opts.virtual_seq_name
@@ -785,10 +793,16 @@ def main(argv):
         input_dir = opts.inference_input_path
         output_dir = opts.inference_output_dir
         model_dir = opts.train_dir
+        tf.gfile.MakeDirs(output_dir)
+        with tf.gfile.Open(osp.join(output_dir, "configs.txt"), "wb") as f:
+            f.write(configs_str)
         infer_dir(model_dir, input_dir, output_dir)
     elif (
         opts.run_mode == "interpolate_appearance"
     ):  # interpolate appearance only between two images.
+        raise NotImplemented(
+            "Saving configs.txt for this is not implemented, check where it should be saved."
+        )
         model_dir = opts.train_dir
         input_dir = opts.inference_input_path
         target_img_basename = opts.target_img_basename
@@ -804,6 +818,9 @@ def main(argv):
     elif (
         opts.run_mode == "joint_interpolation"
     ):  # interpolate viewpoint and appearance between two images
+        raise NotImplemented(
+            "Saving configs.txt for this is not implemented, check where it should be saved."
+        )
         model_dir = opts.train_dir
         app_input_dir = opts.inference_input_path
         st_app_basename = opts.appearance_img1_basename

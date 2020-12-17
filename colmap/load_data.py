@@ -348,7 +348,7 @@ def parse_args():
     )
     parser.add_argument(
         "--voxel_size",
-        type=int,
+        type=float,
         default=None,
         help="Voxel size used for downsampling mesh or pointcloud.",
     )

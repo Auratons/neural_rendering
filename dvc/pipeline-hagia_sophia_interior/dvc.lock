@@ -2,8 +2,8 @@ render_colmap_1:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -26,8 +26,8 @@ render_colmap_2:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -50,8 +50,8 @@ render_colmap_3:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -74,8 +74,8 @@ render_colmap_4:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -98,8 +98,8 @@ render_colmap_5:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -122,8 +122,8 @@ render_colmap_6:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
   deps:
   - path: ../../colmap/load_data.py
-    md5: ae89475639519b64d350f5700d908fbd
-    size: 13415
+    md5: 1d093574a94b3d67df61547ac4bc0b7c
+    size: 13432
   - path: ../../datasets/processed/imc/hagia_sophia_interior
     md5: 8ab6cedf0a9f6a0133d98919b4b2412f.dir
     size: 26760354702
@@ -288,7 +288,7 @@ train_nriw_1:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -303,8 +303,8 @@ train_nriw_1:
       train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/
   outs:
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance
-    md5: c63fe22b6843cc36100d6fd09a2f509d.dir
-    size: 3885902532
+    md5: 14731514304d658bf20692263ce21466.dir
+    size: 3523516084
     nfiles: 16
 train_nriw_2:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
@@ -314,7 +314,7 @@ train_nriw_2:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -340,7 +340,7 @@ train_nriw_3:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -366,7 +366,7 @@ train_nriw_4:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -392,7 +392,7 @@ train_nriw_5:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -418,7 +418,7 @@ train_nriw_6:
     size: 2664556972
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   - path: ../../pretrain_appearance.py
     md5: 30b6abc8c2e30a9268c2df1441b9c9ea
@@ -443,11 +443,11 @@ evaluate_nriw_1:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-06-23-26-46-finetune_appearance
-    md5: c63fe22b6843cc36100d6fd09a2f509d.dir
-    size: 3523515943
+    md5: 14731514304d658bf20692263ce21466.dir
+    size: 3523516084
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
@@ -462,11 +462,11 @@ evaluate_nriw_2:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-11-19-53-57-finetune_appearance
-    md5: fbb9a8a1ef6c60057733322b871f0cd3.dir
-    size: 3526301163
+    md5: 2f04360b6e203473c36dd9138ef4e2a5.dir
+    size: 3526301304
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
@@ -481,11 +481,11 @@ evaluate_nriw_3:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-13-22-27-03-finetune_appearance
-    md5: c6f3d0e7b8b1a6ef34986fc4f0f7c79c.dir
-    size: 3531304911
+    md5: 2c37cab65acb8d9bd1eeab25aaf86900.dir
+    size: 3531305053
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
@@ -500,11 +500,11 @@ evaluate_nriw_4:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-13-22-30-47-finetune_appearance
-    md5: 8a8ad2e8073f73d6116d3d35aa925d4c.dir
-    size: 3531831555
+    md5: eaa490f2daf3d45fc2f6787b06e93bb8.dir
+    size: 3531831687
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
@@ -519,11 +519,11 @@ evaluate_nriw_5:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-14-12-03-17-finetune_appearance
-    md5: d4fe1438b5cf32941b8b4aecc0bd843a.dir
-    size: 3529805787
+    md5: 3552f789eeb739b58afe9b3c6413d563.dir
+    size: 3529805919
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
@@ -538,11 +538,11 @@ evaluate_nriw_6:
     md5: 7d1acafc001bed3bebcb51b323518745
     size: 4340
   - path: ../../models/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance
-    md5: ee78f6af3320736d548bcaadeadeacd2.dir
-    size: 3531060314
+    md5: 54cae0b60c8e215ee4bd4db35f55dbd0.dir
+    size: 3531060447
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: 782c21a91894cf81b726b19c36522906
+    md5: b2aba3d7ce1cac17900eea8ae7317128
     size: 31357
   params:
     params.yaml:
