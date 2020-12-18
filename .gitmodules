@@ -1,0 +1,3 @@
+[submodule "cutouts"]
+	path = artwin/cutouts
+	url = https://github.com/michalpolic/Cutouts4SIE.git
