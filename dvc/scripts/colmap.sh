@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=colmap
+#SBATCH --job-name=colmap_%j
 #SBATCH --output=colmap_%j.log
-#SBATCH --mem=32G
-#SBATCH --time=3-12:00:00
+#SBATCH --mem=64G
+#SBATCH --time=5-00:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:GTX1080Ti:4
+#SBATCH --cpus-per-gpu=16
 
 set -e
 
