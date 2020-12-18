@@ -351,7 +351,7 @@ def parse_args():
     )
     parser.add_argument(
         "--voxel_size",
-        type=float,
+        type=none_or_float,
         default=None,
         help="Voxel size used for downsampling mesh or pointcloud.",
     )
@@ -359,6 +359,13 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+
+def none_or_float(value):
+    """Simplifies unification in SLURM script's parameter handling."""
+    if value == "None":
+        return None
+    return float(value)
 
 
 if __name__ == "__main__":

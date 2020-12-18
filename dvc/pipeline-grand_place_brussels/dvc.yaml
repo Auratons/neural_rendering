@@ -48,7 +48,7 @@ stages:
         cache: false
         persist: true
   render_colmap_4:
-    cmd: bash -lc "sbatch --exclude=node-17,node-12 --wait ../scripts/render_colmap.sh 4"
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
     deps:
     - ../../colmap/load_data.py
     - ../../datasets/processed/imc/grand_place_brussels
