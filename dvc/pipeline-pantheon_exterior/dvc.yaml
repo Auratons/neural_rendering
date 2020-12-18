@@ -1,0 +1,180 @@
+stages:
+  # gbm_colmap:
+  #   cmd: bash -lc "sbatch --wait ../scripts/colmap.sh 1"
+
+  render_colmap_1:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_1.voxel_size
+    - render_colmap_1.ply_file
+    - render_colmap_1.root
+    - render_colmap_1.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_2:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_2.voxel_size
+    - render_colmap_2.ply_file
+    - render_colmap_2.root
+    - render_colmap_2.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_3:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_3.voxel_size
+    - render_colmap_3.ply_file
+    - render_colmap_3.root
+    - render_colmap_3.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_4:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_4.voxel_size
+    - render_colmap_4.ply_file
+    - render_colmap_4.root
+    - render_colmap_4.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused:
+        cache: false
+        persist: true
+  render_colmap_5:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_5.voxel_size
+    - render_colmap_5.ply_file
+    - render_colmap_5.root
+    - render_colmap_5.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused:
+        cache: false
+        persist: true
+  render_colmap_6:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_6.voxel_size
+    - render_colmap_6.ply_file
+    - render_colmap_6.root
+    - render_colmap_6.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused:
+        cache: false
+        persist: true
+
+
+  dataset_utils_1:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    params:
+    - dataset_utils_1.dataset_name
+    - dataset_utils_1.dataset_parent_dir
+    - dataset_utils_1.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_2:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 2"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    params:
+    - dataset_utils_2.dataset_name
+    - dataset_utils_2.dataset_parent_dir
+    - dataset_utils_2.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_3:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 3"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    params:
+    - dataset_utils_3.dataset_name
+    - dataset_utils_3.dataset_parent_dir
+    - dataset_utils_3.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_4:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 4"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    params:
+    - dataset_utils_4.dataset_name
+    - dataset_utils_4.dataset_parent_dir
+    - dataset_utils_4.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused:
+        cache: false
+        persist: true
+  dataset_utils_5:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 5"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    params:
+    - dataset_utils_5.dataset_name
+    - dataset_utils_5.dataset_parent_dir
+    - dataset_utils_5.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused:
+        cache: false
+        persist: true
+  dataset_utils_6:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 6"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    params:
+    - dataset_utils_6.dataset_name
+    - dataset_utils_6.dataset_parent_dir
+    - dataset_utils_6.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused:
+        cache: false
+        persist: true
