@@ -58,3 +58,61 @@ dataset_utils_6:
   dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+
+
+train_nriw_1:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+train_nriw_2:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+train_nriw_3:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+train_nriw_4:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+train_nriw_5:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+train_nriw_6:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+
+
+evaluate_nriw_1:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+  timestamp: 2020-12-26-19-31-08
+evaluate_nriw_2:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+  timestamp: 2021-01-05-23-23-07
+evaluate_nriw_3:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  timestamp: 2020-12-19-18-28-56
+evaluate_nriw_4:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  timestamp: 2021-01-05-23-23-46
+evaluate_nriw_5:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  timestamp: 2021-01-06-05-27-51
+evaluate_nriw_6:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
+  dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+  timestamp: 2020-12-19-00-07-25
