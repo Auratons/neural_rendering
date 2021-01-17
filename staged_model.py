@@ -107,7 +107,9 @@ def create_computation_graph(
     # Show input appearance images
     if opts.use_appearance:
         x_app_rgb = tf.slice(x_app, [0, 0, 0, 0], [-1, -1, -1, 3])
-        if opts.use_buffer_appearance:
+        # Checking use_semantic enables training on dataset containing
+        # semantic information, but without using it.
+        if opts.use_buffer_appearance and opts.use_semantic:
             x_app_sem = tf.slice(x_app, [0, 0, 0, 7], [-1, -1, -1, -1])
             tb_app_visualization = tf.concat([x_app_rgb, x_app_sem], axis=2)
         else:

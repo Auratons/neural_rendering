@@ -74,7 +74,9 @@ def read_single_appearance_input(rgb_img_path):
     base_path = rgb_img_path[:-14]  # remove the '_reference.png' suffix
     rendered_img_path = base_path + "_color.png"
     depth_img_path = base_path + "_depth.png"
-    semantic_img_path = base_path + "_seg_rgb.png"
+    # Checking use_semantic enables training on dataset containing
+    # semantic information, but without using it.
+    semantic_img_path = base_path + "_seg_rgb.png" if opts.use_semantic else None
     network_input_img = _load_and_concatenate_image_channels(
         rgb_img_path,
         rendered_img_path,
