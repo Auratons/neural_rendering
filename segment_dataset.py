@@ -196,7 +196,9 @@ def segment_images(
             parent_dir, filename = osp.split(img_path)
             basename, ext = osp.splitext(filename)
             # basename = basename[:-10]  # remove the '_reference' suffix
-            basename = basename.split("_")[0]  # remove the '_reference' suffix
+            basename = basename.replace(
+                "_reference", ""
+            )  # remove the '_reference' suffix
             seg_filename = basename + "_seg.png"
             seg_filepath = osp.join(save_dir, seg_filename)
             # Save segmentation image
