@@ -93,6 +93,97 @@ stages:
         cache: false
         persist: true
 
+  render_colmap_7:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 7"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_7.voxel_size
+    - render_colmap_7.ply_file
+    - render_colmap_7.root
+    - render_colmap_7.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_8:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 8"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_8.voxel_size
+    - render_colmap_8.ply_file
+    - render_colmap_8.root
+    - render_colmap_8.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_9:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 9"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_9.voxel_size
+    - render_colmap_9.ply_file
+    - render_colmap_9.root
+    - render_colmap_9.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson:
+        cache: false
+        persist: true
+  render_colmap_10:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 10"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_10.voxel_size
+    - render_colmap_10.ply_file
+    - render_colmap_10.root
+    - render_colmap_10.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused:
+        cache: false
+        persist: true
+  render_colmap_11:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 11"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_11.voxel_size
+    - render_colmap_11.ply_file
+    - render_colmap_11.root
+    - render_colmap_11.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused:
+        cache: false
+        persist: true
+  render_colmap_12:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 12"
+    deps:
+    - ../../colmap/load_data.py
+    - ../../datasets/processed/imc/pantheon_exterior
+    - ../scripts/render_colmap.sh
+    params:
+    - render_colmap_12.voxel_size
+    - render_colmap_12.ply_file
+    - render_colmap_12.root
+    - render_colmap_12.src_output
+    outs:
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused:
+        cache: false
+        persist: true
+
 
   dataset_utils_1:
     cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
@@ -178,3 +269,410 @@ stages:
     - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused:
         cache: false
         persist: true
+
+  dataset_utils_7:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 7"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    params:
+    - dataset_utils_7.dataset_name
+    - dataset_utils_7.dataset_parent_dir
+    - dataset_utils_7.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_8:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 8"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    params:
+    - dataset_utils_8.dataset_name
+    - dataset_utils_8.dataset_parent_dir
+    - dataset_utils_8.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_9:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 9"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    params:
+    - dataset_utils_9.dataset_name
+    - dataset_utils_9.dataset_parent_dir
+    - dataset_utils_9.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson:
+        cache: false
+        persist: true
+  dataset_utils_10:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 10"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    params:
+    - dataset_utils_10.dataset_name
+    - dataset_utils_10.dataset_parent_dir
+    - dataset_utils_10.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused:
+        cache: false
+        persist: true
+  dataset_utils_11:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 11"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    params:
+    - dataset_utils_11.dataset_name
+    - dataset_utils_11.dataset_parent_dir
+    - dataset_utils_11.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused:
+        cache: false
+        persist: true
+  dataset_utils_12:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 12"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    params:
+    - dataset_utils_12.dataset_name
+    - dataset_utils_12.dataset_parent_dir
+    - dataset_utils_12.output_dir
+    outs:
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused:
+        cache: false
+        persist: true
+
+
+  train_nriw_1:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 1"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../scripts/train_nriw.sh
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    params:
+    - train_nriw_1.dataset_name
+    - train_nriw_1.dataset_parent_dir
+    - train_nriw_1.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance:
+        cache: false
+        persist: true
+  train_nriw_2:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    params:
+    - train_nriw_2.dataset_name
+    - train_nriw_2.dataset_parent_dir
+    - train_nriw_2.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance:
+        cache: false
+        persist: true
+  train_nriw_3:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    params:
+    - train_nriw_3.dataset_name
+    - train_nriw_3.dataset_parent_dir
+    - train_nriw_3.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance:
+        cache: false
+        persist: true
+  train_nriw_4:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    params:
+    - train_nriw_4.dataset_name
+    - train_nriw_4.dataset_parent_dir
+    - train_nriw_4.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance:
+        cache: false
+        persist: true
+  train_nriw_5:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    params:
+    - train_nriw_5.dataset_name
+    - train_nriw_5.dataset_parent_dir
+    - train_nriw_5.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance:
+        cache: false
+        persist: true
+  train_nriw_6:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    params:
+    - train_nriw_6.dataset_name
+    - train_nriw_6.dataset_parent_dir
+    - train_nriw_6.model_parent_dir
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance:
+        cache: false
+        persist: true
+
+
+  train_nriw_7:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 7"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../scripts/train_nriw.sh
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    params:
+    - train_nriw_7.dataset_name
+    - train_nriw_7.dataset_parent_dir
+    - train_nriw_7.model_parent_dir
+    - train_nriw_7.timestamp
+    - train_nriw_7.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+  train_nriw_8:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 8"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    params:
+    - train_nriw_8.dataset_name
+    - train_nriw_8.dataset_parent_dir
+    - train_nriw_8.model_parent_dir
+    - train_nriw_8.timestamp
+    - train_nriw_8.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+  train_nriw_9:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 9"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    params:
+    - train_nriw_9.dataset_name
+    - train_nriw_9.dataset_parent_dir
+    - train_nriw_9.model_parent_dir
+    - train_nriw_9.timestamp
+    - train_nriw_9.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+  train_nriw_10:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 10"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    params:
+    - train_nriw_10.dataset_name
+    - train_nriw_10.dataset_parent_dir
+    - train_nriw_10.model_parent_dir
+    - train_nriw_10.timestamp
+    - train_nriw_10.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+  train_nriw_11:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 11"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    params:
+    - train_nriw_11.dataset_name
+    - train_nriw_11.dataset_parent_dir
+    - train_nriw_11.model_parent_dir
+    - train_nriw_11.timestamp
+    - train_nriw_11.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+  train_nriw_12:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 12"
+    deps:
+    - ../../pretrain_appearance.py
+    - ../../neural_rerendering.py
+    - ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    params:
+    - train_nriw_12.dataset_name
+    - train_nriw_12.dataset_parent_dir
+    - train_nriw_12.model_parent_dir
+    - train_nriw_12.timestamp
+    - train_nriw_12.suffix
+    outs:
+    - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance_4000kimg:
+        cache: false
+        persist: true
+
+
+  evaluate_nriw_1:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+      params:
+      - evaluate_nriw_1.model_parent_dir
+      - evaluate_nriw_1.dataset_name
+      - evaluate_nriw_1.dataset_parent_dir
+      - evaluate_nriw_1.timestamp
+  evaluate_nriw_2:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 2"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+      params:
+      - evaluate_nriw_2.model_parent_dir
+      - evaluate_nriw_2.dataset_name
+      - evaluate_nriw_2.dataset_parent_dir
+      - evaluate_nriw_2.timestamp
+  evaluate_nriw_3:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 3"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance
+      params:
+      - evaluate_nriw_3.model_parent_dir
+      - evaluate_nriw_3.dataset_name
+      - evaluate_nriw_3.dataset_parent_dir
+      - evaluate_nriw_3.timestamp
+  evaluate_nriw_4:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 4"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance
+      params:
+      - evaluate_nriw_4.model_parent_dir
+      - evaluate_nriw_4.dataset_name
+      - evaluate_nriw_4.dataset_parent_dir
+      - evaluate_nriw_4.timestamp
+  evaluate_nriw_5:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 5"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance
+      params:
+      - evaluate_nriw_5.model_parent_dir
+      - evaluate_nriw_5.dataset_name
+      - evaluate_nriw_5.dataset_parent_dir
+      - evaluate_nriw_5.timestamp
+  evaluate_nriw_6:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 6"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance
+      params:
+      - evaluate_nriw_6.model_parent_dir
+      - evaluate_nriw_6.dataset_name
+      - evaluate_nriw_6.dataset_parent_dir
+      - evaluate_nriw_6.timestamp
+
+
+  evaluate_nriw_7:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 7"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_7.model_parent_dir
+      - evaluate_nriw_7.dataset_name
+      - evaluate_nriw_7.dataset_parent_dir
+      - evaluate_nriw_7.timestamp
+  evaluate_nriw_8:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 8"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_8.model_parent_dir
+      - evaluate_nriw_8.dataset_name
+      - evaluate_nriw_8.dataset_parent_dir
+      - evaluate_nriw_8.timestamp
+  evaluate_nriw_9:
+      cmd: bash -lc "sbatch --wait --exclude=node-16 ../scripts/evaluate_nriw.sh 9"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_9.model_parent_dir
+      - evaluate_nriw_9.dataset_name
+      - evaluate_nriw_9.dataset_parent_dir
+      - evaluate_nriw_9.timestamp
+  evaluate_nriw_10:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 10"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_10.model_parent_dir
+      - evaluate_nriw_10.dataset_name
+      - evaluate_nriw_10.dataset_parent_dir
+      - evaluate_nriw_10.timestamp
+  evaluate_nriw_11:
+      cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 11"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_11.model_parent_dir
+      - evaluate_nriw_11.dataset_name
+      - evaluate_nriw_11.dataset_parent_dir
+      - evaluate_nriw_11.timestamp
+  evaluate_nriw_12:
+      cmd: bash -lc "sbatch --wait --exclude=node-16 ../scripts/evaluate_nriw.sh 12"
+      deps:
+      - ../../neural_rerendering.py
+      - ../../evaluate_quantitative_metrics.py
+      - ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance_4000kimg
+      params:
+      - evaluate_nriw_12.model_parent_dir
+      - evaluate_nriw_12.dataset_name
+      - evaluate_nriw_12.dataset_parent_dir
+      - evaluate_nriw_12.timestamp

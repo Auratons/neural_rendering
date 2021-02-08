@@ -1,28 +1,3 @@
-render_colmap_4:
-  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh
-    4"
-  deps:
-  - path: ../../colmap/load_data.py
-    md5: 5bf34bb330110f6967b1e2ff5888f0b4
-    size: 13647
-  - path: ../../datasets/processed/imc/pantheon_exterior
-    md5: ed002c304763a6dd5cf59f589cb7610c.dir
-    size: 47284039416
-    nfiles: 8402
-  - path: ../scripts/render_colmap.sh
-    md5: 531b3e7283932e405ad2fffbb5f99699
-    size: 2190
-  params:
-    params.yaml:
-      render_colmap_4.ply_file: fused.ply
-      render_colmap_4.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
-      render_colmap_4.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-      render_colmap_4.voxel_size: 0.0153
-  outs:
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-    md5: 2ff8e8c8d0a2834c38e89a50107577a6.dir
-    size: 7044973137
-    nfiles: 7950
 render_colmap_1:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
   deps:
@@ -46,76 +21,6 @@ render_colmap_1:
   - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
     md5: 70c95d03724a789d3adb77bd0550a16d.dir
     size: 6394365767
-    nfiles: 7950
-dataset_utils_4:
-  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 4"
-  deps:
-  - path: ../../dataset_utils.py
-    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
-    size: 10784
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-    md5: 2ff8e8c8d0a2834c38e89a50107577a6.dir
-    size: 7044973137
-    nfiles: 7950
-  - path: ../scripts/run_dataset_utils.sh
-    md5: a1a4738e234e1fa656483689a754e63a
-    size: 2403
-  params:
-    params.yaml:
-      dataset_utils_4.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-      dataset_utils_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-      dataset_utils_4.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-  outs:
-  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
-    md5: 57c4c9ffa5fb12298e8ca16d9a16776f.dir
-    size: 4168285700
-    nfiles: 2
-dataset_utils_1:
-  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
-  deps:
-  - path: ../../dataset_utils.py
-    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
-    size: 10784
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
-    md5: 70c95d03724a789d3adb77bd0550a16d.dir
-    size: 6394365767
-    nfiles: 7950
-  - path: ../scripts/run_dataset_utils.sh
-    md5: a1a4738e234e1fa656483689a754e63a
-    size: 2403
-  params:
-    params.yaml:
-      dataset_utils_1.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
-      dataset_utils_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
-      dataset_utils_1.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
-  outs:
-  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
-    md5: 00c530c8556d5b8e9834e3b394eac8e1.dir
-    size: 4168285700
-    nfiles: 2
-render_colmap_5:
-  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
-  deps:
-  - path: ../../colmap/load_data.py
-    md5: 5bf34bb330110f6967b1e2ff5888f0b4
-    size: 13647
-  - path: ../../datasets/processed/imc/pantheon_exterior
-    md5: ed002c304763a6dd5cf59f589cb7610c.dir
-    size: 47284039416
-    nfiles: 8402
-  - path: ../scripts/render_colmap.sh
-    md5: 531b3e7283932e405ad2fffbb5f99699
-    size: 2190
-  params:
-    params.yaml:
-      render_colmap_5.ply_file: fused.ply
-      render_colmap_5.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
-      render_colmap_5.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-      render_colmap_5.voxel_size: 0.0081
-  outs:
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-    md5: 9bea1c3729f52e2f81d9d112beee6012.dir
-    size: 7029199369
     nfiles: 7950
 render_colmap_2:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
@@ -141,27 +46,123 @@ render_colmap_2:
     md5: 943526563f34474ab53c318341bd13de.dir
     size: 6543078382
     nfiles: 7950
-dataset_utils_5:
-  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 5"
+render_colmap_3:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_3.ply_file: meshed-poisson.ply
+      render_colmap_3.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_3.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      render_colmap_3.voxel_size: None
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 7bc02c0ec992a45a1d8ab5ca554297e9.dir
+    size: 6616767383
+    nfiles: 7950
+render_colmap_4:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 4"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13647
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_4.ply_file: fused.ply
+      render_colmap_4.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_4.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      render_colmap_4.voxel_size: 0.0153
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 2ff8e8c8d0a2834c38e89a50107577a6.dir
+    size: 7044973137
+    nfiles: 7950
+render_colmap_5:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 5"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13647
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_5.ply_file: fused.ply
+      render_colmap_5.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_5.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      render_colmap_5.voxel_size: 0.0081
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 9bea1c3729f52e2f81d9d112beee6012.dir
+    size: 7029199369
+    nfiles: 7950
+render_colmap_6:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_6.ply_file: fused.ply
+      render_colmap_6.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_6.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      render_colmap_6.voxel_size: None
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 87a503f5f08654db70ea5ed6aa371da7.dir
+    size: 7058254016
+    nfiles: 7950
+dataset_utils_1:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
   deps:
   - path: ../../dataset_utils.py
     md5: 52dd3cd4c5e2097f93247c8cd03fac0b
     size: 10784
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-    md5: 9bea1c3729f52e2f81d9d112beee6012.dir
-    size: 7029199369
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 70c95d03724a789d3adb77bd0550a16d.dir
+    size: 6394365767
     nfiles: 7950
   - path: ../scripts/run_dataset_utils.sh
     md5: a1a4738e234e1fa656483689a754e63a
     size: 2403
   params:
     params.yaml:
-      dataset_utils_5.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-      dataset_utils_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-      dataset_utils_5.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      dataset_utils_1.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      dataset_utils_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      dataset_utils_1.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
   outs:
-  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
-    md5: a774d32afb6d8bee001d2fd692c0ac4d.dir
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 00c530c8556d5b8e9834e3b394eac8e1.dir
     size: 4168285700
     nfiles: 2
 dataset_utils_2:
@@ -187,54 +188,75 @@ dataset_utils_2:
     md5: 8f5a8ce22696d545bcb0c99836786254.dir
     size: 4168285700
     nfiles: 2
-render_colmap_6:
-  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 6"
+dataset_utils_3:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 3"
   deps:
-  - path: ../../colmap/load_data.py
-    md5: 5bf34bb330110f6967b1e2ff5888f0b4
-    size: 13822
-  - path: ../../datasets/processed/imc/pantheon_exterior
-    md5: ed002c304763a6dd5cf59f589cb7610c.dir
-    size: 47284039416
-    nfiles: 8402
-  - path: ../scripts/render_colmap.sh
-    md5: 531b3e7283932e405ad2fffbb5f99699
-    size: 2190
-  params:
-    params.yaml:
-      render_colmap_6.ply_file: fused.ply
-      render_colmap_6.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
-      render_colmap_6.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
-      render_colmap_6.voxel_size: None
-  outs:
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
-    md5: 87a503f5f08654db70ea5ed6aa371da7.dir
-    size: 7058254016
-    nfiles: 7950
-render_colmap_3:
-  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
-  deps:
-  - path: ../../colmap/load_data.py
-    md5: 5bf34bb330110f6967b1e2ff5888f0b4
-    size: 13822
-  - path: ../../datasets/processed/imc/pantheon_exterior
-    md5: ed002c304763a6dd5cf59f589cb7610c.dir
-    size: 47284039416
-    nfiles: 8402
-  - path: ../scripts/render_colmap.sh
-    md5: 531b3e7283932e405ad2fffbb5f99699
-    size: 2190
-  params:
-    params.yaml:
-      render_colmap_3.ply_file: meshed-poisson.ply
-      render_colmap_3.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
-      render_colmap_3.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
-      render_colmap_3.voxel_size: None
-  outs:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
   - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
     md5: 7bc02c0ec992a45a1d8ab5ca554297e9.dir
     size: 6616767383
     nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_3.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      dataset_utils_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      dataset_utils_3.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 4df096be4bfc0da7a0abf99d149c3fbd.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_4:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 4"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 2ff8e8c8d0a2834c38e89a50107577a6.dir
+    size: 7044973137
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_4.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      dataset_utils_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      dataset_utils_4.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 57c4c9ffa5fb12298e8ca16d9a16776f.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_5:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 5"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: 9bea1c3729f52e2f81d9d112beee6012.dir
+    size: 7029199369
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_5.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      dataset_utils_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      dataset_utils_5.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: a774d32afb6d8bee001d2fd692c0ac4d.dir
+    size: 4168285700
+    nfiles: 2
 dataset_utils_6:
   cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 6"
   deps:
@@ -258,26 +280,740 @@ dataset_utils_6:
     md5: 69455d3bebd21554dcd97be4cb2d0511.dir
     size: 4168285700
     nfiles: 2
-dataset_utils_3:
-  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 3"
+train_nriw_1:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 1"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 00c530c8556d5b8e9834e3b394eac8e1.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32119
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_1.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+    md5: 2d97d21dc78253410846dc6a831812ed.dir
+    size: 3482048604
+    nfiles: 16
+train_nriw_2:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 8f5a8ce22696d545bcb0c99836786254.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32119
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_2.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_2.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+    md5: 6c2027851f216b1d906590a303d4d038.dir
+    size: 3488164124
+    nfiles: 16
+train_nriw_3:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 3"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 4df096be4bfc0da7a0abf99d149c3fbd.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_3.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance
+    md5: 0ad1629771a65e4551e996d923f9616f.dir
+    size: 3489367152
+    nfiles: 16
+train_nriw_4:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 4"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 57c4c9ffa5fb12298e8ca16d9a16776f.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32119
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_4.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance
+    md5: 3d65ab4b13a40211f7eb51e8d5e2b398.dir
+    size: 3496680188
+    nfiles: 16
+train_nriw_5:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 5"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: a774d32afb6d8bee001d2fd692c0ac4d.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32119
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_5.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance
+    md5: d74d29c9a4b6891cc70d74206b23ba93.dir
+    size: 3497815647
+    nfiles: 16
+train_nriw_6:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 6"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 69455d3bebd21554dcd97be4cb2d0511.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32119
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_6.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance
+    md5: aef370720c17edccd5830c306f14fc3c.dir
+    size: 3499202697
+    nfiles: 16
+evaluate_nriw_1:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+    md5: 2d97d21dc78253410846dc6a831812ed.dir
+    size: 3482048604
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_1.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_1.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_1.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_1.timestamp: 2020-12-25-03-06-46
+evaluate_nriw_3:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 3"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance
+    md5: 0ad1629771a65e4551e996d923f9616f.dir
+    size: 3489367152
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_3.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_3.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_3.timestamp: 2020-12-21-10-05-36
+evaluate_nriw_4:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 4"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance
+    md5: 3d65ab4b13a40211f7eb51e8d5e2b398.dir
+    size: 3496680188
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_4.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_4.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_4.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_4.timestamp: 2020-12-25-04-49-41
+evaluate_nriw_5:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 5"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance
+    md5: d74d29c9a4b6891cc70d74206b23ba93.dir
+    size: 3497815647
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_5.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_5.timestamp: 2020-12-26-00-10-45
+evaluate_nriw_6:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 6"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance
+    md5: aef370720c17edccd5830c306f14fc3c.dir
+    size: 3499202697
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_6.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_6.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_6.timestamp: 2020-12-21-10-05-36
+evaluate_nriw_2:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 2"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance
+    md5: 6c2027851f216b1d906590a303d4d038.dir
+    size: 3488164124
+    nfiles: 16
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_2.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_2.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_2.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_2.timestamp: 2020-12-25-03-06-46
+train_nriw_9:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 9"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+    md5: 4df096be4bfc0da7a0abf99d149c3fbd.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw_wo_pretrain.sh
+    md5: 33e7379760a4d47fa09017229c2f6adc
+    size: 8635
+  params:
+    params.yaml:
+      train_nriw_9.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_9.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      train_nriw_9.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_9.timestamp: 2020-12-21-10-05-36
+      train_nriw_9.suffix: _4000kimg
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance_4000kimg
+    md5: 01a14415f5474f45c6386d51e3ed2976.dir
+    size: 11230839834
+    nfiles: 16
+train_nriw_12:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 12"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+    md5: 69455d3bebd21554dcd97be4cb2d0511.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw_wo_pretrain.sh
+    md5: 33e7379760a4d47fa09017229c2f6adc
+    size: 8635
+  params:
+    params.yaml:
+      train_nriw_12.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_12.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      train_nriw_12.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_12.timestamp: 2020-12-21-10-05-36
+      train_nriw_12.suffix: _4000kimg
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance_4000kimg
+    md5: d6e2eaa10feb7c20e76bd27db8663d2e.dir
+    size: 11312959561
+    nfiles: 16
+evaluate_nriw_9:
+  cmd: bash -lc "sbatch --wait --exclude=node-16 ../scripts/evaluate_nriw.sh 9"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson-2020-12-21-10-05-36-finetune_appearance_4000kimg
+    md5: 01a14415f5474f45c6386d51e3ed2976.dir
+    size: 11230839834
+    nfiles: 40
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_9.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_9.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      evaluate_nriw_9.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_9.timestamp: 2020-12-21-10-05-36
+evaluate_nriw_12:
+  cmd: bash -lc "sbatch --wait --exclude=node-16 ../scripts/evaluate_nriw.sh 12"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance_4000kimg
+    md5: d6e2eaa10feb7c20e76bd27db8663d2e.dir
+    size: 11312959561
+    nfiles: 40
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_12.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_12.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
+      evaluate_nriw_12.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_12.timestamp: 2020-12-21-10-05-36
+train_nriw_7:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 7"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+    md5: 00c530c8556d5b8e9834e3b394eac8e1.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
+  params:
+    params.yaml:
+      train_nriw_7.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_7.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      train_nriw_7.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_7.suffix: _4000kimg
+      train_nriw_7.timestamp: 2020-12-25-03-06-46
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+    md5: 731e3231700e689438bc3835ea6369c4.dir
+    size: 11139902534
+    nfiles: 40
+evaluate_nriw_7:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 7"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+    md5: 731e3231700e689438bc3835ea6369c4.dir
+    size: 11139902534
+    nfiles: 40
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_7.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_7.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
+      evaluate_nriw_7.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_7.timestamp: 2020-12-25-03-06-46
+train_nriw_8:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 8"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+    md5: 8f5a8ce22696d545bcb0c99836786254.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  params:
+    params.yaml:
+      train_nriw_8.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_8.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      train_nriw_8.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_8.suffix: _4000kimg
+      train_nriw_8.timestamp: 2020-12-25-03-06-46
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+    md5: d0480095ffe72a7ef2f19c3db21039ee.dir
+    size: 11184757123
+    nfiles: 40
+evaluate_nriw_8:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 8"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson-2020-12-25-03-06-46-finetune_appearance_4000kimg
+    md5: d0480095ffe72a7ef2f19c3db21039ee.dir
+    size: 11184757123
+    nfiles: 40
+  - path: ../../neural_rerendering.py
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
+  params:
+    params.yaml:
+      evaluate_nriw_8.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_8.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
+      evaluate_nriw_8.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_8.timestamp: 2020-12-25-03-06-46
+render_colmap_7:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 7"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_7.ply_file: meshed-poisson.ply
+      render_colmap_7.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_7.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      render_colmap_7.voxel_size: 0.065
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: 68ab7492f8fe4733f1bf742c4f978b72.dir
+    size: 5944418112
+    nfiles: 5300
+render_colmap_8:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 8"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_8.ply_file: meshed-poisson.ply
+      render_colmap_8.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_8.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      render_colmap_8.voxel_size: 0.038
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: 0e036aaac58ce9b993fc607045909185.dir
+    size: 6104865535
+    nfiles: 5300
+render_colmap_9:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 9"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_9.ply_file: meshed-poisson.ply
+      render_colmap_9.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_9.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      render_colmap_9.voxel_size: 0.027
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: dbcd743c6efe15385b26c48687afe1c1.dir
+    size: 6211574772
+    nfiles: 5300
+render_colmap_10:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 10"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_10.ply_file: fused.ply
+      render_colmap_10.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_10.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      render_colmap_10.voxel_size: 0.12
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: 7480e5af538b584c67913e602ff05b2b.dir
+    size: 6346756029
+    nfiles: 5300
+render_colmap_11:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 11"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_11.ply_file: fused.ply
+      render_colmap_11.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_11.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      render_colmap_11.voxel_size: 0.05
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: 253788651cab4ebe1e8e85c153807c65.dir
+    size: 7035866123
+    nfiles: 5300
+render_colmap_12:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 12"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/pantheon_exterior
+    md5: ed002c304763a6dd5cf59f589cb7610c.dir
+    size: 47284039416
+    nfiles: 8402
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_12.ply_file: fused.ply
+      render_colmap_12.root: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense
+      render_colmap_12.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      render_colmap_12.voxel_size: 0.032
+  outs:
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: 69b0cd30054c7650e03891c6f18712e1.dir
+    size: 7159756449
+    nfiles: 5300
+dataset_utils_12:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 12"
   deps:
   - path: ../../dataset_utils.py
     md5: 52dd3cd4c5e2097f93247c8cd03fac0b
     size: 10784
-  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
-    md5: 7bc02c0ec992a45a1d8ab5ca554297e9.dir
-    size: 6616767383
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: 69b0cd30054c7650e03891c6f18712e1.dir
+    size: 7159756449
     nfiles: 7950
   - path: ../scripts/run_dataset_utils.sh
     md5: a1a4738e234e1fa656483689a754e63a
     size: 2403
   params:
     params.yaml:
-      dataset_utils_3.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
-      dataset_utils_3.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
-      dataset_utils_3.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
+      dataset_utils_12.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      dataset_utils_12.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      dataset_utils_12.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
   outs:
-  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
-    md5: 4df096be4bfc0da7a0abf99d149c3fbd.dir
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: 68e1d676883291aef501e7659ccb39e1.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_7:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 7"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: 68ab7492f8fe4733f1bf742c4f978b72.dir
+    size: 5944418112
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_7.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      dataset_utils_7.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      dataset_utils_7.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: e4c4b12a2197a62be4e4baac6f8d0dfb.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_10:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 10"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: 7480e5af538b584c67913e602ff05b2b.dir
+    size: 6346756029
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_10.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      dataset_utils_10.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      dataset_utils_10.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: b7790ef40817f258eae1c094c6693265.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_9:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 9"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: dbcd743c6efe15385b26c48687afe1c1.dir
+    size: 6211574772
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_9.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      dataset_utils_9.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      dataset_utils_9.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: 178ef37ddd4f93bfc438b7d4bf6a882d.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_8:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 8"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: 0e036aaac58ce9b993fc607045909185.dir
+    size: 6104865535
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_8.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      dataset_utils_8.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      dataset_utils_8.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: b33193ca3a2acbe07b91e46e81252450.dir
+    size: 4168285700
+    nfiles: 2
+dataset_utils_11:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 11"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: 253788651cab4ebe1e8e85c153807c65.dir
+    size: 7035866123
+    nfiles: 7950
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_11.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      dataset_utils_11.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      dataset_utils_11.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+  outs:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: d131150e217169345780aaa60cfcec00.dir
     size: 4168285700
     nfiles: 2

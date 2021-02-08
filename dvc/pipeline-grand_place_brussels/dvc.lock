@@ -288,14 +288,14 @@ train_nriw_1:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
+    md5: ef68171c13d1f2711122a6fa6119836e
     size: 32119
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: 8c09f2c21e00c80c5f25b3aee7a13216
-    size: 12164
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
   params:
     params.yaml:
       train_nriw_1.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
@@ -314,11 +314,14 @@ train_nriw_2:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
+    md5: ef68171c13d1f2711122a6fa6119836e
     size: 32119
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
   params:
     params.yaml:
       train_nriw_2.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
@@ -337,11 +340,14 @@ train_nriw_3:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
+    md5: ef68171c13d1f2711122a6fa6119836e
     size: 32119
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
   params:
     params.yaml:
       train_nriw_3.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
@@ -360,11 +366,14 @@ train_nriw_4:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
+    md5: ef68171c13d1f2711122a6fa6119836e
     size: 32119
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
   params:
     params.yaml:
       train_nriw_4.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
@@ -383,11 +392,14 @@ train_nriw_5:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
+    md5: ef68171c13d1f2711122a6fa6119836e
     size: 32119
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
+    md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
+  - path: ../scripts/train_nriw.sh
+    md5: a78202c553d3ffecc02fd14a5baa7034
+    size: 11464
   params:
     params.yaml:
       train_nriw_5.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
@@ -406,11 +418,11 @@ train_nriw_6:
     size: 3142730124
     nfiles: 2
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   - path: ../../pretrain_appearance.py
-    md5: 30b6abc8c2e30a9268c2df1441b9c9ea
-    size: 13586
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
   params:
     params.yaml:
       train_nriw_6.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
@@ -418,9 +430,9 @@ train_nriw_6:
       train_nriw_6.model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
   outs:
   - path: ../../models/grand_place_brussels/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-19-00-07-25-finetune_appearance
-    md5: b732f31163108c08f1224d2861cbaebb.dir
-    size: 3508197837
-    nfiles: 16
+    md5: 7ec6bc47a663df977d218ebbe6c8423d.dir
+    size: 11370835856
+    nfiles: 40
 evaluate_nriw_6:
   cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 6"
   deps:
@@ -451,8 +463,8 @@ evaluate_nriw_1:
     size: 3490304739
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   params:
     params.yaml:
       evaluate_nriw_1.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
@@ -470,8 +482,8 @@ evaluate_nriw_2:
     size: 3497924139
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   params:
     params.yaml:
       evaluate_nriw_2.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-meshed-poisson
@@ -489,8 +501,8 @@ evaluate_nriw_3:
     size: 3496435196
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   params:
     params.yaml:
       evaluate_nriw_3.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
@@ -508,8 +520,8 @@ evaluate_nriw_4:
     size: 3509500912
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   params:
     params.yaml:
       evaluate_nriw_4.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
@@ -527,11 +539,293 @@ evaluate_nriw_5:
     size: 3506548500
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: b2aba3d7ce1cac17900eea8ae7317128
-    size: 32119
+    md5: ef68171c13d1f2711122a6fa6119836e
+    size: 32135
   params:
     params.yaml:
       evaluate_nriw_5.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       evaluate_nriw_5.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
       evaluate_nriw_5.model_parent_dir: /home/kremeto1/neural_rendering/models/grand_place_brussels/
       evaluate_nriw_5.timestamp: 2021-01-06-05-27-51
+render_colmap_7:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 7"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_7.ply_file: meshed-poisson.ply
+      render_colmap_7.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_7.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      render_colmap_7.voxel_size: 0.067
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: 50d1aae10896b128f833dfdd0a50b232.dir
+    size: 4474081583
+    nfiles: 3996
+render_colmap_8:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 8"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_8.ply_file: meshed-poisson.ply
+      render_colmap_8.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_8.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      render_colmap_8.voxel_size: 0.039
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: b078c16a591f4e6f8f49b6dcbe97f0a6.dir
+    size: 4566811266
+    nfiles: 3996
+render_colmap_9:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 9"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_9.ply_file: meshed-poisson.ply
+      render_colmap_9.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_9.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      render_colmap_9.voxel_size: 0.027
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: cecacbd61f50343db272c2543edaf229.dir
+    size: 4632803797
+    nfiles: 3996
+render_colmap_10:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 10"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_10.ply_file: fused.ply
+      render_colmap_10.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_10.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      render_colmap_10.voxel_size: 0.058
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: ee984b61464a15761009a8ab7b581bf5.dir
+    size: 4567482103
+    nfiles: 3996
+render_colmap_11:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 11"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_11.ply_file: fused.ply
+      render_colmap_11.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_11.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      render_colmap_11.voxel_size: 0.035
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: 5631c37b7475f29dd951a3da4a53f483.dir
+    size: 4901761795
+    nfiles: 3996
+render_colmap_12:
+  cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 12"
+  deps:
+  - path: ../../colmap/load_data.py
+    md5: 5bf34bb330110f6967b1e2ff5888f0b4
+    size: 13822
+  - path: ../../datasets/processed/imc/grand_place_brussels
+    md5: a797717ea4f46d0fa7fe8f14b2b03494.dir
+    size: 30704450158
+    nfiles: 6479
+  - path: ../scripts/render_colmap.sh
+    md5: 531b3e7283932e405ad2fffbb5f99699
+    size: 2190
+  params:
+    params.yaml:
+      render_colmap_12.ply_file: fused.ply
+      render_colmap_12.root: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense
+      render_colmap_12.src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      render_colmap_12.voxel_size: 0.024
+  outs:
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: a2bca00f05f368ca0163b5fe6309180a.dir
+    size: 5078703095
+    nfiles: 3996
+dataset_utils_7:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 7"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: 50d1aae10896b128f833dfdd0a50b232.dir
+    size: 4474081583
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_7.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      dataset_utils_7.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+      dataset_utils_7.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+    md5: bb8fff6f5273ab7e7815ffbd9eabc800.dir
+    size: 3142730124
+    nfiles: 2
+dataset_utils_8:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 8"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: b078c16a591f4e6f8f49b6dcbe97f0a6.dir
+    size: 4566811266
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_8.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      dataset_utils_8.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+      dataset_utils_8.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+    md5: cd0b3f609e3b8a2163d5f31572f29534.dir
+    size: 3142730124
+    nfiles: 2
+dataset_utils_9:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 9"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: cecacbd61f50343db272c2543edaf229.dir
+    size: 4632803797
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_9.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      dataset_utils_9.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+      dataset_utils_9.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+    md5: e2f502c0314cc7b4c358520e802d875c.dir
+    size: 3142730124
+    nfiles: 2
+dataset_utils_10:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 10"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: ee984b61464a15761009a8ab7b581bf5.dir
+    size: 4567482103
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_10.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      dataset_utils_10.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+      dataset_utils_10.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+    md5: 95c5127d295b5c6cd1610b3a2d57b4d1.dir
+    size: 3142730124
+    nfiles: 2
+dataset_utils_11:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 11"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: 5631c37b7475f29dd951a3da4a53f483.dir
+    size: 4901761795
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_11.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      dataset_utils_11.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+      dataset_utils_11.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+    md5: 813087d60229194d5328d4d83777c20d.dir
+    size: 3142730124
+    nfiles: 2
+dataset_utils_12:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 12"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 52dd3cd4c5e2097f93247c8cd03fac0b
+    size: 10784
+  - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: a2bca00f05f368ca0163b5fe6309180a.dir
+    size: 5078703095
+    nfiles: 5994
+  - path: ../scripts/run_dataset_utils.sh
+    md5: a1a4738e234e1fa656483689a754e63a
+    size: 2403
+  params:
+    params.yaml:
+      dataset_utils_12.dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      dataset_utils_12.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+      dataset_utils_12.output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+  outs:
+  - path: ../../datasets/final/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+    md5: b0ffa559e4eef1901f7395d210697fc9.dir
+    size: 3142730124
+    nfiles: 2

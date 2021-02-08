@@ -404,9 +404,9 @@ def evaluate_image_set(
     )
 
     print("Evaluating images for subset %s" % subset_suffix)
-    start = time.time()
+    start = time.process_time()
     images = [x for x in est.predict(est_inp_fn)]
-    end = time.time()
+    end = time.process_time()
     print("Evaluated %d images" % len(images))
     for i, img in enumerate(images):
         output_file_path = osp.join(output_dir, "out_%04d.png" % i)
