@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import open3d as o3d
 import cv2
+import time
 from pathlib import Path
 from PIL import Image
 from skimage.transform import resize
@@ -190,40 +191,7 @@ def o3d_to_pyrenderer(mesh_or_pt):
     return mesh
 
 
-def build_dataset(
-    src_reference,
-    ply_path,
-    src_colmap,
-    out_dir,
-    min_size=512,
-    val_ratio=0.2,
-    src_depth=None,
-    point_size=3.0,
-    verbose=False,
-    voxel_size=100,
-):
-    """Build the input dataset composed of the reference images, the RGBA and depth renderings.
-    Args:
-        - src_reference : reference images directory
-        - ply_path : 3D scene mesh or pointcloud path
-        - src_colmap : colmap SfM output directory
-        - out_dir : output directory
-        - min_size : minimum height and width (for cropping)
-        - val_ratio : train / val ratio
-        - src_depth : depth maps directory. If None, the depth maps are rendered along with RGB renderings.
-        - point_size : Point size for rendering
-        - voxel_size : voxel size for voxel-based subsampling used on mesh or pointcloud
-                       (None means skipping subsampling)
-    """
-    # Create output folders
-    os.makedirs(out_dir, exist_ok=True)
-    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
-    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
-    # Loading camera pose estimates
-    K, R, T, H, W, src_img_nms = load_cameras_colmap(
-        get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
-    )
-    flags = RenderFlags.FLAT | RenderFlags.RGBA
+def load_ply(ply_path, voxel_size):
     # Loading the mesh / pointcloud
     m = trimesh.load(ply_path)
     if isinstance(m, trimesh.PointCloud):
@@ -256,7 +224,49 @@ def build_dataset(
         raise NotImplementedError(
             "Unsupported 3D object. Supported format is a `.ply` pointcloud or mesh."
         )
+    return mesh
+
+
+def build_dataset(
+    src_reference,
+    ply_path,
+    src_colmap,
+    out_dir,
+    min_size=512,
+    val_ratio=0.2,
+    src_depth=None,
+    point_size=3.0,
+    verbose=False,
+    voxel_size=100,
+    bg_color=None,
+):
+    """Build the input dataset composed of the reference images, the RGBA and depth renderings.
+    Args:
+        - src_reference : reference images directory
+        - ply_path : 3D scene mesh or pointcloud path
+        - src_colmap : colmap SfM output directory
+        - out_dir : output directory
+        - min_size : minimum height and width (for cropping)
+        - val_ratio : train / val ratio
+        - src_depth : depth maps directory. If None, the depth maps are rendered along with RGB renderings.
+        - point_size : Point size for rendering
+        - voxel_size : voxel size for voxel-based subsampling used on mesh or pointcloud
+                       (None means skipping subsampling)
+    """
+    # Create output folders
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
+    # Loading camera pose estimates
+    K, R, T, H, W, src_img_nms = load_cameras_colmap(
+        get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
+    )
+    flags = RenderFlags.FLAT | RenderFlags.RGBA
+    # Loading the mesh / pointcloud
+    mesh = load_ply(ply_path, voxel_size)
     it = 0
+
+    times = [0.0] * len(H)
 
     for i in range(len(H)):
         if verbose:
@@ -266,7 +276,9 @@ def build_dataset(
         k, r, t, w, h, img_nm = K[i], R[i], T[i], W[i], H[i], src_img_nms[i]
 
         if min(w, h) > min_size:
-            scene = pyrender.Scene()
+            start = time.process_time()
+
+            scene = pyrender.Scene(bg_color=bg_color)
             scene.add(mesh)
             camera = pyrender.camera.IntrinsicsCamera(
                 k[0, 0], k[1, 1], k[0, 2], k[1, 2]
@@ -280,6 +292,10 @@ def build_dataset(
             # Offscreen rendering
             r = pyrender.OffscreenRenderer(w, h, point_size=point_size)
             rgb_rendering, depth_rendering = r.render(scene, flags=flags)
+
+            end = time.process_time()
+            times[i] = end - start
+
             img_rendering = Image.fromarray(rgb_rendering)
             # depth_rendering = normalize_depth(depth_rendering)
 
@@ -323,6 +339,10 @@ def build_dataset(
             if verbose:
                 print("Skipping this image : too small ")
 
+    if verbose:
+        times = np.array(times)
+        print(f"Rendering time per image was ({np.mean(times)} +- {np.std(times)}) s.")
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -355,6 +375,12 @@ def parse_args():
         default=None,
         help="Voxel size used for downsampling mesh or pointcloud.",
     )
+    parser.add_argument(
+        "--bg_color",
+        type=str,
+        default=None,
+        help="Background comma separated color for rendering.",
+    )
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
     args = parser.parse_args()
 
@@ -383,4 +409,5 @@ if __name__ == "__main__":
         point_size=args.point_size,
         verbose=args.verbose,
         voxel_size=args.voxel_size,
+        bg_color=[float(i) for i in args.bg_color.split(",")],
     )

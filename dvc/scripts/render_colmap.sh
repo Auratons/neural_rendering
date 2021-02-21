@@ -40,6 +40,7 @@ echo "    --val_ratio=$(cat params.yaml | yq -r '.render_colmap_'$sub'.val_ratio
 echo "    --point_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.point_size // "2.0"')"
 echo "    --min_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.min_size // "512"')"
 echo "    --voxel_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.voxel_size')"
+echo "    --bg_color=$(cat params.yaml | yq -r '.render_colmap_'$sub'.bg_color // "1,1,1"')"
 echo "    --verbose"
 echo
 
@@ -52,4 +53,5 @@ echo
     --point_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.point_size // "2.0"') \
     --min_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.min_size // "512"') \
     --voxel_size=$(cat params.yaml | yq -r '.render_colmap_'$sub'.voxel_size') \
+    --bg_color=$(cat params.yaml | yq -r '.render_colmap_'$sub'.bg_color // "1,1,1"') \
     --verbose
