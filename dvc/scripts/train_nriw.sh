@@ -2,9 +2,9 @@
 #SBATCH --job-name=train_nriw_%j
 #SBATCH --output=train_nriw_%j.log
 #SBATCH --mem=128G
-#SBATCH --time=3-0:00:00
+#SBATCH --time=4-0:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:Volta100:4
+#SBATCH --gres=gpu:4
 #SBATCH --cpus-per-gpu=9
 
 set -e
@@ -33,6 +33,22 @@ if [ -z ${TIMESTAMP} ]; then
     TIMESTAMP=$(date "+%F-%H-%M-%S")
 fi
 
+if [ $(nvidia-smi -L | cut -f 3 -d' ' | head -n 1) == 'GeForce' ]; then
+    PT_BS=64
+    PT_STEPS=5000
+    FD_BS=10
+    FD_KIMG=6400
+    FT_BS=10
+    FT_KIMG=1600
+else
+    PT_BS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_batch_size // "64"')
+    PT_STEPS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_appearance_steps // "7000"')
+    FD_BS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_batch_size // "16"')
+    FD_KIMG=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_total_kimg // "4000"')
+    FT_BS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_batch_size // "16"')
+    FT_KIMG=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_total_kimg // "1000"')
+fi
+
 
 echo
 echo "Running"
@@ -41,28 +57,28 @@ echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_n
 echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
 # Final datasets' subfolder contains only tfrecords, post_processed subfolder contains images.
 echo "    --imageset_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_imageset_dir // (.train_nriw_'$sub'.dataset_parent_dir | sub("final"; "post_processed") | . += "/train")')"
-echo "    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_batch_size // "64"')"
+echo "    --batch_size=${PT_BS}"
 echo "    --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"')"
 echo "    --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"')"
 echo "    --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"')"
 echo "    --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_buffer_nc // "4"')"
 echo "    --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
 echo "    --vgg16_path=${WORKSPACE}/vgg16_weights/vgg16.npy"
-echo "    --appearance_pretrain_steps=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_appearance_steps // "7000"')"
+echo "    --appearance_pretrain_steps=${PT_STEPS}"
 echo
 
 ~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
     --imageset_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_imageset_dir // (.train_nriw_'$sub'.dataset_parent_dir | sub("final"; "post_processed") | . += "/train")') \
-    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_batch_size // "64"') \
+    --batch_size=${PT_BS} \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"') \
     --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"') \
     --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"') \
     --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_buffer_nc // "4"') \
     --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
     --vgg16_path="${WORKSPACE}/vgg16_weights/vgg16.npy" \
-    --appearance_pretrain_steps=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_appearance_steps // "7000"')
+    --appearance_pretrain_steps=${PT_STEPS}
 
 
 echo
@@ -76,8 +92,8 @@ echo "    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub
 echo "    --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_app_encoder // "False"')"
 echo "    --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_from_another_ckpt // "False"')"
 echo "    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_train_dir // ""')"
-echo "    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_total_kimg // "4000"')"
-echo "    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_batch_size // "16"')"
+echo "    --total_kimg=${FD_KIMG}"
+echo "    --batch_size=${FD_BS}"
 echo "    --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"')"
 echo "    --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"')"
 echo "    --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"')"
@@ -94,8 +110,8 @@ echo
     --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_app_encoder // "False"') \
     --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_from_another_ckpt // "False"') \
     --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_train_dir // ""') \
-    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_total_kimg // "4000"') \
-    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_batch_size // "16"') \
+    --total_kimg=${FD_KIMG} \
+    --batch_size=${FD_BS} \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"') \
     --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"') \
     --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"') \
@@ -114,8 +130,8 @@ echo "    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub
 echo "    --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_app_encoder // "True"')"
 echo "    --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_from_another_ckpt // "True"')"
 echo "    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")')"
-echo "    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_total_kimg // "1000"')"
-echo "    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_batch_size // "16"')"
+echo "    --total_kimg=${FT_KIMG}"
+echo "    --batch_size=${FT_BS}"
 echo "    --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"')"
 echo "    --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"')"
 echo "    --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"')"
@@ -132,8 +148,8 @@ echo
     --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_app_encoder // "True"') \
     --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_from_another_ckpt // "True"') \
     --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")') \
-    --total_kimg=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_total_kimg // "1000"') \
-    --batch_size=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_batch_size // "16"') \
+    --total_kimg=${FT_KIMG} \
+    --batch_size=${FT_BS} \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"') \
     --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"') \
     --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"') \

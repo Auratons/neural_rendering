@@ -444,7 +444,7 @@ train_nriw_1:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
@@ -470,7 +470,7 @@ train_nriw_2:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
@@ -496,7 +496,7 @@ train_nriw_3:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
@@ -522,7 +522,7 @@ train_nriw_4:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
@@ -548,7 +548,7 @@ train_nriw_5:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
@@ -574,7 +574,7 @@ train_nriw_6:
     md5: 3f1792d2629f2051224c03efe83c7829
     size: 13586
   - path: ../scripts/train_nriw.sh
-    md5: a78202c553d3ffecc02fd14a5baa7034
+    md5: 98f55b14c873854d9fde071851780685
     size: 11464
   params:
     params.yaml:
