@@ -73,9 +73,19 @@ class AlignedRenderedDataset(object):
             # Read the 3D rendered image
             img_rendered = cv2.imread(rendered_img_name, cv2.IMREAD_UNCHANGED)
             # Change BGR (default cv2 format) to RGB
-            img_rendered = img_rendered[
-                :, :, [2, 1, 0, 3]
-            ]  # it has a 4th alpha channel
+            if img_rendered.shape[-1] == 4:
+                img_rendered = img_rendered[
+                    :, :, [2, 1, 0, 3]
+                ]  # it has a 4th alpha channel
+            else:
+                img_rendered = img_rendered[:, :, ::-1]  # Change BGR to RGB format.
+                img_rendered = np.concatenate(
+                    (
+                        img_rendered,
+                        255 * np.ones((*img_rendered.shape[:-1], 1), dtype=np.uint8),
+                    ),
+                    axis=-1,
+                )
             # Read the depth image
             img_depth = cv2.imread(depth_img_name, cv2.IMREAD_UNCHANGED)
             # Workaround as some depth images are read with a different data type!
