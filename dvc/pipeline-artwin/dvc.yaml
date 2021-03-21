@@ -1,0 +1,91 @@
+stages:
+  matlab_preprocessing:
+    cmd: bash -lc "sbatch --wait ../scripts/artwin_matlab_preprocess.sh preprocess"
+    deps:
+    - ../../artwin/preprocess.m
+    - ../scripts/artwin_matlab_preprocess.sh
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29:
+        cache: false
+        persist: true
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53:
+        cache: false
+        persist: true
+
+
+  render_colmap_1:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
+    deps:
+    - ../../colmap/load_data.py
+    - ../scripts/render_colmap.sh
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
+    params:
+    - render_colmap_1.voxel_size
+    - render_colmap_1.ply_file
+    - render_colmap_1.root
+    - render_colmap_1.src_output
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered:
+        cache: false
+        persist: true
+
+  render_colmap_2:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
+    deps:
+    - ../../colmap/load_data.py
+    - ../scripts/render_colmap.sh
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
+    params:
+    - render_colmap_2.voxel_size
+    - render_colmap_2.ply_file
+    - render_colmap_2.root
+    - render_colmap_2.src_output
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered:
+        cache: false
+        persist: true
+
+  render_colmap_3:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
+    deps:
+    - ../../colmap/load_data.py
+    - ../scripts/render_colmap.sh
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
+    params:
+    - render_colmap_3.voxel_size
+    - render_colmap_3.ply_file
+    - render_colmap_3.root
+    - render_colmap_3.src_output
+    - render_colmap_3.bg_color
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered-black_bg:
+        cache: false
+        persist: true
+
+
+  join_datasets:
+    cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py
+    deps:
+    - ../../artwin/join_datasets.py
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset:
+        cache: false
+        persist: true
+
+
+  dataset_utils_1:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
+    params:
+    - dataset_utils_1.dataset_name
+    - dataset_utils_1.dataset_parent_dir
+    - dataset_utils_1.output_dir
+    outs:
+    - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset_tfrecord:
+        cache: false
+        persist: true

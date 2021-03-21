@@ -1,5 +1,5 @@
 matlab_preprocessing:
-  cmd: bash -lc "sbatch --wait ../scripts/artwin_matlab_preprocess.sh"
+  cmd: bash -lc "sbatch --wait ../scripts/artwin_matlab_preprocess.sh preprocess"
   deps:
   - path: ../../artwin/preprocess.m
     md5: 9a9201edfb289431b5caede5fbce700a
@@ -20,8 +20,8 @@ render_colmap_1:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 41912585fcbbc374c3ef1f787c7d8eed
-    size: 14076
+    md5: c0cb2744079e888122587ede3812a510
+    size: 14503
   - path: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
     md5: 1ecdb0953e722f0ec40b1a129e413174.dir
     size: 3471367394
@@ -45,8 +45,8 @@ render_colmap_2:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 2"
   deps:
   - path: ../../colmap/load_data.py
-    md5: 41912585fcbbc374c3ef1f787c7d8eed
-    size: 14076
+    md5: c0cb2744079e888122587ede3812a510
+    size: 14503
   - path: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
     md5: 97e702e8a1c0520c13b128c21bea45e3.dir
     size: 5564578512
@@ -110,8 +110,8 @@ render_colmap_3:
   cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 3"
   deps:
   - path: ../../colmap/load_data.py
-    md5: be6183f4b358be77e1ba43b75c4d0d93
-    size: 14078
+    md5: c0cb2744079e888122587ede3812a510
+    size: 14503
   - path: ../scripts/render_colmap.sh
     md5: df670a9730448d4733e55047b0ee1068
     size: 2371

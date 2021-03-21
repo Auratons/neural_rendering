@@ -1,0 +1,26 @@
+render_colmap_1:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered
+  ply_file: 2019-09-28_08.31.29.ply
+  voxel_size: None
+  val_ratio: 0.0
+
+render_colmap_2:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered
+  ply_file: 2019-09-28_16.11.53.ply
+  voxel_size: None
+  val_ratio: 0.0
+
+render_colmap_3:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered-black_bg
+  ply_file: 2019-09-28_08.31.29.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
+dataset_utils_1:
+  dataset_name: artwin_colmap
+  dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
+  output_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset_tfrecord
