@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=render_colmap_%j
-#SBATCH --output=render_colmap_%j.out
+#SBATCH --output=render_colmap_%j.log
 #SBATCH --mem=32G
 #SBATCH --time=0-5:00:00
 #SBATCH --partition=gpu

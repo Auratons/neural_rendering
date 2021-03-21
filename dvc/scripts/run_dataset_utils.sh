@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=run_dataset_utils_%j
-#SBATCH --output=run_dataset_utils_%j.out
+#SBATCH --output=run_dataset_utils_%j.log
 #SBATCH --mem=32G
 #SBATCH --time=0-10:00:00
 #SBATCH --partition=gpu
