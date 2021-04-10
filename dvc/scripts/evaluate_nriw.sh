@@ -4,7 +4,7 @@
 #SBATCH --mem=64G
 #SBATCH --time=0-01:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:1
 #SBATCH --cpus-per-gpu=16
 
 set -e

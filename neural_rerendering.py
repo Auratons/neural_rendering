@@ -404,16 +404,41 @@ def evaluate_image_set(
     )
 
     print("Evaluating images for subset %s" % subset_suffix)
-    start = time.process_time()
+
+    # Return the value (in fractional seconds) of the sum of the system
+    # and user CPU time of the current thread. It does not include time
+    # elapsed during sleep.
+    thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+    # Return the value (in fractional seconds) of the sum of the system
+    # and user CPU time of the current process. It does not include time
+    # elapsed during sleep. Since these calls utilize more threads, this
+    # may significantly overgrowth the "real" sys+cpu time seen by
+    # observing the main thread.
+    process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
+
     images = [x for x in est.predict(est_inp_fn)]
-    end = time.process_time()
+
+    thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+    process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
+
     print("Evaluated %d images" % len(images))
     for i, img in enumerate(images):
         output_file_path = osp.join(output_dir, "out_%04d.png" % i)
         print("Saving file #%d: %s" % (i, output_file_path))
         with tf.gfile.Open(output_file_path, "wb") as f:
             f.write(utils.to_png(img))
-    print("\n\n\nElapsed time : {}\n\n\n".format((end - start) / len(images)))
+
+    print(
+        f"CPU thread time per prediction: {(thread_end - thread_start) * 1000 / len(images):.2f} ms"
+    )
+    # Count of processors available to the job on this node. Note the
+    # select/linear plugin allocates entire nodes to jobs, so the value
+    # indicates the total count of CPUs on the node. For the select/cons_res
+    # plugin, this number indicates the number of cores on this node
+    # allocated to the job.
+    print(
+        f"CPU process time per prediction ({os.environ['SLURM_CPUS_ON_NODE']} CPUS): ({(process_end - process_start) * 1000 / len(images):.2f}) ms"
+    )
 
 
 def _load_and_concatenate_image_channels(

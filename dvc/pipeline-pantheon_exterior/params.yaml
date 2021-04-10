@@ -192,6 +192,32 @@ train_nriw_12:
   timestamp: 2020-12-21-10-05-36
 
 
+train_nriw_13:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+train_nriw_14:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+train_nriw_15:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+train_nriw_16:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+train_nriw_17:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+train_nriw_18:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+
+
 evaluate_nriw_1:
   model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
   dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
@@ -266,3 +292,35 @@ evaluate_nriw_12:
   timestamp: 2020-12-21-10-05-36
   train_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36-finetune_appearance_4000kimg
   output_validation_dir: /home/kremeto1/neural_rendering/models/evaluations/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-21-10-05-36_seq-val_4000kimg
+
+
+evaluate_nriw_13:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
+  timestamp: test
+evaluate_nriw_14:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
+  timestamp: 2021-02-14-07-56-52
+evaluate_nriw_15:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
+  timestamp: 2021-02-17-00-13-20
+evaluate_nriw_16:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
+  timestamp: 2021-02-14-07-45-16
+evaluate_nriw_17:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
+  timestamp: 2021-02-19-07-51-36
+evaluate_nriw_18:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+  dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+  timestamp: 2021-02-19-03-03-13
