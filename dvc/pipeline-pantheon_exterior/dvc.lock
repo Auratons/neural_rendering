@@ -447,7 +447,7 @@ evaluate_nriw_1:
     size: 3482048604
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -466,7 +466,7 @@ evaluate_nriw_3:
     size: 3489367152
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -485,7 +485,7 @@ evaluate_nriw_4:
     size: 3496680188
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -504,7 +504,7 @@ evaluate_nriw_5:
     size: 3497815647
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -523,7 +523,7 @@ evaluate_nriw_6:
     size: 3499202697
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -542,7 +542,7 @@ evaluate_nriw_2:
     size: 3488164124
     nfiles: 16
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -578,6 +578,59 @@ train_nriw_9:
     md5: 01a14415f5474f45c6386d51e3ed2976.dir
     size: 11230839834
     nfiles: 16
+train_nriw_10:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 10"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+    md5: 57c4c9ffa5fb12298e8ca16d9a16776f.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 32135
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw_wo_pretrain.sh
+    md5: 33e7379760a4d47fa09017229c2f6adc
+    size: 8635
+  params:
+    params.yaml:
+      train_nriw_10.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_10.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      train_nriw_10.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_10.timestamp: 2020-12-25-04-49-41
+      train_nriw_10.suffix: _4000kimg
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance_4000kimg
+    md5: c2c8669eeb32be9cff80c3691ce4340b.dir
+    size: 10900835730
+    nfiles: 16
+train_nriw_11:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 11"
+  deps:
+  - path: ../../datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+    md5: a774d32afb6d8bee001d2fd692c0ac4d.dir
+    size: 4168285700
+    nfiles: 2
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  params:
+    params.yaml:
+      train_nriw_11.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_11.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      train_nriw_11.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      train_nriw_11.suffix: _4000kimg
+      train_nriw_11.timestamp: 2020-12-26-00-10-45
+  outs:
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance_4000kimg
+    md5: 85360e2762d9f3139963f05c54551df1.dir
+    size: 11223374637
+    nfiles: 39
 train_nriw_12:
   cmd: bash -lc "sbatch --wait ../scripts/train_nriw_wo_pretrain.sh 12"
   deps:
@@ -617,8 +670,8 @@ evaluate_nriw_9:
     size: 11230839834
     nfiles: 40
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
-    size: 32135
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_9.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-meshed-poisson
@@ -636,8 +689,8 @@ evaluate_nriw_12:
     size: 11312959561
     nfiles: 40
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
-    size: 32135
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_12.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
@@ -683,8 +736,8 @@ evaluate_nriw_7:
     size: 11139902534
     nfiles: 40
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
-    size: 32135
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_7.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
@@ -727,7 +780,7 @@ evaluate_nriw_8:
     size: 11184757123
     nfiles: 40
   - path: ../../neural_rerendering.py
-    md5: ef68171c13d1f2711122a6fa6119836e
+    md5: f5853952522a6c441124f45cad113b06
     size: 32135
   params:
     params.yaml:
@@ -1055,8 +1108,8 @@ evaluate_nriw_13:
     size: 11026406296
     nfiles: 40
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_13.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-meshed-poisson
@@ -1101,8 +1154,8 @@ evaluate_nriw_14:
     size: 15935637794
     nfiles: 53
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_14.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-meshed-poisson
@@ -1147,8 +1200,8 @@ evaluate_nriw_15:
     size: 11665319686
     nfiles: 41
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_15.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-meshed-poisson
@@ -1193,8 +1246,8 @@ evaluate_nriw_16:
     size: 11405052710
     nfiles: 41
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_16.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-1_src-fused
@@ -1239,8 +1292,8 @@ evaluate_nriw_17:
     size: 11907919501
     nfiles: 41
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_17.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-5_src-fused
@@ -1285,11 +1338,49 @@ evaluate_nriw_18:
     size: 11962069774
     nfiles: 41
   - path: ../../neural_rerendering.py
-    md5: a08776840da87938cb11ee354418315e
-    size: 33324
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
   params:
     params.yaml:
       evaluate_nriw_18.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
       evaluate_nriw_18.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
       evaluate_nriw_18.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
       evaluate_nriw_18.timestamp: 2021-02-19-03-03-13
+evaluate_nriw_10:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 10"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2020-12-25-04-49-41-finetune_appearance_4000kimg
+    md5: c2c8669eeb32be9cff80c3691ce4340b.dir
+    size: 10900835730
+    nfiles: 38
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
+  params:
+    params.yaml:
+      evaluate_nriw_10.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_10.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-25_src-fused
+      evaluate_nriw_10.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_10.timestamp: 2020-12-25-04-49-41
+evaluate_nriw_11:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 11"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../models/pantheon_exterior/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused-2020-12-26-00-10-45-finetune_appearance_4000kimg
+    md5: 85360e2762d9f3139963f05c54551df1.dir
+    size: 11223374637
+    nfiles: 39
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
+  params:
+    params.yaml:
+      evaluate_nriw_11.dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_11.dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-50_src-fused
+      evaluate_nriw_11.model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
+      evaluate_nriw_11.timestamp: 2020-12-26-00-10-45
