@@ -1,0 +1,50 @@
+stages:
+  render_inloc:
+    foreach:
+      - 1
+    do:
+      cmd: >-
+        bash -lc "SLURM_CPUS_ON_NODE=16 cpulimit -il 1600 bash ../scripts/build_dataset_inloc.sh ${item} ../../datasets/processed/inloc/inloc_rendered_${item} | tee logs/inloc_data_build_${item}.log"
+      deps:
+      - ../scripts/build_dataset_inloc.sh
+      - ../../inloc/render_inloc_db.py
+      params:
+      - render_inloc_${item}.n_max_per_scan
+      - render_inloc_${item}.point_size
+      - render_inloc_${item}.bg_color
+      outs:
+      - ../../datasets/processed/inloc/inloc_rendered_${item}:
+          cache: false
+          persist: true
+
+  split_inloc:
+    foreach:
+      - 1
+    do:
+      cmd: >-
+        cpulimit -il 1600 python ../../inloc/export_to_neural_rerendering.py
+        --input_path ../../datasets/processed/inloc/inloc_rendered_${item}
+        --output_path ../../datasets/post_processed/inloc/inloc_rendered_${item} | tee logs/inloc_data_split_${item}.log
+      deps:
+      - ../../inloc/export_to_neural_rerendering.py
+      outs:
+      - ../../datasets/post_processed/inloc/inloc_rendered_${item}:
+          cache: false
+          persist: true
+
+  dataset_utils_inloc:
+    foreach:
+      - 1
+    do:
+      cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh ${item}"
+      deps:
+      - ../../dataset_utils.py
+      - ../scripts/run_dataset_utils.sh
+      params:
+      - dataset_utils_${item}.dataset_name
+      - dataset_utils_${item}.dataset_parent_dir
+      - dataset_utils_${item}.output_dir
+      outs:
+      - ../../datasets/final/inloc/inloc_rendered_${item}:
+          cache: false
+          persist: true

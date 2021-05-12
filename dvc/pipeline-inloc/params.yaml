@@ -1,0 +1,9 @@
+render_inloc_1:
+  n_max_per_scan: "4000000"
+  point_size: "2.0"
+  bg_color: "0.0,0.0,0.0"
+
+dataset_utils_1:
+  dataset_name: "inloc"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_1"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_1"
