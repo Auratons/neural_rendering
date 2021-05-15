@@ -114,10 +114,10 @@ def main():
                             train_dir, "{}_{}.png".format(str(train_num).zfill(5), ext)
                         ),
                     )
-                    train_num += 1
-                    correspondences[
-                        "train/{}".format(str(train_num).zfill(5))
-                    ] = "∕".join([building, scan, cutout])
+                train_num += 1
+                correspondences["train/{}".format(str(train_num).zfill(5))] = "∕".join(
+                    [building, scan, cutout]
+                )
 
     # Mode "balanced" : Split every scan in train and val sets and merge them (every building is present in the same proportion in each dataset)
     if args.split_mode == "balanced":

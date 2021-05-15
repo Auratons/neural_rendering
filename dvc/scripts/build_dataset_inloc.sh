@@ -7,7 +7,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-gpu=16
 
-set -e
+set -euo pipefail
 
 ml purge
 module load CUDA/9.1.85
@@ -22,13 +22,15 @@ output=$2
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
 export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PYTHONUNBUFFERED=1  # for tqdm into file
 
 echo
 echo "Running on $(hostname)"
 echo "The $(type python)"
 echo
 
-WORKSPACE=/home/kremeto1/neural_rendering
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+WORKSPACE="$(realpath "${SCRIPT_DIR}/../../")"
 
 echo
 echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python"
@@ -40,7 +42,6 @@ echo "        --bg_color=$(cat params.yaml | yq -r '.render_inloc_'$sub'.bg_colo
 echo "        --output_path=${output}"
 echo
 
-export PYTHONUNBUFFERED=1  # for tqdm into file
 ~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python \
     ${WORKSPACE}/inloc/render_inloc_db.py \
         --inloc_path='/home/kremeto1/neural_rendering/datasets/raw/inloc' \

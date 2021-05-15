@@ -1,4 +1,5 @@
 stages:
+  # Generate _depth, _color, _reference grouped by buildings.
   render_inloc:
     foreach:
       - 1
@@ -17,6 +18,7 @@ stages:
           cache: false
           persist: true
 
+  # Generate train and val folders from buildings splits.
   split_inloc:
     foreach:
       - 1
@@ -32,6 +34,7 @@ stages:
           cache: false
           persist: true
 
+  # Generate train and val tfrecords.
   dataset_utils_inloc:
     foreach:
       - 1
@@ -48,3 +51,56 @@ stages:
       - ../../datasets/final/inloc/inloc_rendered_${item}:
           cache: false
           persist: true
+
+  # Generate _depth, _color, _reference for for every candidate pose for each query image.
+  # Creates subfolder per query image with those files per candidate pose.
+  render_query:
+    foreach: [1, 2]
+    do:
+      cmd: >-
+        bash -lc "sbatch --wait --exclude=dgx-2 ../scripts/build_query_inloc.sh ${item}"
+      deps:
+      - ../scripts/build_query_inloc.sh
+      - ../../inloc/render_inloc_query.py
+      params:
+      - render_inloc_query_${item}.output_path
+      - render_inloc_query_${item}.mat_path
+      - render_inloc_query_${item}.max_img_size
+      outs:
+      - ../../datasets/post_processed/inloc/query_rendered_${item}:
+          cache: false
+          persist: true
+
+  # Generate tfrecords for candidate pose images per query image.
+  # This is not useful as we have infer_dir run mode of NRIW, see
+  # infer_nriw_on_subfolders_query below.
+  dataset_utils_query:
+    foreach:
+      - 3
+    do:
+      cmd: >-
+        bash -lc "sbatch --wait ../scripts/run_dataset_utils_on_subfolders.sh ${item}"
+      deps:
+      - ../../dataset_utils.py
+      - ../scripts/run_dataset_utils_on_subfolders.sh
+      params:
+      - dataset_utils_subfolders_${item}.input_dir
+      - dataset_utils_subfolders_${item}.output_dir
+      outs:
+      - ../../datasets/final/inloc/query_rendered_${item}:
+          cache: false
+          persist: true
+
+  # Generate renderings fo prrepared subfolder from render_query.
+  infer_nriw_on_subfolders_query:
+    foreach:
+      - 1
+    do:
+      cmd: >-
+        bash -lc "sbatch --wait ../scripts/infer_nriw_on_subfolders.sh ${item}"
+      deps:
+      - ../scripts/infer_nriw_on_subfolders.sh
+      params:
+      - infer_nriw_on_subfolders_${item}.input_dir
+      - infer_nriw_on_subfolders_${item}.output_dir
+      - infer_nriw_on_subfolders_${item}.trained_model_dir
