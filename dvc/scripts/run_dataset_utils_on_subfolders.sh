@@ -23,7 +23,7 @@ nvidia-smi
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -39,7 +39,7 @@ for subfolder in $(ls "${INPUT_FOLDER}"); do
 
     echo
     echo "Running:"
-    echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
+    echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
     echo "    --dataset_name=${subfolder}}"
     echo "    --dataset_parent_dir=${INPUT_FOLDER}/${subfolder}"
     echo "    --output_dir=${OUTPUT_FOLDER}/${subfolder}"
@@ -52,7 +52,7 @@ for subfolder in $(ls "${INPUT_FOLDER}"); do
 
     mkdir -p "${OUTPUT_FOLDER}/${subfolder}"
 
-    ~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
+    ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
         --dataset_name="${subfolder}" \
         --dataset_parent_dir="${INPUT_FOLDER}/${subfolder}" \
         --output_dir="${OUTPUT_FOLDER}/${subfolder}" \

@@ -19,7 +19,7 @@ sub=$1
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -52,7 +52,7 @@ fi
 
 echo
 echo "Running"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
 echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
 # Final datasets' subfolder contains only tfrecords, post_processed subfolder contains images.
@@ -67,7 +67,7 @@ echo "    --vgg16_path=${WORKSPACE}/vgg16_weights/vgg16.npy"
 echo "    --appearance_pretrain_steps=${PT_STEPS}"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
     --imageset_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_imageset_dir // (.train_nriw_'$sub'.dataset_parent_dir | sub("final"; "post_processed") | . += "/train")') \
@@ -83,7 +83,7 @@ echo
 
 echo
 echo "Running"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir')"
 echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")')"
@@ -101,7 +101,7 @@ echo "    --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_bu
 echo "    --vgg16_path=${WORKSPACE}/vgg16_weights/vgg16.npy"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir') \
     --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")') \
@@ -121,7 +121,7 @@ echo
 
 echo
 echo "Running"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir')"
 echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-finetune_appearance")')"
@@ -139,7 +139,7 @@ echo "    --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_bu
 echo "    --vgg16_path=${WORKSPACE}/vgg16_weights/vgg16.npy"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir') \
     --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-finetune_appearance")') \

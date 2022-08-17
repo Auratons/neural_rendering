@@ -19,7 +19,7 @@ sub=$1
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"

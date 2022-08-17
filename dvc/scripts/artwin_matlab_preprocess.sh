@@ -11,7 +11,7 @@ ml load MATLAB/2019b
 
 # jq may not be installed globally, add brew as another option
 # # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -21,4 +21,4 @@ echo
 WORKSPACE=/home/kremeto1/neural_rendering
 
 cd $WORKSPACE/artwin
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' matlab -batch $1
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' matlab -batch $1

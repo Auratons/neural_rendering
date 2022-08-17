@@ -21,7 +21,7 @@ output=$2
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 export PYTHONUNBUFFERED=1  # for tqdm into file
 
 echo
@@ -33,7 +33,7 @@ echo
 WORKSPACE=/home/kremeto1/neural_rendering
 
 echo
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python"
 echo "    ${WORKSPACE}/inloc/render_inloc_query.py"
 echo "        --inloc_path='/home/kremeto1/neural_rendering/datasets/raw/inloc'"
 echo "        --query_path='/home/kremeto1/neural_rendering/datasets/raw/inloc/query/with_border"
@@ -46,7 +46,7 @@ echo "        --max_img_size=$(cat params.yaml | yq -r '.render_inloc_query_'$su
 echo "        --nvidia_id=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.nvidia_id // "0"')"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python \
     ${WORKSPACE}/inloc/render_inloc_query.py \
         --inloc_path=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.inloc_path // "/home/kremeto1/neural_rendering/datasets/raw/inloc"') \
         --query_path=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.query_path // "/home/kremeto1/neural_rendering/datasets/raw/inloc/query/with_borders"') \

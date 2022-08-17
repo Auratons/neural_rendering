@@ -19,7 +19,7 @@ sub=$1
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -38,7 +38,7 @@ TRAIN_DIR=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.train_dir // (.evalua
 echo
 echo "Evaluating the validation set"
 echo "Running"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "   --dataset_name=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_name')"
 echo "   --dataset_parent_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_parent_dir')"
 echo "   --train_dir=${TRAIN_DIR}"
@@ -53,7 +53,7 @@ echo "   --deep_buffer_nc=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.deep_
 echo "   --logtostderr"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.dataset_parent_dir') \
     --train_dir=${TRAIN_DIR} \
@@ -71,13 +71,13 @@ echo
 echo
 echo "Evaluate quantitative metrics"
 echo "Running"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py"
 echo "   --val_set_out_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.output_validation_dir // (.evaluate_nriw_'$sub'.model_parent_dir + "../evaluations/" + .evaluate_nriw_'$sub'.dataset_name + "_'${TIMESTAMP}'_seq-'${VIRTUAL_SEQ_NAME}'")')"
 echo "   --experiment_title=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.experiment_title // (.evaluate_nriw_'$sub'.dataset_name | . += "_'${TIMESTAMP}'_seq-'${VIRTUAL_SEQ_NAME}'")')"
 echo "   --logtostderr"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/evaluate_quantitative_metrics.py \
     --val_set_out_dir=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.output_validation_dir // (.evaluate_nriw_'$sub'.model_parent_dir + "../evaluations/" + .evaluate_nriw_'$sub'.dataset_name + "_'${TIMESTAMP}'_seq-'${VIRTUAL_SEQ_NAME}'")') \
     --experiment_title=$(cat params.yaml | yq -r '.evaluate_nriw_'$sub'.experiment_title // (.evaluate_nriw_'$sub'.dataset_name | . += "_'${TIMESTAMP}'_seq-'${VIRTUAL_SEQ_NAME}'")') \
     --logtostderr

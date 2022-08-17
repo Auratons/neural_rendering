@@ -18,7 +18,7 @@ sub=$1
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -31,7 +31,7 @@ WORKSPACE=/home/kremeto1/neural_rendering
 
 echo
 echo "Running:"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py"
 echo "    --src_reference=$DATASET_PATH/images"
 echo "    --src_colmap=$DATASET_PATH/sparse"
 echo "    --ply_path=$DATASET_PATH/$PLY_FILE"
@@ -44,7 +44,7 @@ echo "    --bg_color=$(cat params.yaml | yq -r '.render_colmap_'$sub'.bg_color /
 echo "    --verbose"
 echo
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/colmap/load_data.py \
     --src_reference=$DATASET_PATH/images \
     --src_colmap=$DATASET_PATH/sparse \
     --ply_path=$DATASET_PATH/$PLY_FILE \

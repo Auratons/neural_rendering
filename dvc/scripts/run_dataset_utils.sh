@@ -20,7 +20,7 @@ nvidia-smi
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.linuxbrew/bin:${PATH}
+export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
 echo
 echo "Running on $(hostname)"
@@ -31,7 +31,7 @@ WORKSPACE=/home/kremeto1/neural_rendering
 
 echo
 echo "Running:"
-echo "~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
+echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_parent_dir')"
 echo "    --output_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir')"
@@ -43,7 +43,7 @@ echo
 
 mkdir -p $(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir')
 
-~/.linuxbrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
+~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ${WORKSPACE}/dataset_utils.py \
     --dataset_name=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.dataset_parent_dir') \
     --output_dir=$(cat params.yaml | yq -r '.dataset_utils_'$sub'.output_dir') \
