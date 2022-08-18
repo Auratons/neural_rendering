@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=run_dataset_utils_%j
-#SBATCH --output=run_dataset_utils_%j.log
+#SBATCH --job-name=run_dataset_utils
+#SBATCH --output=logs/run_dataset_utils_%j.log
 #SBATCH --mem=32G
 #SBATCH --time=0-10:00:00
 #SBATCH --partition=gpu
@@ -8,6 +8,7 @@
 #SBATCH --cpus-per-gpu=16
 
 set -e
+. /opt/ohpc/admin/lmod/lmod/init/bash
 
 ml purge
 module load CUDA/9.1.85

@@ -1,14 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=train_nriw_%j
-#SBATCH --output=train_nriw_%j.log
-#SBATCH --mem=128G
+#SBATCH --output=logs/train_nriw_%j.log
+#SBATCH --mem=64G
 #SBATCH --time=4-0:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:4
-#SBATCH --cpus-per-gpu=9
+#SBATCH --cpus-per-gpu=5
 
 set -e
 
+. /opt/ohpc/admin/lmod/lmod/init/zsh
 ml purge
 module load CUDA/9.1.85
 module load cuDNN/7.0.5-CUDA-9.1.85

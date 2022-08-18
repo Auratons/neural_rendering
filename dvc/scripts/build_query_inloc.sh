@@ -17,7 +17,6 @@ module load Mesa/18.1.1-fosscuda-2018b
 nvidia-smi
 
 sub=$1
-output=$2
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
@@ -27,7 +26,6 @@ export PYTHONUNBUFFERED=1  # for tqdm into file
 echo
 echo "Running on $(hostname)"
 echo "The $(type python)"
-echo "With ${DISPLAY}"
 echo
 
 WORKSPACE=/home/kremeto1/neural_rendering
@@ -36,7 +34,7 @@ echo
 echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python"
 echo "    ${WORKSPACE}/inloc/render_inloc_query.py"
 echo "        --inloc_path='/home/kremeto1/neural_rendering/datasets/raw/inloc'"
-echo "        --query_path='/home/kremeto1/neural_rendering/datasets/raw/inloc/query/with_border"
+echo "        --query_path=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.query_path // "/home/kremeto1/neural_rendering/datasets/raw/inloc/query/with_borders"')"
 echo "        --output_path=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.output_path')"
 echo "        --mat_path=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.mat_path')"
 echo "        --n_max_per_scan=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.n_max_per_scan // "None"')"
