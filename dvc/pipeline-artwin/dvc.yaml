@@ -123,6 +123,37 @@ stages:
         cache: false
         persist: true
 
+# python /home/kremeto1/neural_rendering/colmap/load_data_hololens.py --src_colmap /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/sparse --src_output /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_08.31.29-rendered-mesh-black_bg --verbose --src_reference /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/images --val_ratio 0.0 --bg_color "0.0,0.0,0.0" --ply_path /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/2019-09-28_08.31.29.ply
+
+# cd /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/
+# for i in $(ls 2019-09-28_08.31.29-rendered-mesh-black_bg/train/*reference.png); do\
+# ln $i 2019-09-28_08.31.29-perspective/train\
+# done
+# for i in $(ls 2019-09-28_08.31.29-rendered-mesh-black_bg/train/*depth.png); do\
+# ln $i 2019-09-28_08.31.29-perspective/train\
+# done
+# for i in $(ls 2019-09-28_08.31.29-rendered-mesh-black_bg/train/*depth.npy); do\
+# ln $i 2019-09-28_08.31.29-perspective/train\
+# done
+# for i in $(ls /home/kremeto1/renderer-test/hall_29_kdtree/train/*color.png); do\
+# ln $i 2019-09-28_08.31.29-perspective/train\
+# done
+# for i in $(ls /home/kremeto1/renderer-test/hall_29_kdtree/train/*color.png); do\
+# cp $i 2019-09-28_08.31.29-perspective/train\
+# done
+# for i in $(ls /home/kremeto1/renderer-test/hall_53_kdtree/train/*color.png); do\
+# cp $i 2019-09-28_16.11.53-perspective/train\
+# done
+# for i in $(ls 2019-09-28_16.11.53-rendered-mesh-black_bg/train/*depth.npy); do\
+# ln $i 2019-09-28_16.11.53-perspective/train\
+# done
+# for i in $(ls 2019-09-28_16.11.53-rendered-mesh-black_bg/train/*depth.png); do\
+# ln $i 2019-09-28_16.11.53-perspective/train\
+# done
+# for i in $(ls 2019-09-28_16.11.53-rendered-mesh-black_bg/train/*reference.png); do\
+# ln $i 2019-09-28_16.11.53-perspective/train\
+# done
+
   join_datasets:
     cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py "/nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender" "2019-*-rendered"
     deps:
@@ -131,6 +162,28 @@ stages:
     - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered
     outs:
     - /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset:
+        cache: false
+        persist: true
+
+  join_datasets_7:
+    cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py "/nfs/projects/artwin/experiments/hololens_mapper" "2019-*-rendered-mesh-black_bg"
+    deps:
+    - ../../artwin/join_datasets.py
+    - /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_08.31.29-rendered-mesh-black_bg
+    - /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_16.11.53-rendered-mesh-black_bg
+    outs:
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset:
+        cache: false
+        persist: true
+
+  join_datasets_8:
+    cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py "/nfs/projects/artwin/experiments/hololens_mapper" "2019-*-perspective" "joined_dataset_perspective"
+    deps:
+    - ../../artwin/join_datasets.py
+    - /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_08.31.29-perspective
+    - /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_16.11.53-perspective
+    outs:
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective:
         cache: false
         persist: true
 
@@ -163,6 +216,38 @@ stages:
     - dataset_utils_1.output_dir
     outs:
     - /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord:
+        cache: false
+        persist: true
+
+
+  dataset_utils_7:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 7"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - /nfs/projects/artwin/experiments/matlab_60_fov
+    params:
+    - dataset_utils_7.dataset_name
+    - dataset_utils_7.dataset_parent_dir
+    - dataset_utils_7.output_dir
+    outs:
+    - /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord:
+        cache: false
+        persist: true
+
+
+  dataset_utils_8:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 8"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective
+    params:
+    - dataset_utils_8.dataset_name
+    - dataset_utils_8.dataset_parent_dir
+    - dataset_utils_8.output_dir
+    outs:
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord:
         cache: false
         persist: true
 
@@ -203,6 +288,17 @@ stages:
     - train_nriw_3.dataset_parent_dir
     - train_nriw_3.model_parent_dir
 
+  train_nriw_8:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 8"
+    deps:
+    - ../../neural_rerendering.py
+    - ../scripts/train_nriw.sh
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord
+    params:
+    - train_nriw_8.dataset_name
+    - train_nriw_8.dataset_parent_dir
+    - train_nriw_8.model_parent_dir
+
   evaluate_nriw_1:
       cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
       deps:
@@ -216,7 +312,7 @@ stages:
       - evaluate_nriw_1.timestamp
 
   evaluate_nriw:
-    foreach: [1, 2]
+    foreach: [1, 2, 7]
     do:
       cmd: >-
         bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh ${item}"

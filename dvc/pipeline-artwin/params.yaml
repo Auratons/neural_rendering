@@ -62,6 +62,16 @@ dataset_utils_2:
   dataset_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov
   output_dir: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
 
+dataset_utils_7:
+  dataset_name: artwin_pt_cpp_render
+  dataset_parent_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset
+  output_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_tfrecord
+
+dataset_utils_8:
+  dataset_name: artwin_ray_marched
+  dataset_parent_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective
+  output_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord
+
 
 train_nriw_1:
   model_parent_dir: "/nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset/model_no_semantic"
@@ -79,6 +89,8 @@ train_nriw_1:
 
   finetune_batch_size: "32"
 
+
+
 train_nriw_2:
   model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
   dataset_name: "artwin_matlab"
@@ -94,6 +106,7 @@ train_nriw_2:
   fixed_total_kimg: "150"
 
   finetune_batch_size: "32"
+
 
 train_nriw_3:
   model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
@@ -115,6 +128,40 @@ train_nriw_3:
   timestamp: 2021-03-20-21-06-40
 
 
+train_nriw_7:
+  model_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/"
+  dataset_name: "artwin_pt_cpp_render"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/joined_dataset"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2000"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "150"
+
+  finetune_batch_size: "32"
+
+
+train_nriw_8:
+  model_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/"
+  dataset_name: "artwin_ray_marched"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2000"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "150"
+
+  finetune_batch_size: "32"
+
+
 evaluate_nriw_1:
   model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
   dataset_name: "artwin_matlab"
@@ -134,3 +181,23 @@ evaluate_nriw_2:
   appearance_nc: "7"
   deep_buffer_nc: "4"
   suffix: "_fixed_1k"
+
+evaluate_nriw_7:
+  model_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/"
+  dataset_name: "artwin_pt_cpp_render"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/joined_dataset"
+  timestamp: 2022-01-16-01-49-25
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+  suffix: ""
+
+evaluate_nriw_8:
+  model_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/"
+  dataset_name: "artwin_ray_marched"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective"
+  timestamp: 2022-06-24-00-24-05
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+  suffix: ""
