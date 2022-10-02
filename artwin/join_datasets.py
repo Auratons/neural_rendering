@@ -1,10 +1,13 @@
 """Join COLMAP-rendered datasets into one prepared for dataset_utils.py."""
 import os
 import random
+import string
+import json
+import argparse
 from pathlib import Path
 
 
-def link(view, part):
+def link(view, part, index, mapping):
     stem = view.stem.split("_")[0]
     print(f"Linking {stem} to {part.name}")
 
@@ -12,31 +15,71 @@ def link(view, part):
         if not dst.exists():
             os.link(src, dst)
 
-    link_(view, part / view.name)
-    link_(view.parent / f"{stem}_reference.png", part / f"{stem}_reference.png")
-    link_(view.parent / f"{stem}_depth.png", part / f"{stem}_depth.png")
-    link_(view.parent / f"{stem}_color.png", part / f"{stem}_color.png")
+    mapping[str(view.parent / f"{stem}_reference.png")] = str(
+        part / f"{index:04n}_reference.png"
+    )
+    link_(view.parent / f"{stem}_reference.png", part / f"{index:04n}_reference.png")
+    link_(view.parent / f"{stem}_depth.png", part / f"{index:04n}_depth.png")
+    link_(view.parent / f"{stem}_depth.npy", part / f"{index:04n}_depth.npy")
+    link_(view.parent / f"{stem}_color.png", part / f"{index:04n}_color.png")
 
 
 if __name__ == "__main__":
-    random.seed(42)
+    rnd = random.Random(42)
 
-    prefix = Path("/nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "root",
+        nargs="?",
+        type=Path,
+        help="path experiment root",
+        default=Path("/nfs/projects/artwin/experiments/hololens_mapper"),
+    )
+    parser.add_argument(
+        "glob",
+        nargs="?",
+        type=str,
+        help="dataset name glob to process",
+        default="2019-*-rendered-mesh-black_bg",
+    )
+    parser.add_argument(
+        "output", nargs="?", type=str, help="name of output dataset", default=""
+    )
+    args = parser.parse_args()
 
-    train = prefix / "joined_dataset" / "train"
-    val = prefix / "joined_dataset" / "val"
-    test = prefix / "joined_dataset" / "test"
+    if args.output == "":
+        args.output = "joined_dataset_" + "".join(
+            random.Random(43).choice(string.ascii_uppercase + string.digits)
+            for _ in range(10)
+        )
+
+    prefix = args.root.absolute()
+
+    train = prefix / args.output / "train"
+    val = prefix / args.output / "val"
+    test = prefix / args.output / "test"
     os.makedirs(train, exist_ok=True)
     os.makedirs(val, exist_ok=True)
     os.makedirs(test, exist_ok=True)
 
-    for hall in prefix.glob("2019*"):
-        views = list((hall / "rendered" / "train").glob("*_depth.npy"))
-        random.shuffle(views)
-        split = int(0.2 * (len(views) - 15))
-        for view in views[:15]:
-            link(view, test)
-        for view in views[16:split]:
-            link(view, val)
-        for view in views[split:]:
-            link(view, train)
+    test_size = 50
+    it = 0
+    mapping = {}
+    halls = sorted(list(prefix.glob(args.glob)))
+    for hall in halls:  # Stratified split across halls
+        print(f"Processing {hall.name}")
+        reference_photos = list((hall / "train").glob("*_reference.png"))
+        rnd.shuffle(reference_photos)
+        split = int(0.2 * (len(reference_photos) - test_size))
+        for ref in reference_photos[: int(test_size / len(halls))]:
+            link(ref, test, it, mapping)
+            it += 1
+        for ref in reference_photos[int(test_size / len(halls)) : split]:
+            link(ref, val, it, mapping)
+            it += 1
+        for ref in reference_photos[split:]:
+            link(ref, train, it, mapping)
+            it += 1
+
+    with open(prefix / args.output / "mapping.txt", "w") as mapping_file:
+        mapping_file.write(json.dumps(mapping, indent=4))

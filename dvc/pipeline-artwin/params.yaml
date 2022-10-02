@@ -20,7 +20,117 @@ render_colmap_3:
   val_ratio: 0.0
   bg_color: "0.0,0.0,0.0"
 
+render_colmap_4:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered-black_bg
+  ply_file: 2019-09-28_16.11.53.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
+render_colmap_5:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29-rendered-mesh-black_bg
+  ply_file: 2019-09-28_08.31.29_mesh.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
+render_colmap_6:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered-mesh-black_bg
+  ply_file: 2019-09-28_16.11.53_mesh.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
+render_colmap_7:
+  root: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53
+  src_output: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_16.11.53-rendered-mesh-black_bg-delete-me
+  ply_file: 2019-09-28_16.11.53_mesh.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
 dataset_utils_1:
   dataset_name: artwin_colmap
   dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
   output_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset_tfrecord
+
+dataset_utils_2:
+  dataset_name: artwin_matlab
+  dataset_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov
+  output_dir: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
+
+
+train_nriw_1:
+  model_parent_dir: "/nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset/model_no_semantic"
+  dataset_name: "artwin_colmap"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2000"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "150"
+
+  finetune_batch_size: "32"
+
+train_nriw_2:
+  model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
+  dataset_name: "artwin_matlab"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2000"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "150"
+
+  finetune_batch_size: "32"
+
+train_nriw_3:
+  model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
+  dataset_name: "artwin_matlab"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2000"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1000"
+
+  finetune_batch_size: "32"
+
+  suffix: "_fixed_1k"
+  timestamp: 2021-03-20-21-06-40
+
+
+evaluate_nriw_1:
+  model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
+  dataset_name: "artwin_matlab"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord"
+  timestamp: 2021-03-20-21-06-40
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+  suffix: ""
+
+evaluate_nriw_2:
+  model_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-model"
+  dataset_name: "artwin_matlab"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord"
+  timestamp: 2021-03-20-21-06-40
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+  suffix: "_fixed_1k"

@@ -27,7 +27,7 @@ render_colmap_1:
     size: 3471367394
     nfiles: 6479
   - path: ../scripts/render_colmap.sh
-    md5: df670a9730448d4733e55047b0ee1068
+    md5: 1c83c900ece0d5c22a9b6e6da97bbcae
     size: 2190
   params:
     params.yaml:
@@ -52,7 +52,7 @@ render_colmap_2:
     size: 5564578512
     nfiles: 6479
   - path: ../scripts/render_colmap.sh
-    md5: df670a9730448d4733e55047b0ee1068
+    md5: 1c83c900ece0d5c22a9b6e6da97bbcae
     size: 2190
   params:
     params.yaml:
@@ -87,14 +87,14 @@ dataset_utils_1:
   cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 1"
   deps:
   - path: ../../dataset_utils.py
-    md5: 43c1066b27a99a6498469f360a627cbd
+    md5: 5ab6999820dc0c10094cac4e02b0375a
     size: 10784
   - path: ../../datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
     md5: 109836eb2d46f57bbb94829e52bb7f72.dir
     size: 4726849996
     nfiles: 5994
   - path: ../scripts/run_dataset_utils.sh
-    md5: a1a4738e234e1fa656483689a754e63a
+    md5: 2320f1712a3ab6713dd1f13c9dfc1120
     size: 2403
   params:
     params.yaml:
@@ -113,7 +113,7 @@ render_colmap_3:
     md5: c0cb2744079e888122587ede3812a510
     size: 14503
   - path: ../scripts/render_colmap.sh
-    md5: df670a9730448d4733e55047b0ee1068
+    md5: 1c83c900ece0d5c22a9b6e6da97bbcae
     size: 2371
   - path: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29
     md5: 1ecdb0953e722f0ec40b1a129e413174.dir
@@ -131,3 +131,81 @@ render_colmap_3:
     md5: 5d9347fcb886070a1559e76f688d3391.dir
     size: 15340612626
     nfiles: 4176
+matlab_preprocessing2:
+  cmd: bash -lc "sbatch --wait ../scripts/artwin_matlab_preprocess.sh preprocess_v2"
+  deps:
+  - path: ../../artwin/preprocess.m
+    md5: 2d55da2a2ce2c99f40eb6aeb3276060a
+    size: 10094
+  - path: ../scripts/artwin_matlab_preprocess.sh
+    md5: 662782fbb971276eb86a330523f70c21
+    size: 603
+  outs:
+  - path: /nfs/projects/artwin/experiments/matlab_60_fov
+    md5: 6e9787a9fb0c8c823740caea860a0555.dir
+    size: 9193976121
+    nfiles: 2
+dataset_utils_2:
+  cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh 2"
+  deps:
+  - path: ../../dataset_utils.py
+    md5: 5ab6999820dc0c10094cac4e02b0375a
+    size: 11184
+  - path: ../scripts/run_dataset_utils.sh
+    md5: 2320f1712a3ab6713dd1f13c9dfc1120
+    size: 2403
+  - path: /nfs/projects/artwin/experiments/matlab_60_fov
+    md5: 6e9787a9fb0c8c823740caea860a0555.dir
+    size: 9241353436
+    nfiles: 17712
+  params:
+    params.yaml:
+      dataset_utils_1.dataset_name: artwin_colmap
+      dataset_utils_1.dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
+      dataset_utils_1.output_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset_tfrecord
+  outs:
+  - path: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
+    md5: 82faded33f434a28385db5946227c690.dir
+    size: 9286625952
+    nfiles: 2
+train_nriw_2:
+  cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 2"
+  deps:
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33324
+  - path: ../../pretrain_appearance.py
+    md5: 3f1792d2629f2051224c03efe83c7829
+    size: 13734
+  - path: ../scripts/train_nriw.sh
+    md5: 98f55b14c873854d9fde071851780685
+    size: 11354
+  - path: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
+    md5: 82faded33f434a28385db5946227c690.dir
+    size: 9286625952
+    nfiles: 2
+  params:
+    params.yaml:
+      train_nriw_2.dataset_name: artwin_matlab
+      train_nriw_2.dataset_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
+      train_nriw_2.model_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov-model
+evaluate_nriw@1:
+  cmd: bash -lc "sbatch --wait ../scripts/evaluate_nriw.sh 1"
+  deps:
+  - path: ../../evaluate_quantitative_metrics.py
+    md5: 7d1acafc001bed3bebcb51b323518745
+    size: 4340
+  - path: ../../neural_rerendering.py
+    md5: f5853952522a6c441124f45cad113b06
+    size: 33360
+  - path: /nfs/projects/artwin/experiments/matlab_60_fov-modelartwin_matlab-2021-03-20-21-06-40-finetune_appearance
+    md5: d423e7d1badc3d9b4e171e262437f8fb.dir
+    size: 11130690760
+    nfiles: 40
+  params:
+    params.yaml:
+      evaluate_nriw_1.dataset_name: artwin_matlab
+      evaluate_nriw_1.dataset_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov-joined_dataset_tfrecord
+      evaluate_nriw_1.model_parent_dir: /nfs/projects/artwin/experiments/matlab_60_fov-model
+      evaluate_nriw_1.timestamp: 2021-03-20-21-06-40
+      evaluate_nriw_1.suffix:
