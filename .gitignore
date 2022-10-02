@@ -145,3 +145,4 @@ vgg16_weights/
 datasets/
 models/
 evaluations_temp/
+inferences/
