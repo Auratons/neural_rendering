@@ -42,6 +42,7 @@ echo "        --point_size=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'
 echo "        --max_depth=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.max_depth // "20"')"
 echo "        --max_img_size=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.max_img_size // "4032"')"
 echo "        --nvidia_id=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.nvidia_id // "0"')"
+echo "        --squarify=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.squarify // "False"')"
 echo
 
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python \
@@ -54,6 +55,7 @@ echo
         --point_size=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.point_size // "5"') \
         --max_depth=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.max_depth // "20"') \
         --max_img_size=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.max_img_size // "4032"') \
-        --nvidia_id=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.nvidia_id // "0"')
+        --nvidia_id=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.nvidia_id // "0"') \
+        --squarify=$(cat params.yaml | yq -r '.render_inloc_query_'$sub'.squarify // "False"')
 
 exit 0

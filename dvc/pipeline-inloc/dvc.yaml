@@ -55,10 +55,10 @@ stages:
   # Generate _depth, _color, _reference for for every candidate pose for each query image.
   # Creates subfolder per query image with those files per candidate pose.
   render_query:
-    foreach: [1, 2]
+    foreach: [1, 2, 3]
     do:
       cmd: >-
-        bash -lc "sbatch --wait --exclude=dgx-2 ../scripts/build_query_inloc.sh ${item}"
+        bash -lc "sbatch --wait --exclude=node-12 ../scripts/build_query_inloc.sh ${item}"
       deps:
       - ../scripts/build_query_inloc.sh
       - ../../inloc/render_inloc_query.py
@@ -66,6 +66,7 @@ stages:
       - render_inloc_query_${item}.output_path
       - render_inloc_query_${item}.mat_path
       - render_inloc_query_${item}.max_img_size
+      - render_inloc_query_${item}.squarify
       outs:
       - ../../datasets/post_processed/inloc/query_rendered_${item}:
           cache: false
@@ -91,10 +92,9 @@ stages:
           cache: false
           persist: true
 
-  # Generate renderings fo prrepared subfolder from render_query.
+  # Generate renderings fo prepared subfolder from render_query.
   infer_nriw_on_subfolders_query:
-    foreach:
-      - 1
+    foreach: [1, 2]
     do:
       cmd: >-
         bash -lc "sbatch --wait ../scripts/infer_nriw_on_subfolders.sh ${item}"

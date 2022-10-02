@@ -252,3 +252,25 @@ class HookReport(tf.train.SessionRunHook):
         """
         cls._TENSOR_NAMES[tensor] = name
         tf.add_to_collection(cls._REPORT_KEY, tensor)
+
+
+def squarify(image: np.array, square_size: int) -> np.array:
+    assert square_size >= image.shape[0] and square_size >= image.shape[1]
+    shape = list(image.shape)
+    shape[0] = shape[1] = square_size
+    square = np.zeros(shape, dtype=image.dtype)
+    h, w = image.shape[:2]
+    offset_h = (square_size - h) // 2
+    offset_w = (square_size - w) // 2
+    square[offset_h : offset_h + h, offset_w : offset_w + w, ...] = image
+    return square
+
+
+def desquarify(squared_image: np.array, hw_shape: tuple) -> np.array:
+    assert squared_image.shape[0] == squared_image.shape[1]
+    square_size = squared_image.shape[0]
+    h, w = hw_shape
+    offset_h = (square_size - h) // 2
+    offset_w = (square_size - w) // 2
+    image = squared_image[offset_h : offset_h + h, offset_w : offset_w + w, :]
+    return image

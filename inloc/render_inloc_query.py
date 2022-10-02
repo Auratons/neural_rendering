@@ -22,6 +22,11 @@ from scipy.io import loadmat
 from scipy.spatial.transform import Rotation as R
 from tqdm import tqdm
 
+import sys
+
+sys.path.append(f"{str(Path(__file__).parent)}/../")
+import utils
+
 from render_inloc_db import (
     FLAGS,
     get_path_name,
@@ -121,6 +126,9 @@ def main(args):
             query_img = query_img.resize(
                 (int(ratio * w), int(ratio * h)), Image.ANTIALIAS
             )
+            if args.squarify:
+                query_img = utils.squarify(np.array(query_img), args.max_img_size)
+                query_img = Image.fromarray(query_img)
             fl = FL * ratio
             cx, cy = int(w * ratio / 2.0), int(h * ratio / 2.0)
             camera = pyrender.IntrinsicsCamera(fl, fl, cx, cy, znear=ZNEAR, zfar=ZFAR)
@@ -151,7 +159,13 @@ def main(args):
                     mask = depth > args.max_depth
                     depth[mask] = 0.0
                     color[mask, :] = 255
-                    rendered_img = Image.fromarray(color)
+                    if args.squarify:
+                        rendered_img = Image.fromarray(
+                            utils.squarify(color, args.max_img_size)
+                        )
+                        depth = utils.squarify(depth, args.max_img_size)
+                    else:
+                        rendered_img = Image.fromarray(color)
 
                     # Save the images
                     os.makedirs(args.output_path / query, exist_ok=True)
@@ -216,6 +230,7 @@ def parse_args():
     parser.add_argument("--max_depth", type=float, default=20.0)
     parser.add_argument("--max_img_size", type=int, default=4032)
     parser.add_argument("--nvidia_id", type=int, default=0)
+    parser.add_argument("--squarify", type=bool, default=False)
     args = parser.parse_args()
     return args
 

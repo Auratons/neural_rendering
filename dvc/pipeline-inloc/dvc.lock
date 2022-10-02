@@ -19,3 +19,14 @@ stages:
       md5: c5bd3efc0ef7928455a78d40911a670d.dir
       size: 31370675472
       nfiles: 2
+  infer_nriw_on_subfolders_query@2:
+    cmd: bash -lc "sbatch --wait ../scripts/infer_nriw_on_subfolders.sh 2"
+    deps:
+    - path: ../scripts/infer_nriw_on_subfolders.sh
+      md5: 1b7900c0c255f5949b5c61ae89416643
+      size: 2917
+    params:
+      params.yaml:
+        infer_nriw_on_subfolders_2.input_dir: /home/kremeto1/neural_rendering/datasets/post_processed/inloc/query_rendered_scaled
+        infer_nriw_on_subfolders_2.output_dir: /home/kremeto1/neural_rendering/inferences/inloc/query_rendered_scaled
+        infer_nriw_on_subfolders_2.trained_model_dir: /home/bdechamps/neural_rerendering_in_the_wild/train_models/inloc_db-staged-finetune_appearance
