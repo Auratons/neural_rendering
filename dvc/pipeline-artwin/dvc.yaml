@@ -22,6 +22,18 @@ stages:
         cache: false
         persist: true
 
+  matlab_preprocessing_thesis:
+    cmd: bash -lc "sbatch --wait ../scripts/artwin_matlab_preprocess.sh preprocess"
+    deps:
+    - ../../artwin/preprocess.m
+    - ../scripts/artwin_matlab_preprocess.sh
+    outs:
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29:
+        cache: false
+        persist: true
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53:
+        cache: false
+        persist: true
 
   render_colmap_1:
     cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh 1"

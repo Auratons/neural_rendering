@@ -1,11 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=artwin
+#SBATCH --job-name=gen
 #SBATCH --output=artwin_%j.log
 #SBATCH --mem=64G
 #SBATCH --time=1-00:00:00
 #SBATCH --partition=compute
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=16
 
+. /opt/ohpc/admin/lmod/lmod/init/bash
 ml purge
 ml load MATLAB/2019b
 
