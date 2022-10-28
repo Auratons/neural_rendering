@@ -20,6 +20,11 @@ from skimage.io import imread
 from io import BytesIO
 from pyrender.constants import RenderFlags
 import read_model
+import sys
+
+sys.path.append(f"{str(Path(__file__).parent)}/../")
+import utils
+import traceback
 
 ################################################################################
 # Load sfm model directly from colmap output files
@@ -239,6 +244,7 @@ def build_dataset(
     verbose=False,
     voxel_size=100,
     bg_color=None,
+    squarify=False,
 ):
     """Build the input dataset composed of the reference images, the RGBA and depth renderings.
     Args:
@@ -275,7 +281,7 @@ def build_dataset(
         # Camera intrisics and intrisics
         k, r, t, w, h, img_nm = K[i], R[i], T[i], W[i], H[i], src_img_nms[i]
 
-        if min(w, h) > min_size:
+        if squarify or min(w, h) > min_size:
             start = time.process_time()
 
             scene = pyrender.Scene(bg_color=bg_color)
@@ -304,34 +310,46 @@ def build_dataset(
                 output_dir = os.path.join(out_dir, "train")
             else:
                 output_dir = os.path.join(out_dir, "val")
+            try:
+                # Reference image
+                img = plt.imread(os.path.join(src_reference, img_nm))
+                if squarify:
+                    img = utils.squarify(img, min_size)
+                img = Image.fromarray(img)
+                img.save(os.path.join(output_dir, "{:04n}_reference.png".format(it)))
 
-            # Reference image
-            img = Image.open(os.path.join(src_reference, img_nm))
-            img.save(os.path.join(output_dir, "{:04n}_reference.png".format(it)))
-
-            # depth image
-            if src_depth is not None:
-                raise NotImplementedError(
-                    "Use renderings rather than depth maps estimated with COLMAP."
+                # depth image
+                if src_depth is not None:
+                    raise NotImplementedError(
+                        "Use renderings rather than depth maps estimated with COLMAP."
+                    )
+                # cv2.imwrite saves depth map as a single channel img and as-is meaning
+                # if max depth is x, then max of the saved img values will be x as well.
+                # skimage.io.imsave saves the image normalized, so max value will always
+                # be 255 or 65k depending on the data type. plt.imsave saves RGBA image
+                # with depth remapped to a color depending on a colormap used.
+                # For possible further recalculation, npz with raw depth map is also saved.
+                np.save(
+                    os.path.join(output_dir, "{:04n}_depth.npy".format(it)),
+                    depth_rendering,
                 )
-            # cv2.imwrite saves depth map as a single channel img and as-is meaning
-            # if max depth is x, then max of the saved img values will be x as well.
-            # skimage.io.imsave saves the image normalized, so max value will always
-            # be 255 or 65k depending on the data type. plt.imsave saves RGBA image
-            # with depth remapped to a color depending on a colormap used.
-            cv2.imwrite(
-                os.path.join(output_dir, "{:04n}_depth.png".format(it)),
-                depth_rendering.astype(np.uint16),
-            )
-            # For possible further recalculation, npz with raw depth map is also saved.
-            np.save(
-                os.path.join(output_dir, "{:04n}_depth.npy".format(it)),
-                depth_rendering,
-            )
+                if squarify:
+                    depth_rendering = utils.squarify(depth_rendering, min_size)
+                cv2.imwrite(
+                    os.path.join(output_dir, "{:04n}_depth.png".format(it)),
+                    depth_rendering.astype(np.uint16),
+                )
 
-            # rendered image
-            img_rendering = Image.fromarray(rgb_rendering)
-            img_rendering.save(os.path.join(output_dir, "{:04n}_color.png".format(it)))
+                # rendered image
+                if squarify:
+                    rgb_rendering = utils.squarify(rgb_rendering, min_size)
+                img_rendering = Image.fromarray(rgb_rendering)
+                img_rendering.save(
+                    os.path.join(output_dir, "{:04n}_color.png".format(it))
+                )
+            except AssertionError:
+                print(os.path.join(src_reference, img_nm))
+                print(traceback.format_exc())
 
             it += 1
 
@@ -382,6 +400,11 @@ def parse_args():
         help="Background comma separated color for rendering.",
     )
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
+    parser.add_argument(
+        "--squarify",
+        action="store_true",
+        help="Should all images that fit be placed onto black canvas of size min_size x min_size?",
+    )
     args = parser.parse_args()
 
     return args
@@ -410,4 +433,5 @@ if __name__ == "__main__":
         verbose=args.verbose,
         voxel_size=args.voxel_size,
         bg_color=[float(i) for i in args.bg_color.split(",")],
+        squarify=args.squarify,
     )
