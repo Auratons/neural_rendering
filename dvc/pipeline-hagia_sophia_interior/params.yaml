@@ -59,6 +59,25 @@ render_colmap_12:
   src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
   ply_file: fused.ply
   voxel_size: 0.039
+render_colmap_thesis:
+  root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+  src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis-100_src-fused
+  ply_file: fused.ply
+  voxel_size: None
+render_colmap_thesis_test:
+  root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+  src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused
+  ply_file: fused.ply
+  test_size: 50
+  voxel_size: None
+render_colmap_thesis_test_squarify:
+  root: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0
+  src_output: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test_squarify-100_src-fused
+  ply_file: fused.ply
+  test_size: 50
+  squarify: True
+  min_size: 1241  # max dimension in the data
+  voxel_size: None
 
 
 dataset_utils_1:

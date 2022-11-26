@@ -5,9 +5,15 @@ os.environ["PYOPENGL_PLATFORM"] = "egl"
 # to set this or we get an egl initialization error.
 os.environ["EGL_DEVICE_ID"] = os.environ.get("SLURM_JOB_GPUS", "0").split(",")[0]
 
+import tensorflow as tf
+
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+
 import trimesh
 import argparse
+import distutils
 import pyrender
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 import open3d as o3d
@@ -245,6 +251,7 @@ def build_dataset(
     voxel_size=100,
     bg_color=None,
     squarify=False,
+    test_size=0,
 ):
     """Build the input dataset composed of the reference images, the RGBA and depth renderings.
     Args:
@@ -259,8 +266,10 @@ def build_dataset(
         - voxel_size : voxel size for voxel-based subsampling used on mesh or pointcloud
                        (None means skipping subsampling)
     """
+    rnd = random.Random(42)
     # Create output folders
     os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "test"), exist_ok=True)
     os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
     os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     # Loading camera pose estimates
@@ -273,10 +282,13 @@ def build_dataset(
     it = 0
 
     times = [0.0] * len(H)
+    indices = list(range(len(H)))
+    rnd.shuffle(indices)
 
-    for i in range(len(H)):
+    for index in range(len(H)):
         if verbose:
-            print("Processing image {}/{}".format(i + 1, len(H)))
+            print("Processing image {}/{}".format(index + 1, len(H)))
+        i = indices[index]
 
         # Camera intrisics and intrisics
         k, r, t, w, h, img_nm = K[i], R[i], T[i], W[i], H[i], src_img_nms[i]
@@ -304,12 +316,14 @@ def build_dataset(
 
             img_rendering = Image.fromarray(rgb_rendering)
             # depth_rendering = normalize_depth(depth_rendering)
-
+            split = int(val_ratio * (len(H) - test_size))
             # Building dataset
-            if i < (1.0 - val_ratio) * len(H):
-                output_dir = os.path.join(out_dir, "train")
-            else:
+            if it < test_size:
+                output_dir = os.path.join(out_dir, "test")
+            elif it < test_size + split:
                 output_dir = os.path.join(out_dir, "val")
+            else:
+                output_dir = os.path.join(out_dir, "train")
             try:
                 # Reference image
                 img = plt.imread(os.path.join(src_reference, img_nm))
@@ -347,6 +361,13 @@ def build_dataset(
                 img_rendering.save(
                     os.path.join(output_dir, "{:04n}_color.png".format(it))
                 )
+                if Path(
+                    os.path.join(src_reference, img_nm[:-13] + "params.json")
+                ).exists():
+                    os.link(
+                        os.path.join(src_reference, img_nm[:-13] + "params.json"),
+                        os.path.join(output_dir, "{:04n}_params.json".format(it)),
+                    )
             except AssertionError:
                 print(os.path.join(src_reference, img_nm))
                 print(traceback.format_exc())
@@ -402,8 +423,11 @@ def parse_args():
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
     parser.add_argument(
         "--squarify",
-        action="store_true",
+        type=lambda x: bool(distutils.util.strtobool(x)),
         help="Should all images that fit be placed onto black canvas of size min_size x min_size?",
+    )
+    parser.add_argument(
+        "--test_size", type=int, default=0, help="Test size for generated dataset"
     )
     args = parser.parse_args()
 
@@ -434,4 +458,5 @@ if __name__ == "__main__":
         voxel_size=args.voxel_size,
         bg_color=[float(i) for i in args.bg_color.split(",")],
         squarify=args.squarify,
+        test_size=args.test_size,
     )
