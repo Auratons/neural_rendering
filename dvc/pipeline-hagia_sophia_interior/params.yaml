@@ -80,6 +80,23 @@ render_colmap_thesis_test_squarify:
   voxel_size: None
 
 
+inloc_cutouts_thesis_test_squarify:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test_squarify-100_src-fused
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_test_squarify-100_src-fused_inloc_format
+  test_size: 50
+  squarify: True
+
+inloc_cutouts_thesis_test:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_test-100_src-fused_inloc_format
+  test_size: 50
+  squarify: False
+
+
 dataset_utils_1:
   dataset_name: hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson

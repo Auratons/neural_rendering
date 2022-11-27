@@ -84,6 +84,23 @@ render_colmap_12:
   voxel_size: 0.024
 
 
+inloc_cutouts_thesis_test_squarify:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_thesis_test_squarify-100_src-fused
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_thesis_test_squarify-100_src-fused_inloc_format
+  test_size: 50
+  squarify: True
+
+inloc_cutouts_thesis_test:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_thesis_test-100_src-fused
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/grand_place_brussels_thesis_test-100_src-fused_inloc_format
+  test_size: 50
+  squarify: False
+
+
 dataset_utils_1:
   dataset_name: grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-meshed-poisson
