@@ -1,3 +1,8 @@
+% Generates COLMAP-like output structure from raw ARTwin data
+% so that other processing steps can be later applied in a similar
+% manner to IMC dataset processing.
+% This script can possible render on it's own with as_colmap = false.
+
 %% Setup
 this_file_path = mfilename('fullpath');
 idx = strfind(this_file_path,filesep);

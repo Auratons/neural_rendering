@@ -52,6 +52,22 @@ render_colmap_7:
   val_ratio: 0.0
   bg_color: "0.0,0.0,0.0"
 
+render_colmap_thesis_53:
+  root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53
+  src_output: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-pyrender-black_bg
+  ply_file: 2019-09-28_16.11.53.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
+render_colmap_thesis_29:
+  root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29
+  src_output: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-pyrender-black_bg
+  ply_file: 2019-09-28_08.31.29.ply
+  voxel_size: None
+  val_ratio: 0.0
+  bg_color: "0.0,0.0,0.0"
+
 dataset_utils_1:
   dataset_name: artwin_colmap
   dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
@@ -71,6 +87,29 @@ dataset_utils_8:
   dataset_name: artwin_ray_marched
   dataset_parent_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective
   output_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord
+
+dataset_utils_thesis_splatting:
+  dataset_name: artwin_splatted
+  dataset_parent_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting
+  output_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting-tfrecord
+
+
+train_nriw_thesis_splatting:
+  model_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/model-splatting"
+  dataset_name: "artwin_splatted"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2500"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
 
 
 train_nriw_1:

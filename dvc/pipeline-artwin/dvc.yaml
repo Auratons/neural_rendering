@@ -135,6 +135,16 @@ stages:
         cache: false
         persist: true
 
+  render_colmap_thesis_53:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh thesis_53"
+    outs:
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-rendered-mesh-black_bg
+
+  render_colmap_thesis_29:
+    cmd: bash -lc "sbatch --wait ../scripts/render_colmap.sh thesis_29"
+    outs:
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-rendered-mesh-black_bg
+
 # python /home/kremeto1/neural_rendering/colmap/load_data_hololens.py --src_colmap /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/sparse --src_output /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_08.31.29-rendered-mesh-black_bg --verbose --src_reference /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/images --val_ratio 0.0 --bg_color "0.0,0.0,0.0" --ply_path /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/2019-09-28_08.31.29/2019-09-28_08.31.29.ply
 
 # cd /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/
@@ -196,6 +206,28 @@ stages:
     - /nfs/projects/artwin/experiments/hololens_mapper/2019-09-28_16.11.53-perspective
     outs:
     - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective:
+        cache: false
+        persist: true
+
+  join_datasets_thesis_pyrender:
+    cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc" "2019-*-pyrender-black_bg" "joined-dataset-pyrender-black_bg"
+    deps:
+    - ../../artwin/join_datasets.py
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-pyrender-black_bg
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-pyrender-black_bg
+    outs:
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-pyrender-black_bg:
+        cache: false
+        persist: true
+
+  join_datasets_thesis_splatting:
+    cmd: ~/.conda/envs/pipeline/bin/python ../../artwin/join_datasets.py "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc" "2019-*-splatting" "joined-dataset-splatting"
+    deps:
+    - ../../artwin/join_datasets.py
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-splatting
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-splatting
+    outs:
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting:
         cache: false
         persist: true
 
@@ -262,6 +294,33 @@ stages:
     - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord:
         cache: false
         persist: true
+
+
+  dataset_utils_thesis_splatting:
+    cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh thesis_splatting"
+    deps:
+    - ../../dataset_utils.py
+    - ../scripts/run_dataset_utils.sh
+    - /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting-tfrecord
+    params:
+    - dataset_utils_8.dataset_name
+    - dataset_utils_8.dataset_parent_dir
+    - dataset_utils_8.output_dir
+    outs:
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined-dataset-splatting-tfrecord:
+        cache: false
+        persist: true
+
+  train_nriw_thesis_splatting:
+    cmd: bash -lc "sbatch --wait ../scripts/train_nriw.sh 8"
+    deps:
+    - ../../neural_rerendering.py
+    - ../scripts/train_nriw.sh
+    - /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord
+    params:
+    - train_nriw_8.dataset_name
+    - train_nriw_8.dataset_parent_dir
+    - train_nriw_8.model_parent_dir
 
 
   train_nriw_1:

@@ -9,7 +9,8 @@
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
+# export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
+export PATH=/usr/local/bin:/usr/bin
 
 echo
 echo "Running on $(hostname)"
@@ -20,7 +21,7 @@ echo
 
 WORKSPACE=/home/kremeto1/neural_rendering
 
-for ply_file in `find /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_splatting -type f -name '???_scan_???_30M.ptx.ply'`
+for ply_file in `find /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_splatting -type f -name '???_scan_???.ptx.ply'`
 do
     echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
     echo "    exec --nv --bind /nfs:/nfs ~/containers/renderer-app.sif ~/containers/radii-compute-app.executable"
