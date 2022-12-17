@@ -1,3 +1,6 @@
+"""
+This file serves for generating dataset for Free view synthesis algorithm.
+"""
 import os
 from typing import Tuple
 

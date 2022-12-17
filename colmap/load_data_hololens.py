@@ -1,3 +1,9 @@
+"""
+This file serves for rendering pointclouds with C++ very basic implementation
+of a sphere renderer from https://github.com/Auratons/hololens_mapper/, discretizing
+a point in the screen space as a disc with hardcoded linearly sized diameter with
+a CPU-based implementation.
+"""
 import os
 import sys
 

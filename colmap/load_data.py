@@ -1,3 +1,7 @@
+"""
+This file serves for rendering pointclouds on an NVIDIA GPU with pyrender project,
+using OpenGL GL_POINTS primitive under the hood.
+"""
 import os
 
 os.environ["PYOPENGL_PLATFORM"] = "egl"
@@ -284,6 +288,7 @@ def build_dataset(
     times = [0.0] * len(H)
     indices = list(range(len(H)))
     rnd.shuffle(indices)
+    split = int(val_ratio * (len(H) - test_size))
 
     for index in range(len(H)):
         if verbose:
@@ -316,7 +321,7 @@ def build_dataset(
 
             img_rendering = Image.fromarray(rgb_rendering)
             # depth_rendering = normalize_depth(depth_rendering)
-            split = int(val_ratio * (len(H) - test_size))
+
             # Building dataset
             if it < test_size:
                 output_dir = os.path.join(out_dir, "test")
@@ -372,7 +377,7 @@ def build_dataset(
                 print(os.path.join(src_reference, img_nm))
                 print(traceback.format_exc())
 
-            it += 1
+            it += 1  # Jump over failed it so that there's alignment between (non)squarified imgs.
 
         else:
             if verbose:
