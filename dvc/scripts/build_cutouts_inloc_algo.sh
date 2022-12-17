@@ -33,7 +33,7 @@ echo "        --squarify=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.squari
 echo
 
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
-    exec --nv --bind /nfs:/nfs ~/containers/renderer-app.sif \
+    exec --bind /nfs:/nfs ~/containers/renderer-app.sif \
         ~/.conda/envs/pipeline/bin/python ~/inloc/inLocCIIRC_dataset/buildCutouts/build_cutouts_colmap.py \
         --input_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root') \
         --input_ply_path=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_ply_path') \

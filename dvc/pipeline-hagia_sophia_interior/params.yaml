@@ -76,8 +76,34 @@ render_colmap_thesis_test_squarify:
   ply_file: fused.ply
   test_size: 50
   squarify: True
-  min_size: 1241  # max dimension in the data
+  min_size: 1248  # minimal 2**3 and 2**5 divisible number higher than max dimension in the data
   voxel_size: None
+
+
+cpp_render_thesis_splatting:
+  type: "COLMAP"
+  root_to_process: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-splatting"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+cpp_render_thesis_spheres:
+  type: "COLMAP"
+  root_to_process: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-spheres"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+
+# First call generates matrices, second also squarifies renderer outputs.
+# colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/images \
+#     --src_colmap /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse \
+#     --src_output /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-splatting \
+#     --min_size 1248 \
+#     --verbose \
+#     --squarify "True" \
+#     --test_size 50
 
 
 inloc_cutouts_thesis_test_squarify:
@@ -85,8 +111,24 @@ inloc_cutouts_thesis_test_squarify:
   input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
   input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
   output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_test_squarify-100_src-fused_inloc_format
-  test_size: 50
-  squarify: True
+  test_size: "50"
+  squarify: "True"
+
+inloc_cutouts_thesis_splatting_squarify:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-splatting
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_splatting_squarify-100_src-fused_inloc_format
+  test_size: "50"
+  squarify: "True"
+
+inloc_cutouts_thesis_spheres_squarify:
+  input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-spheres
+  input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
+  input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
+  output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_spheres_squarify-100_src-fused_inloc_format
+  test_size: "50"
+  squarify: "True"
 
 inloc_cutouts_thesis_test:
   input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused

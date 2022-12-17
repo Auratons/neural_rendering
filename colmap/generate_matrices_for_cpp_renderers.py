@@ -5,37 +5,31 @@ python colmap/generate_matrices_for_sphere_pcd_renderer.py --src_colmap /nfs/pro
 """
 
 import argparse
+import cv2
+import distutils.util
 import json
+import matplotlib.pyplot as plt
 import os
+import random
+import traceback
 from pathlib import Path
 
 import numpy as np
+from PIL import Image
 
 import read_model
 
-################################################################################
-# Load sfm model directly from colmap output files
-################################################################################
 
-# Load point cloud with per-point sift descriptors and rgb features from
-# colmap database and points3D.bin file from colmap sparse reconstruction
-# def load_points_colmap(points3D_fp):
-
-#     if points3D_fp.endswith(".bin"):
-#         points3D = read_model.read_points3d_binary(points3D_fp)
-#     else:  # .txt
-#         points3D = read_model.read_points3D_text(points3D_fp)
-
-#     pcl_xyz = []
-#     pcl_rgb = []
-#     for pt3D in points3D.values():
-#         pcl_xyz.append(pt3D.xyz)
-#         pcl_rgb.append(pt3D.rgb)
-
-#     pcl_xyz = np.vstack(pcl_xyz).astype(np.float32)
-#     pcl_rgb = np.vstack(pcl_rgb).astype(np.uint8)
-
-#     return pcl_xyz, pcl_rgb
+def squarify_image(image: np.array, square_size: int) -> np.array:
+    assert square_size >= image.shape[0] and square_size >= image.shape[1]
+    shape = list(image.shape)
+    shape[0] = shape[1] = square_size
+    square = np.zeros(shape, dtype=image.dtype)
+    h, w = image.shape[:2]
+    offset_h = (square_size - h) // 2
+    offset_w = (square_size - w) // 2
+    square[offset_h : offset_h + h, offset_w : offset_w + w, ...] = image
+    return square
 
 
 # Load camera matrices and names of corresponding src images from
@@ -96,72 +90,102 @@ def get_colmap_file(colmap_path, file_stem):
 
 def build_dataset(
     src_reference,
-    ply_path,
     src_colmap,
     out_dir,
     min_size=512,
     val_ratio=0.2,
-    src_depth=None,
-    point_size=3.0,
     verbose=False,
-    voxel_size=100,
-    bg_color=None,
-    output_json_path=None,
+    squarify=False,
+    test_size=0,
 ):
     """Build the input dataset composed of the reference images, the RGBA and depth renderings.
     Args:
         - src_reference : reference images directory
-        - ply_path : 3D scene mesh or pointcloud path
         - src_colmap : colmap SfM output directory
         - out_dir : output directory
         - min_size : minimum height and width (for cropping)
         - val_ratio : train / val ratio
-        - src_depth : depth maps directory. If None, the depth maps are rendered along with RGB renderings.
-        - point_size : Point size for rendering
-        - voxel_size : voxel size for voxel-based subsampling used on mesh or pointcloud
-                       (None means skipping subsampling)
     """
+    rnd = random.Random(42)
     # Create output folders
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "test"), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "train"), exist_ok=True)
+    os.makedirs(os.path.join(out_dir, "val"), exist_ok=True)
     # Loading camera pose estimates
     K, R, T, H, W, src_img_nms = load_cameras_colmap(
         get_colmap_file(src_colmap, "images"), get_colmap_file(src_colmap, "cameras")
     )
+    it = 0
+
+    indices = list(range(len(H)))
+    rnd.shuffle(indices)
+    split = int(val_ratio * (len(H) - test_size))
+
     train = {}
     val = {}
+    test = {}
 
-    it = 0
-    for i in range(len(H)):
+    for index in range(len(H)):
         if verbose:
-            print("Processing image {}/{}".format(i + 1, len(H)))
+            print("Processing image {}/{}".format(index + 1, len(H)))
+        i = indices[index]
 
         # Camera intrisics and intrisics
         k, r, t, w, h, img_nm = K[i], R[i], T[i], W[i], H[i], src_img_nms[i]
 
-        if min(w, h) > min_size:
-            camera_pose = np.eye(4)
-            camera_pose[:3, :3] = r.T
-            camera_pose[:3, -1:] = -r.T @ t
-            # camera_pose[:3, :3] = r
-            # camera_pose[:3, -1:] = t
-            camera_pose[:, 1:3] *= -1
+        if squarify or min(w, h) > min_size:
+            try:
+                camera_pose = np.eye(4)
+                camera_pose[:3, :3] = r.T
+                camera_pose[:3, -1:] = -r.T @ t
+                camera_pose[:, 1:3] *= -1
 
-            camera_matrix = np.eye(4)
-            camera_matrix[:3, :3] = k
+                camera_matrix = np.eye(4)
+                camera_matrix[:3, :3] = k
 
-            # Building dataset
-            if i < (1.0 - val_ratio) * len(H):
-                output_dir = os.path.join(out_dir, "train")
-                output_dict = train
-            else:
-                output_dir = os.path.join(out_dir, "val")
-                output_dict = val
+                # Building dataset
+                if it < test_size:
+                    output_dir = os.path.join(out_dir, "test")
+                    output_dict = test
+                elif it < test_size + split:
+                    output_dir = os.path.join(out_dir, "val")
+                    output_dict = val
+                else:
+                    output_dir = os.path.join(out_dir, "train")
+                    output_dict = train
 
-            # rendered image
-            target_path = os.path.join(output_dir, "{:04n}_color.png".format(it))
-            output_dict[target_path] = {
-                "intrinsic_matrix": [list(l) for l in list(camera_matrix)],
-                "extrinsic_matrix": [list(l) for l in list(camera_pose)],
-            }
+                # Reference image
+                img = plt.imread(os.path.join(src_reference, img_nm))
+                if squarify:
+                    img = squarify_image(img, min_size)
+                img = Image.fromarray(img)
+                img.save(os.path.join(output_dir, "{:04n}_reference.png".format(it)))
+
+                depth_p = Path(output_dir) / "{:04n}_depth.png".format(it)
+                if depth_p.exists():
+                    depth = cv2.imread(str(depth_p), cv2.IMREAD_UNCHANGED)
+                    assert len(depth.shape) == 2 or depth.shape[2] == 1, "Weird depth"
+                    depth = squarify_image(depth, min_size)
+                    cv2.imwrite(str(depth_p), depth)
+
+                color_p = Path(output_dir) / "{:04n}_color.png".format(it)
+                if color_p.exists():
+                    color = cv2.imread(str(color_p), cv2.IMREAD_UNCHANGED)
+                    color = squarify_image(color, min_size)
+                    if color.shape[2] == 4:
+                        color[:, :, 3] = np.iinfo(color.dtype).max
+                    cv2.imwrite(str(color_p), color)
+
+                # rendered image
+                target_path = os.path.join(output_dir, "{:04n}_color.png".format(it))
+                output_dict[target_path] = {
+                    "intrinsic_matrix": [list(l) for l in list(camera_matrix)],
+                    "extrinsic_matrix": [list(l) for l in list(camera_pose)],
+                }
+            except AssertionError:
+                print(os.path.join(src_reference, img_nm))
+                print(traceback.format_exc())
 
             it += 1
 
@@ -169,9 +193,14 @@ def build_dataset(
             if verbose:
                 print("Skipping this image : too small ")
 
-    output = {"train": train, "val": val}
-    with open(output_json_path, "w") as f:
-        json.dump(output, f, indent=4)
+    with open(Path(out_dir) / "test" / "matrices_for_rendering.json", "w") as f:
+        f.write(json.dumps({"train": test, "val": {}}, indent=4))
+
+    with open(Path(out_dir) / "val" / "matrices_for_rendering.json", "w") as f:
+        f.write(json.dumps({"train": val, "val": {}}, indent=4))
+
+    with open(Path(out_dir) / "train" / "matrices_for_rendering.json", "w") as f:
+        f.write(json.dumps({"train": train, "val": {}}, indent=4))
 
 
 def parse_args():
@@ -184,47 +213,24 @@ def parse_args():
         "--src_colmap", required=True, type=str, help="path to colmap .bin output files"
     )
     parser.add_argument(
-        "--ply_path",
-        required=True,
-        type=str,
-        help="path to point cloud or mesh .ply file",
-    )
-    parser.add_argument(
         "--src_output", required=True, type=str, help="path to write output images"
-    )
-    parser.add_argument(
-        "--output_json_path", required=True, type=str, help="where to write matrix file"
     )
     parser.add_argument("--val_ratio", type=float, default=0.2, help="Train/val ratio")
     parser.add_argument(
-        "--point_size", type=float, default=2.0, help="Rendering point size"
-    )
-    parser.add_argument(
         "--min_size", type=int, default=512, help="Minimum size for images"
     )
-    parser.add_argument(
-        "--voxel_size",
-        type=none_or_float,
-        default=None,
-        help="Voxel size used for downsampling mesh or pointcloud.",
-    )
-    parser.add_argument(
-        "--bg_color",
-        type=str,
-        default=None,
-        help="Background comma separated color for rendering.",
-    )
     parser.add_argument("--verbose", action="store_true", help="Increase verbosity")
+    parser.add_argument(
+        "--squarify",
+        type=lambda x: bool(distutils.util.strtobool(x)),
+        help="Should all images that fit be placed onto black canvas of size min_size x min_size?",
+    )
+    parser.add_argument(
+        "--test_size", type=int, default=0, help="Test size for generated dataset"
+    )
     args = parser.parse_args()
 
     return args
-
-
-def none_or_float(value):
-    """Simplifies unification in SLURM script's parameter handling."""
-    if value == "None":
-        return None
-    return float(value)
 
 
 if __name__ == "__main__":
@@ -233,15 +239,11 @@ if __name__ == "__main__":
     # Build dataset
     build_dataset(
         src_reference=args.src_reference,
-        ply_path=args.ply_path,
         src_colmap=args.src_colmap,
         out_dir=args.src_output,
         min_size=args.min_size,
         val_ratio=args.val_ratio,
-        src_depth=None,
-        point_size=args.point_size,
         verbose=args.verbose,
-        voxel_size=args.voxel_size,
-        bg_color=[float(i) for i in args.bg_color.split(",")],
-        output_json_path=args.output_json_path,
+        squarify=args.squarify,
+        test_size=args.test_size,
     )
