@@ -6,13 +6,11 @@ import argparse
 import json
 import numpy as np
 import os
-import pyrender
 from scipy.spatial.transform import Rotation as R
 from pathlib import Path
 from scipy.io import loadmat
 import pymeshlab
 import portalocker
-import time
 
 WIDTH = 1600
 HEIGHT = 1200
@@ -24,7 +22,7 @@ ZFAR = 100.0
 BUILDINGS = ["CSE3", "CSE4", "CSE5", "DUC1", "DUC2"]
 
 
-# Coordinate changes from InLoc transformations to pyrender
+# Coordinate changes from InLoc transformations to C++ renders
 ROT_ALIGN = np.array([[0, 0, 1], [1, 0, 0], [0, 1, 0]], dtype=np.float)
 
 
@@ -69,9 +67,6 @@ def get_rotation_matrix(cutout_name):
     r_2 = R.from_rotvec([theta_2, 0, 0]).as_matrix()
     r = r_1 @ r_2
     return r
-    # rotation = np.eye(4)
-    # rotation[:3, :3] = r
-    # return rotation
 
 
 def get_path_name(building):
@@ -82,28 +77,30 @@ def get_path_name(building):
 
 
 def render_scan(args, building, scan):
-    thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
-    process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
+    os.makedirs(os.path.join(args.output_path, building, scan), exist_ok=True)
     matrices_dict = {"train": {}, "val": {}}
+
+    building_name = get_path_name(building)
     # Load the scan
     transform_path = (
         args.inloc_path
-        / "database/alignments"
-        / building
-        / "transformations"
-        / f"{get_path_name(building)}_trans_{scan}.txt"
+        / f"database/alignments/{building}/transformations"
+        / f"{building_name}_trans_{scan}.txt"
     )
     ptx_path = (
         args.inloc_path
-        / f"database/scans/{building}/{get_path_name(building)}_scan_{scan}.ptx.mat"
+        / f"database/scans/{building}"
+        / f"{building_name}_scan_{scan}.ptx.mat"
     )
-    xyz, rgb = load_point_cloud(ptx_path, n_max=args.n_max_per_scan)
+    xyz, rgb = load_point_cloud(str(ptx_path), n_max=args.n_max_per_scan)
     T = load_initial_transform(transform_path)
-    # # Transform the points in homogeneous coordinates
+
+    # Transform the points in homogeneous coordinates
     xyz = np.concatenate([xyz, np.ones((xyz.shape[0], 1))], axis=1)
     xyz = (T @ xyz.T).T
     xyz = xyz[:, :3] / xyz[:, -1:]
 
+    # Estimate normals for Points Splatting
     rgb = np.concatenate([rgb, np.ones((rgb.shape[0], 1))], axis=1)
     rgb = rgb.astype(np.float64) / 255
     mesh = pymeshlab.Mesh(vertex_matrix=xyz, v_color_matrix=rgb)
@@ -112,10 +109,7 @@ def render_scan(args, building, scan):
     ms.compute_normals_for_point_sets(flipflag=True, viewpos=T[:3, 3])
     ms.save_current_mesh(
         str(
-            args.output_path
-            / building
-            / scan
-            / f"{get_path_name(building)}_scan_{scan}.ptx.ply"
+            args.output_path / building / scan / f"{building_name}_scan_{scan}.ptx.ply"
         ),
         save_vertex_normal=True,
     )
@@ -134,13 +128,10 @@ def render_scan(args, building, scan):
     intristic_camera[0, 2] = cx
     intristic_camera[1, 2] = cy
 
-    # Render from the cutouts views
     cutout_path = args.inloc_path / "database/cutouts" / building / scan
-    os.makedirs(os.path.join(args.output_path, building, scan), exist_ok=True)
     for cutout_name in cutout_path.iterdir():
         if cutout_name.suffix == ".jpg":
             cutout_name = cutout_name.name
-            camera = pyrender.IntrinsicsCamera(fl, fl, cx, cy)
             r = get_rotation_matrix(str(cutout_name))
             camera_pose = T.copy()
             camera_pose[:3, :3] = camera_pose[:3, :3] @ ROT_ALIGN @ r
@@ -159,47 +150,13 @@ def render_scan(args, building, scan):
             except FileNotFoundError as err:
                 error = True
                 print(f"Unexpected {type(err)}: {err}")
-            try:
-                link(
-                    args.inloc_rendered_by_pyrender
-                    / building
-                    / scan
-                    / f"{base_name}_depth.png",
-                    args.output_path / building / scan / f"{base_name}_depth.png",
-                )
-            except FileNotFoundError as err:
-                error = True
-                print(f"Unexpected {type(err)}: {err}")
-            # For possible further recalculation, npz with raw depth map is also saved.
-            try:
-                link(
-                    args.inloc_rendered_by_pyrender
-                    / building
-                    / scan
-                    / f"{base_name}_depth.npy",
-                    args.output_path / building / scan / f"{base_name}_depth.npy",
-                )
-            except FileNotFoundError as err:
-                error = True
-                print(f"Unexpected {type(err)}: {err}")
             if not error:
                 matrices_dict["train"][
-                    os.path.join(
-                        args.output_path,
-                        building,
-                        scan,
-                        "{}_color.png".format(base_name),
-                    )
+                    str(args.output_path / building / scan / f"{base_name}_color.png")
                 ] = {
-                    "intrinsic_matrix": [list(i) for i in list(intristic_camera)],
-                    "extrinsic_matrix": [list(i) for i in camera_pose],
+                    "calibration_mat": [list(i) for i in list(intristic_camera)],
+                    "camera_pose": [list(i) for i in camera_pose],
                 }
-
-    thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
-    process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
-    print(
-        f"{building}/{scan}, {args}\nCPU thread time per render: ({thread_end - thread_start:.4f} ms\nCPU process time per render: ({process_end - process_start:.4f} ms"
-    )
 
     with open(
         args.output_path / building / scan / "matrices_for_rendering.txt", "w"
@@ -235,16 +192,16 @@ def main(args):
             scan = scan.name
             try:
                 lock_path = str(args.output_path / building / f"{scan}.LOCK")
-                with portalocker.Lock(lock_path) as ff:
-                    # if not (args.output_path / building / scan.name / "matrices_for_rendering.txt").exists():
-                    if not (
-                        args.output_path
-                        / building
-                        / scan
-                        / f"{get_path_name(building)}_scan_{scan}.ptx.ply"
-                    ).exists():
-                        print(f"{building}/{scan}")
-                        render_scan(args, building, scan)
+                # with portalocker.Lock(lock_path) as ff:
+                # if not (args.output_path / building / scan.name / "matrices_for_rendering.txt").exists():
+                # if not (
+                #     args.output_path
+                #     / building
+                #     / scan
+                #     / f"{get_path_name(building)}_scan_{scan}_30M.ptx.ply"
+                # ).exists():
+                print(f"{building}/{scan}")
+                render_scan(args, building, scan)
             except portalocker.exceptions.LockException:
                 print(f"Lock {lock_path} already locked, skipping")
                 continue

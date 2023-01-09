@@ -10,7 +10,7 @@ set -euo pipefail
 
 # jq may not be installed globally, add brew as another option
 # Also, conda is not activateing the environment
-export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
+export PATH=/usr/local/bin:/usr/bin
 
 set +u
 echo

@@ -30,6 +30,7 @@ echo "        --input_root_colmap=$(cat params.yaml | yq -r '.inloc_cutouts_'$su
 echo "        --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root')"
 echo "        --test_size=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.test_size')"
 echo "        --squarify=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.squarify')"
+echo "        --val_ratio=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.val_ratio // "0.2"')"
 echo
 
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
@@ -40,6 +41,7 @@ echo
         --input_root_colmap=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root_colmap') \
         --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root') \
         --test_size=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.test_size') \
-        --squarify=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.squarify')
+        --squarify=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.squarify') \
+        --val_ratio=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.val_ratio // "0.2"')
 
 exit 0

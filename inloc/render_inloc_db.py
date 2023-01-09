@@ -8,22 +8,23 @@ import os
 os.environ["PYOPENGL_PLATFORM"] = "egl"
 # When ran with SLURM on a multigpu node, scheduled on other than GPU0, we need
 # to set this or we get an egl initialization error.
-os.environ["EGL_DEVICE_ID"] = os.environ.get("SLURM_JOB_GPUS", "0").split(",")[0]
+batch_mode = os.environ.get("SLURM_JOB_GPUS", "").split(",")[0]
+interactive_mode = os.environ.get("SLURM_STEP_GPUS", "").split(",")[0]
+os.environ["EGL_DEVICE_ID"] = "".join([batch_mode, interactive_mode])
+if os.environ["EGL_DEVICE_ID"] == "":
+    os.environ["EGL_DEVICE_ID"] = "0"
 
 import argparse
 import multiprocessing
 import pyrender
-import trimesh
 import time
 import cv2
-import scipy as sc
+from pathlib import Path
 import numpy as np
-import matplotlib.pyplot as plt
 from pyrender.constants import RenderFlags
 from scipy.io import loadmat
 from scipy.spatial.transform import Rotation as R
 from PIL import Image
-from tqdm import tqdm
 
 WIDTH = 1600
 HEIGHT = 1200
@@ -86,22 +87,17 @@ def get_path_name(building):
 
 
 def render_scan(args, building, scan):
+    building_name = get_path_name(building)
     # Load the scan
-    transform_path = os.path.join(
-        args.inloc_path,
-        "database/alignments/{}/transformations/{}_trans_{}.txt".format(
-            building,
-            get_path_name(building),
-            scan,
-        ),
+    transform_path = (
+        args.inloc_path
+        / f"database/alignments/{building}/transformations"
+        / f"{building_name}_trans_{scan}.txt"
     )
-    ptx_path = os.path.join(
-        args.inloc_path,
-        "database/scans/{}/{}_scan_{}.ptx.mat".format(
-            building,
-            get_path_name(building),
-            scan,
-        ),
+    ptx_path = (
+        args.inloc_path
+        / f"database/scans/{building}"
+        / f"{building_name}_scan_{scan}.ptx.mat"
     )
     xyz, rgb = load_point_cloud(ptx_path, n_max=args.n_max_per_scan)
     T = load_initial_transform(transform_path)
@@ -118,39 +114,40 @@ def render_scan(args, building, scan):
     cx, cy = int(CX * ratio), int(CY * ratio)
     mesh = pyrender.Mesh.from_points(xyz, rgb)
 
+    bg_color = (
+        [float(i) for i in args.bg_color.split(",")]
+        if args.bg_color is not None
+        else None
+    )
+    scene = pyrender.Scene(bg_color=bg_color)
+    scene.add(mesh)
+    camera = pyrender.IntrinsicsCamera(fl, fl, cx, cy, znear=ZNEAR, zfar=ZFAR)
+    renderer = pyrender.OffscreenRenderer(args.width, height, args.point_size)
+
     thread_times = []
     process_times = []
 
     # Render from the cutouts views
-    cutout_path = os.path.join(
-        args.inloc_path,
-        "database/cutouts/{}/{}".format(building, scan),
-    )
-    os.makedirs(os.path.join(args.output_path, building, scan), exist_ok=True)
-    for cutout_name in tqdm(os.listdir(cutout_path)):
-        if cutout_name[-3:] == "jpg":
-            bg_color = (
-                [float(i) for i in args.bg_color.split(",")]
-                if args.bg_color is not None
-                else None
-            )
+    cutout_path = args.inloc_path / "database/cutouts" / building / scan
+    os.makedirs(args.output_path / building / scan, exist_ok=True)
+    for cutout_name in cutout_path.iterdir():
+        if cutout_name.suffix == ".jpg":
+            # Load and resize the reference image
+            reference_img = Image.open(str(cutout_name))
+            reference_img = reference_img.resize((args.width, height), Image.ANTIALIAS)
+
+            cutout_name = cutout_name.name
 
             thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
             process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
-            scene = pyrender.Scene(bg_color=bg_color)
-            scene.add(mesh)
-            camera = pyrender.IntrinsicsCamera(fl, fl, cx, cy, znear=ZNEAR, zfar=ZFAR)
-            camera_node = pyrender.Node(camera=camera, matrix=np.eye(4))
-            scene.add_node(camera_node)
+            # Render the view
             r = get_rotation_matrix(cutout_name)
             camera_pose = T.copy()
             camera_pose[:3, :3] = camera_pose[:3, :3] @ ROT_ALIGN @ r
-            scene.set_pose(camera_node, camera_pose)
-            renderer = pyrender.OffscreenRenderer(args.width, height, args.point_size)
-
-            # Render the view
+            cam_node = scene.add(camera, pose=camera_pose)
             rendering, depth = renderer.render(scene, flags=FLAGS)
+            scene.remove_node(cam_node)
 
             thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
             process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
@@ -158,33 +155,23 @@ def render_scan(args, building, scan):
             thread_times.append(thread_end - thread_start)
             process_times.append(process_end - process_start)
 
-            renderer.delete()
-            color = np.array(rendering.copy(), dtype=np.uint8)
-
             # Discard points where depth is too large
-            mask = depth > args.max_depth
-            depth[mask] = 0.0
-            color[mask, :] = 255
-
-            # Load and resize the reference image
-            reference_img = Image.open(os.path.join(cutout_path, cutout_name))
-            reference_img = reference_img.resize((args.width, height), Image.ANTIALIAS)
+            if args.max_depth > 0:
+                color = np.array(rendering.copy(), dtype=np.uint8)
+                mask = depth > args.max_depth
+                depth[mask] = 0.0
+                color[mask, :] = 255
+            else:
+                color = rendering
 
             # Save the images
             base_name = cutout_name.split(".")[0]
             rendered_img = Image.fromarray(color)
             reference_img.save(
-                os.path.join(
-                    args.output_path,
-                    building,
-                    scan,
-                    "{}_reference.png".format(base_name),
-                )
+                str(args.output_path / building / scan / f"{base_name}_reference.png")
             )
             rendered_img.save(
-                os.path.join(
-                    args.output_path, building, scan, "{}_color.png".format(base_name)
-                )
+                str(args.output_path / building / scan / f"{base_name}_color.png")
             )
             # cv2.imwrite saves depth map as a single channel img and as-is meaning
             # if max depth is x, then max of the saved img values will be x as well.
@@ -192,16 +179,12 @@ def render_scan(args, building, scan):
             # be 255 or 65k depending on the data type. plt.imsave saves RGBA image
             # with depth remapped to a color depending on a colormap used.
             cv2.imwrite(
-                os.path.join(
-                    args.output_path, building, scan, "{}_depth.png".format(base_name)
-                ),
-                depth.astype(np.uint16),
+                str(args.output_path / building / scan / f"{base_name}_depth.png"),
+                np.clip(depth * 255.0 / 100.0, 0.0, 255.0).astype(np.uint8),
             )
             # For possible further recalculation, npz with raw depth map is also saved.
             np.save(
-                os.path.join(
-                    args.output_path, building, scan, "{}_depth.npy".format(base_name)
-                ),
+                str(args.output_path / building / scan / f"{base_name}_depth.npy"),
                 depth,
             )
     thread_mean = np.mean(thread_times) * 1000
@@ -227,10 +210,10 @@ def render_scan(args, building, scan):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--inloc_path", type=str, default="/home/bdechamps/InLoc_dataset/"
+        "--inloc_path", type=Path, default="/home/bdechamps/InLoc_dataset/"
     )
     parser.add_argument(
-        "--output_path", type=str, default="/home/bdechamps/datasets/InLoc_rendered/"
+        "--output_path", type=Path, default="/home/bdechamps/datasets/InLoc_rendered/"
     )
     # Rendering parameters
     parser.add_argument("--width", type=int, default=800)
@@ -250,10 +233,9 @@ def parse_args():
 def main(args):
     for building in BUILDINGS:
         print("Building dataset for {}".format(building))
-        for scan in os.listdir(
-            os.path.join(args.inloc_path, "database/cutouts/", building)
-        ):
-            print("scan {}".format(scan))
+        for scan in (args.inloc_path / "database/cutouts" / building).iterdir():
+            scan = scan.name
+            print(f"scan {scan}")
             render_scan(args, building, scan)
 
 
