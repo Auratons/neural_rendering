@@ -133,3 +133,28 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type')" == "COLMAP" ]]; the
         --ignore_existing \
         --max_radius "${MAX_RADIUS}"
 fi
+
+if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type')" == "CANDIDATES" ]]; then
+    PLY_PATH=$(cat params.yaml | yq -r '.cpp_render_'$sub'.ply_path')
+    if [[ -z "${OUTPUT_ROOT}" ]]; then OUTPUT_ROOT="${ROOT_TO_PROCESS}"; fi
+
+    echo
+    echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
+    echo "    exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif ${EXECUTABLE}"
+    echo "    --file ${PLY_PATH}"
+    echo "    --matrices=$(cat params.yaml | yq -r '.cpp_render_'$sub'.matrices // "${ROOT_TO_PROCESS}/matrices_for_rendering.json"')"
+    echo "    --output_path ${OUTPUT_ROOT}"
+    echo "    --headless"
+    echo "    --ignore_existing"
+    echo "    --max_radius ${MAX_RADIUS}"
+    echo
+
+    ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
+        exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif "${EXECUTABLE}" \
+        --file "${PLY_PATH}" \
+        --matrices=$(cat params.yaml | yq -r '.cpp_render_'$sub'.matrices // "'${ROOT_TO_PROCESS}'/matrices_for_rendering.json"') \
+        --output_path "${OUTPUT_ROOT}" \
+        --headless \
+        --ignore_existing \
+        --max_radius "${MAX_RADIUS}"
+fi
