@@ -31,7 +31,8 @@ MAX_RADIUS=$(cat params.yaml | yq -r '.cpp_render_'$sub'.max_radius')
 OUTPUT_ROOT=$(cat params.yaml | yq -r '.cpp_render_'$sub'.output_root // ""')
 
 if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type')" == "INLOC" ]]; then
-    for ply_file in `find "${ROOT_TO_PROCESS}" -type f -name '$(cat params.yaml | yq -r '.cpp_render_'$sub'.ply_glob')'`
+    PLY_GLOB=$(cat params.yaml | yq -r '.cpp_render_'$sub'.ply_glob')
+    for ply_file in `find "${ROOT_TO_PROCESS}" -type f -name "${PLY_GLOB}"`
     do
         if [[ ! -f "$(dirname ${ply_file})_SPLAT.LOCK" ]]; then
             touch "$(dirname ${ply_file})_SPLAT.LOCK"
@@ -40,14 +41,18 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type')" == "INLOC" ]]; then
             continue
         fi
 
-        if [[ -z "${OUTPUT_ROOT}" ]]; then OUTPUT_ROOT=$(dirname $(dirname ${ply_file})); fi
+        if [[ -z "${OUTPUT_ROOT}" ]]; then
+            OUTPUT_ROOT_FOLDER=$(dirname $(dirname ${ply_file}))
+        else
+            OUTPUT_ROOT_FOLDER="${OUTPUT_ROOT}"
+        fi
 
         echo
         echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
         echo "    exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif ${EXECUTABLE}"
         echo "    --file ${ply_file}"
         echo "    --matrices $(dirname ${ply_file})/matrices_for_rendering.txt"
-        echo "    --output_path $(dirname $(dirname ${ply_file}))"
+        echo "    --output_path ${OUTPUT_ROOT_FOLDER}"
         echo "    --headless"
         echo "    --ignore_existing"
         echo "    --max_radius ${MAX_RADIUS}"
@@ -57,7 +62,7 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type')" == "INLOC" ]]; then
             exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif "${EXECUTABLE}" \
             --file "${ply_file}" \
             --matrices "$(dirname ${ply_file})/matrices_for_rendering.txt" \
-            --output_path "${OUTPUT_ROOT}" \
+            --output_path "${OUTPUT_ROOT_FOLDER}" \
             --headless \
             --ignore_existing \
             --max_radius "${MAX_RADIUS}"
