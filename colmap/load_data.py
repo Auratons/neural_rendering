@@ -17,6 +17,7 @@ import trimesh
 import argparse
 import distutils
 import pyrender
+import json
 import random
 import numpy as np
 import matplotlib.pyplot as plt
@@ -331,11 +332,20 @@ def build_dataset(
                 output_dir = os.path.join(out_dir, "train")
             try:
                 # Reference image
-                img = plt.imread(os.path.join(src_reference, img_nm))
                 if squarify:
+                    img = plt.imread(os.path.join(src_reference, img_nm))
                     img = utils.squarify(img, min_size)
-                img = Image.fromarray(img)
-                img.save(os.path.join(output_dir, "{:04n}_reference.png".format(it)))
+                    plt.imsave(
+                        os.path.join(output_dir, "{:04n}_reference.png".format(it)), img
+                    )
+                else:
+                    if not Path(
+                        os.path.join(output_dir, "{:04n}_reference.png".format(it))
+                    ).exists():
+                        os.link(
+                            os.path.join(src_reference, img_nm),
+                            os.path.join(output_dir, "{:04n}_reference.png".format(it)),
+                        )
 
                 # depth image
                 if src_depth is not None:
@@ -356,13 +366,16 @@ def build_dataset(
                     depth_rendering = utils.squarify(depth_rendering, min_size)
                 cv2.imwrite(
                     os.path.join(output_dir, "{:04n}_depth.png".format(it)),
-                    depth_rendering.astype(np.uint16),
+                    np.clip(depth_rendering * 255.0 / 100.0, 0.0, 255.0).astype(
+                        np.uint8
+                    ),
                 )
 
                 # rendered image
                 if squarify:
                     rgb_rendering = utils.squarify(rgb_rendering, min_size)
                 img_rendering = Image.fromarray(rgb_rendering)
+                img_rendering.putalpha(255)
                 img_rendering.save(
                     os.path.join(output_dir, "{:04n}_color.png".format(it))
                 )
@@ -373,6 +386,20 @@ def build_dataset(
                         os.path.join(src_reference, img_nm[:-13] + "params.json"),
                         os.path.join(output_dir, "{:04n}_params.json".format(it)),
                     )
+                else:
+                    camera_pose[:, 1:3] *= -1
+                    cam = np.eye(4)
+                    cam[:3, :3] = k
+                    serialized_cam = [list(l) for l in cam]
+                    serialized_pose = [list(l) for l in camera_pose]
+                    params = {
+                        "calibration_mat": serialized_cam,
+                        "camera_pose": serialized_pose,
+                    }
+                    with open(
+                        os.path.join(output_dir, "{:04n}_params.json".format(it)), "w"
+                    ) as ff:
+                        json.dump(params, ff, indent=4)
             except AssertionError:
                 print(os.path.join(src_reference, img_nm))
                 print(traceback.format_exc())

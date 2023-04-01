@@ -24,7 +24,9 @@ def link(view, part, index, mapping):
     link_(view.parent / f"{stem}_reference.png", part / f"{index:04n}_reference.png")
     link_(view.parent / f"{stem}_depth.png", part / f"{index:04n}_depth.png")
     link_(view.parent / f"{stem}_depth.npy", part / f"{index:04n}_depth.npy")
+    link_(view.parent / f"{stem}_depth.png.npy", part / f"{index:04n}_depth.png.npy")
     link_(view.parent / f"{stem}_color.png", part / f"{index:04n}_color.png")
+    link_(view.parent / f"{stem}_params.json", part / f"{index:04n}_params.json")
 
 
 def get_matrices(reference_path, dataset_path, matrices_dict, index):
@@ -98,26 +100,26 @@ if __name__ == "__main__":
         rnd.shuffle(reference_photos)
         split = int(0.2 * (len(reference_photos) - test_size))
         for ref in reference_photos[: int(test_size / len(halls))]:
-            get_matrices(ref, test, test_matrices_dict, it)
+            # get_matrices(ref, test, test_matrices_dict, it)
             link(ref, test, it, mapping)
             it += 1
         for ref in reference_photos[int(test_size / len(halls)) : split]:
-            get_matrices(ref, test, val_matrices_dict, it)
+            # get_matrices(ref, val, val_matrices_dict, it)
             link(ref, val, it, mapping)
             it += 1
         for ref in reference_photos[split:]:
-            get_matrices(ref, test, train_matrices_dict, it)
+            # get_matrices(ref, train, train_matrices_dict, it)
             link(ref, train, it, mapping)
             it += 1
 
-    with open(prefix / args.output / "mapping.txt", "w") as mapping_file:
-        mapping_file.write(json.dumps(mapping, indent=4))
+    # with open(prefix / args.output / "mapping.txt", "w") as mapping_file:
+    #     mapping_file.write(json.dumps(mapping, indent=4))
 
-    with open(test / "matrices_for_rendering.json", "w") as f:
-        f.write(json.dumps(test_matrices_dict, indent=4))
+    # with open(test / "matrices_for_rendering.json", "w") as f:
+    #     f.write(json.dumps(test_matrices_dict, indent=4))
 
-    with open(val / "matrices_for_rendering.json", "w") as f:
-        f.write(json.dumps(val_matrices_dict, indent=4))
+    # with open(val / "matrices_for_rendering.json", "w") as f:
+    #     f.write(json.dumps(val_matrices_dict, indent=4))
 
-    with open(train / "matrices_for_rendering.json", "w") as f:
-        f.write(json.dumps(train_matrices_dict, indent=4))
+    # with open(train / "matrices_for_rendering.json", "w") as f:
+    #     f.write(json.dumps(train_matrices_dict, indent=4))
