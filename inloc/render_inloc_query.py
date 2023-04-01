@@ -21,6 +21,8 @@ from PIL import Image
 from scipy.io import loadmat
 from scipy.spatial.transform import Rotation as R
 from tqdm import tqdm
+import open3d as o3d
+import trimesh
 
 import sys
 
@@ -41,6 +43,59 @@ CY = 1512
 ZNEAR = 0.05
 ZFAR = 100.0
 ROT_ALIGN_QUERY = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]], dtype=np.float)
+
+
+def o3d_to_pyrenderer(mesh_or_pt):
+    if isinstance(mesh_or_pt, o3d.geometry.PointCloud):
+        points = np.asarray(mesh_or_pt.points).copy()
+        colors = np.asarray(mesh_or_pt.colors).copy()
+        mesh = pyrender.Mesh.from_points(points, colors)
+    elif isinstance(mesh_or_pt, o3d.geometry.TriangleMesh):
+        mesh = trimesh.Trimesh(
+            np.asarray(mesh_or_pt.vertices),
+            np.asarray(mesh_or_pt.triangles),
+            vertex_colors=np.asarray(mesh_or_pt.vertex_colors),
+        )
+        mesh = pyrender.Mesh.from_trimesh(mesh)
+    else:
+        raise NotImplementedError()
+    return mesh
+
+
+def load_ply(ply_path, voxel_size):
+    # Loading the mesh / pointcloud
+    m = trimesh.load(ply_path)
+    if isinstance(m, trimesh.PointCloud):
+        if voxel_size is not None:
+            pcd = o3d.geometry.PointCloud()
+            pcd.points = o3d.utility.Vector3dVector(np.asarray(m.vertices))
+            pcd.colors = o3d.utility.Vector3dVector(
+                np.asarray(m.colors, dtype=np.float64)[:, :3] / 255
+            )
+            pcd = pcd.voxel_down_sample(voxel_size=voxel_size)
+            mesh = o3d_to_pyrenderer(pcd)
+        else:
+            points = m.vertices.copy()
+            colors = m.colors.copy()
+            mesh = pyrender.Mesh.from_points(points, colors)
+    elif isinstance(m, trimesh.Trimesh):
+        if voxel_size is not None:
+            m2 = m.as_open3d
+            m2.vertex_colors = o3d.utility.Vector3dVector(
+                np.asarray(m.visual.vertex_colors, dtype=np.float64)[:, :3] / 255
+            )
+            m2 = m2.simplify_vertex_clustering(
+                voxel_size=voxel_size,
+                contraction=o3d.geometry.SimplificationContraction.Average,
+            )
+            mesh = o3d_to_pyrenderer(m2)
+        else:
+            mesh = pyrender.Mesh.from_trimesh(m)
+    else:
+        raise NotImplementedError(
+            "Unsupported 3D object. Supported format is a `.ply` pointcloud or mesh."
+        )
+    return mesh
 
 
 def invert_T(T):
@@ -89,29 +144,28 @@ def main(args):
         print("Processing scan {}...".format(scan))
         # Load the pointcloud once
         building, scan = scan.split("/")
-        ptx_path = (
-            args.inloc_path
-            / "database"
-            / "scans"
+        ply_path = (
+            args.ply_root
             / building
-            / f"{get_path_name(building)}_scan_{scan}.ptx.mat"
+            / scan
+            / f"{get_path_name(building)}_scan_{scan}_30M.ptx.ply"
         )
-        xyz, rgb = load_point_cloud(ptx_path, n_max=args.n_max_per_scan)
-        transform_path = (
-            args.inloc_path
-            / "database"
-            / "alignments"
-            / f"{building}"
-            / "transformations"
-            / f"{get_path_name(building)}_trans_{scan}.txt"
-        )
-        T_cutout = load_initial_transform(transform_path)
-        xyz = np.concatenate([xyz, np.ones((xyz.shape[0], 1))], axis=1)
-        xyz = xyz @ T_cutout.T
-        xyz = xyz[:, :3] / xyz[:, -1:]
+        mesh = load_ply(ply_path)
+        # transform_path = (
+        #     args.inloc_path
+        #     / "database"
+        #     / "alignments"
+        #     / f"{building}"
+        #     / "transformations"
+        #     / f"{get_path_name(building)}_trans_{scan}.txt"
+        # )
+        # T_cutout = load_initial_transform(transform_path)
+        # xyz = np.concatenate([xyz, np.ones((xyz.shape[0], 1))], axis=1)
+        # xyz = xyz @ T_cutout.T
+        # xyz = xyz[:, :3] / xyz[:, -1:]
 
         # Setup the scene
-        mesh = pyrender.Mesh.from_points(xyz, rgb)
+        # mesh = pyrender.Mesh.from_points(xyz, rgb)
         scene = pyrender.Scene()
         scene.add(mesh)
         # camera = pyrender.IntrinsicsCamera(FL, FL, CX, CY, znear=ZNEAR, zfar=ZFAR)
@@ -211,25 +265,33 @@ def none_or_int(value):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--inloc_path", type=Path)
-    parser.add_argument("--query_path", type=Path)
+    # parser.add_argument("--inloc_path", type=Path)
+    parser.add_argument(
+        "--ply_root",
+        type=Path,
+        default="/home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_spheres",
+    )
+    parser.add_argument(
+        "--query_path",
+        type=Path,
+        default="/home/kremeto1/neural_rendering/datasets/raw/inloc/query/same_db_size",
+    )
     parser.add_argument(
         "--output_path",
         type=Path,
-        default="/home/bdechamps/datasets/query_4032_borders/",
+        default="/home/kremeto1/inloc/datasets/pipeline-inloc-conv5-pyrender/candidate_renders",
     )
     parser.add_argument(
         "--mat_path",
         type=Path,
-        default="/home/bdechamps/InLoc_demo/outputs/densePE_top100_shortlist.mat",
+        default="/home/kremeto1/inloc/datasets/pipeline-inloc-conv5-pyrender/densePE_top100_shortlist.mat",
     )
 
     # Rendering parameters
     parser.add_argument("--n_max_per_scan", type=none_or_int, default=None)
-    parser.add_argument("--point_size", type=float, default=5.0)
-    parser.add_argument("--max_depth", type=float, default=20.0)
-    parser.add_argument("--max_img_size", type=int, default=4032)
-    parser.add_argument("--nvidia_id", type=int, default=0)
+    parser.add_argument("--point_size", type=float, default=3.0)
+    parser.add_argument("--max_depth", type=float, default=100.0)
+    parser.add_argument("--max_img_size", type=int, default=1600)
     parser.add_argument("--squarify", type=bool, default=False)
     args = parser.parse_args()
     return args
