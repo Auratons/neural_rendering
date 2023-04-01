@@ -78,6 +78,7 @@ render_colmap_thesis_test_squarify:
   squarify: True
   min_size: 1248  # minimal 2**3 and 2**5 divisible number higher than max dimension in the data
   voxel_size: None
+  bg_color: "0.0,0.0,0.0"
 
 
 cpp_render_thesis_splatting:
@@ -95,8 +96,9 @@ cpp_render_thesis_spheres:
   renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
 
 
-# First call generates matrices, second also squarifies renderer outputs.
-# colmap/generate_matrices_for_cpp_renderers.py \
+# First call generates matrices, second also squarifies renderer outputs (cpp renderers do not squarify contrary to pyrender script).
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
 #     --src_reference /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/images \
 #     --src_colmap /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse \
 #     --src_output /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-splatting \
@@ -124,6 +126,7 @@ inloc_cutouts_thesis_splatting_squarify:
 
 inloc_cutouts_thesis_spheres_squarify:
   input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/hagia_sophia_interior_thesis_test-100_src-fused-spheres
+  input_root_renderer: "marcher"
   input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply
   input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse
   output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_spheres_squarify-100_src-fused_inloc_format
@@ -137,6 +140,37 @@ inloc_cutouts_thesis_test:
   output_root: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_thesis_test-100_src-fused_inloc_format
   test_size: 50
   squarify: False
+
+# After InLoc runs, for pose verification renders must be generated. For splatting and spheres, --just_jsons is needed,
+# for pyrender this option is not used. Then, cpp renderers must be called below.
+
+# python ~/neural_rendering/colmap/render_test.py \
+# --src_colmap=/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse \
+# --ply_path=/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply \
+# --src_output=/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-splatting/candidate_renders \
+# --point_size="2.0" \
+# --min_size="1248" \
+# --voxel_size="None" \
+# --bg_color="0,0,0" \
+# --test_size="50" \
+# --squarify="True" \
+# --input_poses="/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-splatting/densePE_top100_shortlist.mat" \
+# --just_jsons
+
+
+cpp_render_thesis_splatting_candidates:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-splatting/candidate_renders"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+cpp_render_thesis_spheres_candidates:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-spheres/candidate_renders"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
 
 
 dataset_utils_1:

@@ -85,6 +85,7 @@ render_colmap_thesis_test_squarify:
   squarify: "True"
   min_size: 1168  # minimal 2**3 and 2**5 divisible number higher than max dimension in the data
   voxel_size: None
+  bg_color: "0.0,0.0,0.0"
 
 
 cpp_render_thesis_splatting:
@@ -100,6 +101,17 @@ cpp_render_thesis_spheres:
   ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/fused.ply"
   max_radius: "0.01"
   renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+# First call generates matrices, second also squarifies renderer outputs (cpp renderers do not squarify contrary to pyrender script).
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/images \
+#     --src_colmap /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/sparse \
+#     --src_output /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-splatting \
+#     --min_size 1168 \
+#     --verbose \
+#     --squarify "True" \
+#     --test_size 50
 
 
 inloc_cutouts_thesis_test_squarify:
@@ -128,11 +140,58 @@ inloc_cutouts_thesis_splatting_squarify:
 
 inloc_cutouts_thesis_spheres_squarify:
   input_root: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-spheres
+  input_root_renderer: "marcher"
   input_ply_path: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/fused.ply
   input_root_colmap: /home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/sparse
   output_root: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_thesis_spheres_squarify-100_src-fused_inloc_format
   test_size: "50"
   squarify: "True"
+
+# After InLoc runs, for pose verification renders must be generated. For splatting and spheres, --just_jsons is needed,
+# for pyrender this option is not used. Then, cpp renderers must be called below.
+
+# python ~/neural_rendering/colmap/render_test.py --src_colmap=/home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/sparse \
+# --ply_path=/home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/fused.ply \
+# --src_output=/home/kremeto1/inloc/datasets/pipeline-pantheon-conv5-pyrender/candidate_renders \
+# --point_size="2.0" \
+# --min_size="1168" \
+# --voxel_size="None" \
+# --bg_color="0,0,0" \
+# --test_size="50" \
+# --squarify="True" \
+# --input_poses="/home/kremeto1/inloc/datasets/pipeline-pantheon-conv5-pyrender/densePE_top100_shortlist.mat"
+
+cpp_render_thesis_splatting_candidates:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-pantheon-conv5-splatting/candidate_renders"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+cpp_render_thesis_spheres_candidates:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-pantheon-conv5-spheres/candidate_renders"
+  ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/pantheon_exterior/dense/dense/fused.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+
+dataset_utils_thesis_pyrender:
+  dataset_name: pantheon_exterior_thesis_pyrender
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_thesis_pyrender
+
+
+dataset_utils_thesis_spheres:
+  dataset_name: pantheon_exterior_thesis_spheres
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-spheres
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_thesis_spheres
+
+
+dataset_utils_thesis_splatting:
+  dataset_name: pantheon_exterior_thesis_splatting
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-splatting
+  output_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_thesis_splatting
 
 
 dataset_utils_1:
@@ -286,6 +345,74 @@ train_nriw_18:
   model_parent_dir: /home/kremeto1/neural_rendering/models/pantheon_exterior/
   dataset_name: pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_minsz-512_valr-0.2_pts-2.0_down-10_src-fused
+
+train_nriw_thesis:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/pantheon_exterior/"
+  dataset_name: "pantheon_exterior_thesis-100_src-fused"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/final/imc/pantheon_exterior_thesis-100_src-fused"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "200"
+  pretrain_appearance_steps: "2600"
+
+  fixed_batch_size: "32"
+  fixed_total_kimg: "4000"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "4000"
+
+train_nriw_thesis_pyrender:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/pantheon_exterior/"
+  dataset_name: "pantheon_exterior_thesis_pyrender"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "32"
+  fixed_total_kimg: "4000"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "4000"
+
+train_nriw_thesis_splatting:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/pantheon_exterior/"
+  dataset_name: "pantheon_exterior_thesis_splatting"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-splatting"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "32"
+  fixed_total_kimg: "4000"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "4000"
+
+train_nriw_thesis_spheres:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/pantheon_exterior/"
+  dataset_name: "pantheon_exterior_thesis_spheres"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/pantheon_exterior_thesis_test-100_src-fused-spheres"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "32"
+  fixed_total_kimg: "4000"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "4000"
 
 
 evaluate_nriw_1:

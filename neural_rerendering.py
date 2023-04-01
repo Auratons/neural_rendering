@@ -12,6 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import tensorflow as tf
+
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 from PIL import Image
 from absl import app
 from options import FLAGS as opts
@@ -28,7 +35,6 @@ import os.path as osp
 import random
 import skimage.measure
 import staged_model
-import tensorflow as tf
 import time
 import utils
 

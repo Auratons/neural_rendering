@@ -55,7 +55,7 @@ def compute_pairwise_style_loss_v2(image_paths_list):
     with tf.Session() as sess:
         for ii, img_path in enumerate(image_paths_list):
             print("Computing gram matrices for image #%d" % (ii + 1))
-            img = np.array(Image.open(img_path), dtype=np.float32)
+            img = np.array(Image.open(img_path), dtype=np.float32)[:, :, :3]
             img = img * 2.0 / 255.0 - 1  # normalize image
             img = utils.get_central_crop(img, crop_height, crop_width)
             img = np.expand_dims(img, axis=0)

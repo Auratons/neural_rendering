@@ -68,6 +68,165 @@ render_colmap_thesis_29:
   val_ratio: 0.0
   bg_color: "0.0,0.0,0.0"
 
+inloc_cutouts_thesis_pyrender_53:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-pyrender-black_bg
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-pyrender-zp50-inloc_format
+  test_size: "0"
+  val_ratio: "0.0"
+  squarify: "False"
+  z_addition: "50.0"
+
+inloc_cutouts_thesis_pyrender_29:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-pyrender-black_bg
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-pyrender-inloc_format
+  test_size: "0"
+  val_ratio: "0.0"
+  squarify: "False"
+
+# python ~/neural_rendering/artwin/join_datasets.py "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc" "2019-*-pyrender-black_bg" "joined-dataset-pyrender-black_bg"
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/images" \
+#     --src_colmap "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/sparse" \
+#     --src_output "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-splatting" \
+#     --verbose \
+#     --test_size "0" \
+#     --val_ratio "0.0" \
+#     --squarify "False"
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/images" \
+#     --src_colmap "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/sparse" \
+#     --src_output "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-splatting" \
+#     --verbose \
+#     --test_size "0" \
+#     --val_ratio "0.0" \
+#     --squarify "False"
+
+cpp_render_thesis_splatting_53:
+  type: "COLMAP"
+  root_to_process: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-splatting"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply"
+  max_radius: "-0.1"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+cpp_render_thesis_splatting_29:
+  type: "COLMAP"
+  root_to_process: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-splatting"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply"
+  max_radius: "-0.1"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+inloc_cutouts_thesis_splatting_53:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-splatting
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-splatting-zp50-inloc_format
+  test_size: "0"
+  val_ratio: "1.0"
+  squarify: "False"
+  z_addition: "50.0"
+
+inloc_cutouts_thesis_splatting_29:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-splatting
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-splatting-inloc_format
+  test_size: "0"
+  val_ratio: "1.0"
+  squarify: "False"
+
+# python ~/neural_rendering/artwin/join_datasets.py "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc" "2019-*-splatting" "joined-dataset-splatting"
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/images" \
+#     --src_colmap "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/sparse" \
+#     --src_output "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-spheres" \
+#     --verbose \
+#     --test_size "0" \
+#     --val_ratio "0.0" \
+#     --squarify "False"
+
+# python ~/neural_rendering/colmap/generate_matrices_for_cpp_renderers.py \
+#     --src_reference "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/images" \
+#     --src_colmap "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/sparse" \
+#     --src_output "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-spheres" \
+#     --verbose \
+#     --test_size "0" \
+#     --val_ratio "0.0" \
+#     --squarify "False"
+
+cpp_render_thesis_spheres_53:
+  type: "COLMAP"
+  root_to_process: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-spheres"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply"
+  max_radius: "-0.1"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+cpp_render_thesis_spheres_29:
+  type: "COLMAP"
+  root_to_process: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-spheres"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply"
+  max_radius: "-0.1"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+inloc_cutouts_thesis_spheres_53:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-spheres
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53-spheres-zp50-inloc_format
+  test_size: "0"
+  val_ratio: "1.0"
+  squarify: "False"
+  z_addition: "50.0"
+
+inloc_cutouts_thesis_spheres_29:
+  input_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-spheres
+  input_ply_path: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply
+  input_root_colmap: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/sparse
+  output_root: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29-spheres-inloc_format
+  test_size: "0"
+  val_ratio: "1.0"
+  squarify: "False"
+
+# python ~/neural_rendering/artwin/join_datasets.py "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc" "2019-*-spheres" "joined-dataset-spheres"
+
+cpp_render_thesis_splatting_candidates_29:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders/matrices_for_rendering_29.json"
+
+cpp_render_thesis_splatting_candidates_53:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders/matrices_for_rendering_53.json"
+
+cpp_render_thesis_spheres_candidates_29:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders/matrices_for_rendering_29.json"
+
+cpp_render_thesis_spheres_candidates_53:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders/matrices_for_rendering_53.json"
+
 dataset_utils_1:
   dataset_name: artwin_colmap
   dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
@@ -88,10 +247,20 @@ dataset_utils_8:
   dataset_parent_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective
   output_dir: /nfs/projects/artwin/experiments/hololens_mapper/joined_dataset_perspective_tfrecord
 
+dataset_utils_thesis_pyrender:
+  dataset_name: artwin_pyrender
+  dataset_parent_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-pyrender-black_bg
+  output_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-pyrender-black_bg-tfrecord
+
 dataset_utils_thesis_splatting:
   dataset_name: artwin_splatted
   dataset_parent_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting
   output_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-splatting-tfrecord
+
+dataset_utils_thesis_spheres:
+  dataset_name: artwin_marched
+  dataset_parent_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-spheres
+  output_dir: /nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-spheres-tfrecord
 
 
 train_nriw_thesis_splatting:
@@ -102,8 +271,44 @@ train_nriw_thesis_splatting:
   appearance_nc: "7"
   deep_buffer_nc: "4"
 
-  pretrain_batch_size: "200"
-  pretrain_appearance_steps: "2500"
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
+
+
+train_nriw_thesis_spheres:
+  model_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/model-spheres"
+  dataset_name: "artwin_marched"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-spheres"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
+
+
+train_nriw_thesis_pyrender:
+  model_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/model-pyrender"
+  dataset_name: "artwin_pyrender"
+  dataset_parent_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/joined-dataset-pyrender-black_bg"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
 
   fixed_batch_size: "64"
   fixed_total_kimg: "1900"

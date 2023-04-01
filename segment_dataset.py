@@ -174,7 +174,7 @@ def segment_images(
                 "Segmenting image %05d / %05d: %s" % (i + 1, len(images_path), img_path)
             )
             if segment_reference:
-                img = np.array(Image.open(img_path))
+                img = np.array(Image.open(img_path))[:, :, :3]
             else:
                 img = np.array(Image.open(img_path))[:, :, :3]
             if len(img.shape) == 2 or img.shape[2] != 3:
