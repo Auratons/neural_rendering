@@ -156,11 +156,20 @@ def build_dataset(
                     output_dict = train
 
                 # Reference image
-                img = plt.imread(os.path.join(src_reference, img_nm))
                 if squarify:
+                    img = plt.imread(os.path.join(src_reference, img_nm))
                     img = squarify_image(img, min_size)
-                img = Image.fromarray(img)
-                img.save(os.path.join(output_dir, "{:04n}_reference.png".format(it)))
+                    plt.imsave(
+                        os.path.join(output_dir, "{:04n}_reference.png".format(it)), img
+                    )
+                else:
+                    if not Path(
+                        os.path.join(output_dir, "{:04n}_reference.png".format(it))
+                    ).exists():
+                        os.link(
+                            os.path.join(src_reference, img_nm),
+                            os.path.join(output_dir, "{:04n}_reference.png".format(it)),
+                        )
 
                 depth_p = Path(output_dir) / "{:04n}_depth.png".format(it)
                 if depth_p.exists():
@@ -180,8 +189,8 @@ def build_dataset(
                 # rendered image
                 target_path = os.path.join(output_dir, "{:04n}_color.png".format(it))
                 output_dict[target_path] = {
-                    "intrinsic_matrix": [list(l) for l in list(camera_matrix)],
-                    "extrinsic_matrix": [list(l) for l in list(camera_pose)],
+                    "calibration_mat": [list(l) for l in list(camera_matrix)],
+                    "camera_pose": [list(l) for l in list(camera_pose)],
                 }
             except AssertionError:
                 print(os.path.join(src_reference, img_nm))
