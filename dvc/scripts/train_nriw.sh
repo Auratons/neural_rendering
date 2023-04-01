@@ -23,9 +23,12 @@ sub=$1
 # Also, conda is not activateing the environment
 export PATH=~/.conda/envs/pipeline/bin:~/.homebrew/bin:${PATH}
 
+SCRIPT_DIR_NAME="$(basename $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))"
+
 echo
 echo "Running on $(hostname)"
 echo "The $(type python)"
+echo "Running ${SCRIPT_DIR_NAME} ${sub}"
 echo
 
 WORKSPACE=/home/kremeto1/neural_rendering
