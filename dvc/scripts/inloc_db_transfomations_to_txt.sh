@@ -26,6 +26,6 @@ set -u
         ~/.conda/envs/pipeline/bin/python \
             ~/neural_rendering/inloc/inloc_db_transfomations_to_txt.py \
                 --inloc_path ~/neural_rendering/datasets/raw/inloc \
-                --inloc_rendered_by_pyrender ~/neural_rendering/datasets/processed/inloc/inloc_rendered_bdechamps \
+                --inloc_rendered_by_pyrender ~/neural_rendering/datasets/processed/inloc/inloc_rendered_base \
                 --output_path ~/neural_rendering/datasets/processed/inloc/inloc_rendered_splatting \
                 --n_max_per_scan 30000000

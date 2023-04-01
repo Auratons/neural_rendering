@@ -1,11 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=train_nriw_%j
+#SBATCH --job-name=nriw
 #SBATCH --output=logs/train_nriw_%j.log
 #SBATCH --mem=64G
 #SBATCH --time=4-0:00:00
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:4
-#SBATCH --cpus-per-gpu=5
+#SBATCH --gres=gpu:8
+#SBATCH --cpus-per-gpu=2
+#SBATCH --exclude='amd-01'
 
 set -e
 
@@ -36,11 +37,11 @@ fi
 
 if [ $(nvidia-smi -L | cut -f 3 -d' ' | head -n 1) == 'GeForce' ]; then
     PT_BS=64
-    PT_STEPS=5000
+    PT_STEPS=8000
     FD_BS=10
-    FD_KIMG=6400
+    FD_KIMG=12000
     FT_BS=10
-    FT_KIMG=1600
+    FT_KIMG=12000
 else
     PT_BS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_batch_size // "64"')
     PT_STEPS=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_appearance_steps // "7000"')
