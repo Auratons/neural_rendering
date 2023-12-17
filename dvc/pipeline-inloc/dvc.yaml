@@ -3,6 +3,8 @@ stages:
   render_inloc:
     foreach:
       - 1
+      - base
+      - pyrender
     do:
       cmd: >-
         bash -lc "SLURM_CPUS_ON_NODE=16 cpulimit -il 1600 bash ../scripts/build_dataset_inloc.sh ${item} ../../datasets/processed/inloc/inloc_rendered_${item} | tee logs/inloc_data_build_${item}.log"
@@ -13,15 +15,22 @@ stages:
       - render_inloc_${item}.n_max_per_scan
       - render_inloc_${item}.point_size
       - render_inloc_${item}.bg_color
+      - render_inloc_${item}.max_depth
+      - render_inloc_${item}.width
       outs:
       - ../../datasets/processed/inloc/inloc_rendered_${item}:
           cache: false
           persist: true
 
+# sbatch ../scripts/inloc_db_transfomations_to_txt.sh
+# sbatch ../scripts/compute_radii_for_ply.sh
+# sbatch ../scripts/cpp_renderer.sh
+
   # Generate train and val folders from buildings splits.
   split_inloc:
     foreach:
       - 1
+      - splatting
     do:
       cmd: >-
         cpulimit -il 1600 python ../../inloc/export_to_neural_rerendering.py
@@ -38,6 +47,7 @@ stages:
   dataset_utils_inloc:
     foreach:
       - 1
+      - splatting
     do:
       cmd: bash -lc "sbatch --wait ../scripts/run_dataset_utils.sh ${item}"
       deps:

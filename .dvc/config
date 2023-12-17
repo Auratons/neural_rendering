@@ -1,8 +1,0 @@
-[cache]
-    dir = cache
-    shared = group
-    type = "reflink,hardlink,copy"
-[core]
-    remote = local
-['remote "local"']
-    url = /home/kremeto1/dvc-local-remote
