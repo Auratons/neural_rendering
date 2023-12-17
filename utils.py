@@ -40,13 +40,18 @@ def get_central_crop(img, crop_height=512, crop_width=512):
         "input image should be either a 2D or 3D matrix,"
         " but input was of shape %s" % str(img.shape)
     )
-    height, width, _ = img.shape
-    assert height >= crop_height and width >= crop_width, (
-        "input image cannot " "be smaller than the requested crop size"
-    )
-    st_y = (height - crop_height) // 2
-    st_x = (width - crop_width) // 2
-    return np.squeeze(img[st_y : st_y + crop_height, st_x : st_x + crop_width, :])
+    height, width, ch = img.shape
+    # assert height >= crop_height and width >= crop_width, (
+    #     "input image cannot " "be smaller than the requested crop size"
+    # )
+    st_y = abs((height - crop_height) // 2)
+    st_x = abs((width - crop_width) // 2)
+    if height >= crop_height and width >= crop_width:
+        return np.squeeze(img[st_y : st_y + crop_height, st_x : st_x + crop_width, :])
+    else:
+        new_img = np.zeros((crop_height, crop_height, ch), dtype=np.float32)
+        new_img[st_y : st_y + height, st_x : st_x + width, :] = img
+        return np.squeeze(new_img)
 
 
 def load_global_step_from_checkpoint_dir(checkpoint_dir):

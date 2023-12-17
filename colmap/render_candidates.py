@@ -278,6 +278,10 @@ if __name__ == "__main__":
         # candidate_k = mat['ImgList'][0][index][4][0]
         candidate_r = mat["ImgList"][0][index][5][0]
         candidate_t = mat["ImgList"][0][index][6][0]
+
+        if all([np.isnan(candidate_projections[tidx]).any() for tidx in range(len(candidate_projections))]):
+            continue
+
         os.makedirs(Path(args.src_output) / query_path.stem, exist_ok=True)
 
         for tidx in range(len(candidate_projections)):

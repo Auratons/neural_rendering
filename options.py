@@ -232,6 +232,9 @@ flags.DEFINE_string("output_img_name", "", "[OPTIONAL] output image name for inf
 flags.DEFINE_boolean(
     "use_semantic_gt", True, "Whether to compute semantic masks from reference images"
 )
+flags.DEFINE_string(
+    "infer_dir_output_suffix", "_out.png", "What to append to inferred images base names in infer_dir command."
+)
 
 # -----------------------------------------------------------------------------
 # Some validation and assertions

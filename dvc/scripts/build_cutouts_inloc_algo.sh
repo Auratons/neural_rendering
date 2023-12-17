@@ -1,10 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=cutouts
 #SBATCH --output=logs/inloc_algo_cutouts_%j.log
-#SBATCH --mem=4G
-#SBATCH --time=0-04:00:00
+#SBATCH --mem=8G
+#SBATCH --time=0-24:00:00
 #SBATCH --partition=compute
 #SBATCH --cpus-per-task=2
+#SBATCH --exclude='node-[11,08,09,10]'
 
 set -euo pipefail
 
@@ -20,7 +21,7 @@ echo "Running on $(hostname)"
 echo
 set -u
 
-if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "COLMAP" ]]; then
+if [[ "$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.type // "COLMAP"')" == "COLMAP" ]]; then
     echo
     echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
     echo "    exec --nv --bind /nfs:/nfs ~/containers/renderer-app.sif"
@@ -49,7 +50,7 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "COL
 fi
 
 
-if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "ARTWIN" ]]; then
+if [[ "$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.type // "COLMAP"')" == "ARTWIN" ]]; then
     echo
     echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
     echo "    exec --nv --bind /nfs:/nfs ~/containers/renderer-app.sif"
@@ -70,7 +71,7 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "ART
 fi
 
 
-if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "INLOC" ]]; then
+if [[ "$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.type // "COLMAP"')" == "INLOC" ]]; then
     echo
     echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
     echo "    exec --nv --bind /nfs:/nfs ~/containers/renderer-app.sif"
@@ -78,14 +79,28 @@ if [[ "$(cat params.yaml | yq -r '.cpp_render_'$sub'.type // "COLMAP"')" == "INL
     echo "        --input_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root')"
     echo "        --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root')"
     echo "        --input_root_renderer=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root_renderer // "pyrender"')"
+
+    if [[ "$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.lift // "false"')" == "true" ]]; then
+        echo "        --lift"
+    fi
     echo
 
-    ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
-        exec --bind /nfs:/nfs ~/containers/renderer-app.sif \
-            ~/.conda/envs/pipeline/bin/python ~/inloc/inLocCIIRC_dataset/buildCutouts/build_cutouts_inloc.py \
-            --input_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root') \
-            --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root') \
-            --input_root_renderer=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root_renderer // "pyrender"')
+    if [[ "$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.lift // "false"')" == "true" ]]; then
+        ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
+            exec --bind /nfs:/nfs ~/containers/renderer-app.sif \
+                ~/.conda/envs/pipeline/bin/python ~/inloc/inLocCIIRC_dataset/buildCutouts/build_cutouts_inloc.py \
+                --input_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root') \
+                --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root') \
+                --input_root_renderer=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root_renderer // "pyrender"') \
+                --lift
+    else
+        ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
+            exec --bind /nfs:/nfs ~/containers/renderer-app.sif \
+                ~/.conda/envs/pipeline/bin/python ~/inloc/inLocCIIRC_dataset/buildCutouts/build_cutouts_inloc.py \
+                --input_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root') \
+                --output_root=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.output_root') \
+                --input_root_renderer=$(cat params.yaml | yq -r '.inloc_cutouts_'$sub'.input_root_renderer // "pyrender"')
+    fi
 fi
 
 exit 0

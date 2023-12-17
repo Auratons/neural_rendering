@@ -103,9 +103,6 @@ if __name__ == "__main__":
         i = idx_to_render
         k, r, t, w, h, img_nm = K[i], R[i], T[i], W[i], H[i], src_img_nms[i]
 
-        thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
-        process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
-
         scene = pyrender.Scene()
         scene.add(mesh)
         camera = pyrender.camera.IntrinsicsCamera(k[0, 0], k[1, 1], k[0, 2], k[1, 2])
@@ -114,6 +111,9 @@ if __name__ == "__main__":
         camera_pose[:3, -1:] = -r.T @ t
         camera_pose[:, 1:3] *= -1
         scene.add(camera, pose=camera_pose)
+
+        thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+        process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
         # Offscreen rendering
         r = pyrender.OffscreenRenderer(

@@ -45,6 +45,8 @@ def _load_and_concatenate_image_channels(
     if rgb_path is not None:
         rgb_img = np.array(Image.open(rgb_path)).astype(np.float32)
         rgb_img = utils.get_central_crop(rgb_img, crop_size, crop_size)
+        if not opts.use_alpha:
+            rgb_img = rgb_img[:, :, :3]  # drop the alpha channel
         channels = channels + (rgb_img,)
     if opts.use_buffer_appearance and rendered_path is not None:
         rendered_img = np.array(Image.open(rendered_path)).astype(np.float32)

@@ -6,6 +6,7 @@
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-gpu=16
+#SBATCH --exclude='amd-[01,02],node-[12]'
 
 set -e
 . /opt/ohpc/admin/lmod/lmod/init/bash

@@ -94,7 +94,7 @@ def parse_args():
         type=Path,
         help="path to write output images",
         default=Path(
-            "/home/kremeto1/inloc/datasets/pipeline-inloc-conv5-pyrender/candidate_renders"
+            "/home/kremeto1/inloc/datasets/pipeline-inloc-lifted-conv5-pyrender_corrected_missing_points/candidate_renders"
         ),
     )
     parser.add_argument(
@@ -116,7 +116,7 @@ def parse_args():
         "--input_poses",
         type=Path,
         help="Path to densePE_top100_shortlist matfile from InLoc run.",
-        default="/home/kremeto1/inloc/datasets/pipeline-inloc-conv5-pyrender/densePE_top100_shortlist.mat",
+        default="/home/kremeto1/inloc/datasets/pipeline-inloc-lifted-conv5-pyrender_corrected_missing_points/densePE_top100_shortlist.mat",
     )
     parser.add_argument(
         "--just_jsons",
@@ -162,7 +162,8 @@ if __name__ == "__main__":
     if not args.just_jsons:
         flags = RenderFlags.FLAT | RenderFlags.RGBA
         # Loading the mesh / pointcloud
-        times = [0.0] * len(mat["ImgList"][0])
+        thread_times = [0.0] * len(mat["ImgList"][0])
+        process_times = [0.0] * len(mat["ImgList"][0])
 
     test_size = len(mat["ImgList"][0])
     matrices_dict = {"train": {}, "val": {}}
@@ -187,8 +188,12 @@ if __name__ == "__main__":
         # candidate_scores = mat['ImgList'][0][index][2][0]
         candidate_projections = [i for i in mat["ImgList"][0][index][3][0]]
         # candidate_k = mat['ImgList'][0][index][4][0]
-        candidate_r = mat["ImgList"][0][index][5][0]
-        candidate_t = mat["ImgList"][0][index][6][0]
+        # candidate_r = mat["ImgList"][0][index][5][0]
+        # candidate_t = mat["ImgList"][0][index][6][0]
+
+        if all([np.isnan(candidate_projections[tidx]).any() for tidx in range(len(candidate_projections))]):
+            continue
+
         os.makedirs(args.src_output / query_path.stem, exist_ok=True)
 
         for tidx in range(len(candidate_projections)):
@@ -209,7 +214,22 @@ if __name__ == "__main__":
                 continue
             print("XXXXXXXXXXXXXXXXXX")
 
-            db_scan_number = candidate_paths[tidx].name.split("_")[3]
+            # if camera_pose[2, -1] > (160 - 20):
+            #     localized_scan = "CSE5"
+            #     camera_pose[2, -1] -= 160
+            # elif camera_pose[2, -1] > (120 - 20):
+            #     localized_scan = "CSE4"
+            #     camera_pose[2, -1] -= 120
+            # elif camera_pose[2, -1] > (80 - 20):
+            #     localized_scan = "CSE3"
+            #     camera_pose[2, -1] -= 80
+            # elif camera_pose[2, -1] > (40 - 20):
+            #     localized_scan = "DUC2"
+            #     camera_pose[2, -1] -= 40
+            # else:
+            #     localized_scan = "DUC1"
+
+            db_scan_number = candidate_paths[tidx].name.split("_")[2]
             for building in scans.keys():
                 if building in candidate_paths[tidx].name:
                     building_shorcut = building
@@ -255,7 +275,16 @@ if __name__ == "__main__":
                 )
                 scene.add(mesh)
 
-                start = time.process_time()
+                # Return the value (in fractional seconds) of the sum of the system
+                # and user CPU time of the current thread. It does not include time
+                # elapsed during sleep.
+                thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+                # Return the value (in fractional seconds) of the sum of the system
+                # and user CPU time of the current process. It does not include time
+                # elapsed during sleep. Since these calls utilize more threads, this
+                # may significantly overgrowth the "real" sys+cpu time seen by
+                # observing the main thread.
+                process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
                 camera = pyrender.camera.IntrinsicsCamera(
                     k[0, 0], k[1, 1], k[0, 2], k[1, 2]
@@ -265,14 +294,16 @@ if __name__ == "__main__":
                     # Offscreen rendering
                     rgb_rendering, depth_rendering = r.render(scene, flags=flags)
                 except np.linalg.LinAlgError:
-                    print("Eigenvalues did not converge.")
+                    print("Eigenvalues did not converge.", flush=True)
                     continue
+
+                thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+                process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
                 del scene
                 del mesh
-
-                end = time.process_time()
-                times[index] = end - start
+                thread_times[index] = thread_end - thread_start
+                process_times[index] = process_end - process_start
 
                 # cv2.imwrite saves depth map as a single channel img and as-is meaning
                 # if max depth is x, then max of the saved img values will be x as well.
@@ -296,10 +327,38 @@ if __name__ == "__main__":
                         / f"{candidate_paths[tidx].stem}_color.png"
                     )
                 )
+                print(f'Rendered {str(args.src_output / query_path.stem / f"{candidate_paths[tidx].stem}_color.png")}', flush=True)
+                print(
+                    f"CPU thread time: {(thread_end - thread_start) * 1000:.2f} ms", flush=True
+                )
+                # Count of processors available to the job on this node. Note the
+                # select/linear plugin allocates entire nodes to jobs, so the value
+                # indicates the total count of CPUs on the node. For the select/cons_res
+                # plugin, this number indicates the number of cores on this node
+                # allocated to the job.
+                print(
+                    f"CPU process time (uses one core): {(process_end - process_start) * 1000:.2f}) ms", flush=True
+                )
 
     if not args.just_jsons:
-        times = np.array(times)
-        print(f"Rendering time per image was ({np.mean(times)} +- {np.std(times)}) s.")
+        thread_times = np.array(thread_times)
+        process_times = np.array(process_times)
+        print(np.mean(thread_times))
+        print(np.std(thread_times))
+        print(np.mean(process_times))
+        print(np.std(process_times))
+
+        print(
+            f"CPU thread time: {np.mean(thread_times) * 1000:.2f} ms +- {np.std(thread_times):.2f} ms", flush=True
+        )
+        # Count of processors available to the job on this node. Note the
+        # select/linear plugin allocates entire nodes to jobs, so the value
+        # indicates the total count of CPUs on the node. For the select/cons_res
+        # plugin, this number indicates the number of cores on this node
+        # allocated to the job.
+        print(
+            f"CPU process time (uses one core): {np.mean(process_times) * 1000:.2f} ms +- {np.std(process_times):.2f} ms) ms", flush=True
+        )
 
     with open(args.src_output / "matrices_for_rendering.json", "w") as ff:
         json.dump(matrices_dict, ff, indent=4)

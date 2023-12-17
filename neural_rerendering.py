@@ -37,6 +37,7 @@ import skimage.measure
 import staged_model
 import time
 import utils
+import json
 
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
@@ -461,10 +462,14 @@ def _load_and_concatenate_image_channels(
 
     channels = ()
     if rgb_path is not None:
+        if not os.path.exists(rgb_path):
+            rgb_path = rgb_path.replace('png', 'jpg')
         rgb_img = np.array(Image.open(rgb_path)).astype(np.float32)
         rgb_img = utils.get_central_crop(
             rgb_img, crop_height=opts.train_resolution, crop_width=opts.train_resolution
         )
+        if not opts.use_alpha:
+            rgb_img = rgb_img[:, :, :3]  # drop the alpha channel
         rgb_img = utils.crop_to_multiple(rgb_img, size_multiple)
         channels = channels + (rgb_img,)
     if rendered_path is not None:
@@ -492,7 +497,11 @@ def _load_and_concatenate_image_channels(
         channels = channels + (depth_img,)
         # depth_img = depth_img * (2.0 / 255) - 1.0
     if seg_path is not None:
-        seg_img = np.array(Image.open(seg_path)).astype(np.float32)
+        try:
+            seg_img = np.array(Image.open(seg_path)).astype(np.float32)
+        except FileNotFoundError:
+            shape = rgb_img.shape if rgb_path is not None else rendered_img.shape
+            seg_img = np.zeros(shape, dtype=np.float32)
         seg_img = utils.crop_to_multiple(seg_img, size_multiple)
         channels = channels + (seg_img,)
     # Concatenate and normalize channels
@@ -546,9 +555,36 @@ def infer_dir(model_dir, input_dir, output_dir):
     base_paths = [x[:-10] for x in file_paths]  # remove the '_depth.png' suffix
     for inp_base_path in base_paths:
         est_inp_fn = get_inference_input_fn(inp_base_path, inp_base_path)
+
+        # Return the value (in fractional seconds) of the sum of the system
+        # and user CPU time of the current thread. It does not include time
+        # elapsed during sleep.
+        thread_start = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+        # Return the value (in fractional seconds) of the sum of the system
+        # and user CPU time of the current process. It does not include time
+        # elapsed during sleep. Since these calls utilize more threads, this
+        # may significantly overgrowth the "real" sys+cpu time seen by
+        # observing the main thread.
+        process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
+
         img = next(est.predict(est_inp_fn))
+
+        thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
+        process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
+
         basename = osp.basename(inp_base_path)
-        output_img_path = osp.join(output_dir, basename + "_out.png")
+        output_img_path = osp.join(output_dir, basename + opts.infer_dir_output_suffix)
+        print(
+            f"CPU thread time ({opts.train_resolution} resolution): {(thread_end - thread_start) * 1000:.2f} ms"
+        )
+        # Count of processors available to the job on this node. Note the
+        # select/linear plugin allocates entire nodes to jobs, so the value
+        # indicates the total count of CPUs on the node. For the select/cons_res
+        # plugin, this number indicates the number of cores on this node
+        # allocated to the job.
+        print(
+            f"CPU process time (uses one core, {opts.train_resolution} resolution): {(process_end - process_start) * 1000:.2f}) ms"
+        )
         print("Saving generated image to %s" % output_img_path)
         with tf.gfile.Open(output_img_path, "wb") as f:
             f.write(utils.to_png(img))

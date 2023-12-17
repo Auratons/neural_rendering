@@ -1,14 +1,16 @@
 #!/bin/bash
 #SBATCH --job-name=infer_nriw_on_subfolders_%j
 #SBATCH --output=logs/infer_nriw_on_subfolders_%j.log
-#SBATCH --mem=64G
+#SBATCH --mem=8G
 #SBATCH --time=0-06:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
-#SBATCH --cpus-per-gpu=16
+#SBATCH --cpus-per-gpu=1
+#SBATCH --exclude='dgx-[2,5],amd-[01-02],node-[12]'
 
 set -euo pipefail
 
+. /opt/ohpc/admin/lmod/lmod/init/bash
 ml purge
 module load CUDA/9.1.85
 module load cuDNN/7.0.5-CUDA-9.1.85
@@ -49,7 +51,7 @@ for subfolder in $(ls "${INPUT_FOLDER}"); do
 
     mkdir -p "${OUTPUT_FOLDER}/${subfolder}"
 
-    python ../../neural_rerendering.py \
+    ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ../../neural_rerendering.py \
         --train_dir="$(realpath "$(cat params.yaml | yq -r '.infer_nriw_on_subfolders_'$sub'.trained_model_dir')")" \
         --run_mode="eval_dir" \
         --inference_input_path="${INPUT_FOLDER}/${subfolder}" \

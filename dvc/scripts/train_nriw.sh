@@ -35,7 +35,9 @@ WORKSPACE=/home/kremeto1/neural_rendering
 
 # Possibility to restart training.
 if [ -z ${TIMESTAMP} ]; then
-    TIMESTAMP=$(date "+%F-%H-%M-%S")
+    STAMP=$(date "+%F-%H-%M-%S")
+else
+    STAMP="${TIMESTAMP}"
 fi
 
 if [ $(nvidia-smi -L | cut -f 3 -d' ' | head -n 1) == 'GeForce' ]; then
@@ -59,7 +61,7 @@ echo
 echo "Running"
 echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
-echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
+echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")')"
 # Final datasets' subfolder contains only tfrecords, post_processed subfolder contains images.
 echo "    --imageset_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_imageset_dir // (.train_nriw_'$sub'.dataset_parent_dir | sub("final"; "post_processed") | . += "/train")')"
 echo "    --batch_size=${PT_BS}"
@@ -67,21 +69,21 @@ echo "    --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.
 echo "    --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"')"
 echo "    --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"')"
 echo "    --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_buffer_nc // "4"')"
-echo "    --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
+echo "    --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")')"
 echo "    --vgg16_path=${WORKSPACE}/vgg16_weights/vgg16.npy"
 echo "    --appearance_pretrain_steps=${PT_STEPS}"
 echo
 
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/pretrain_appearance.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
-    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
+    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")') \
     --imageset_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_imageset_dir // (.train_nriw_'$sub'.dataset_parent_dir | sub("final"; "post_processed") | . += "/train")') \
     --batch_size=${PT_BS} \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"') \
     --use_semantic=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_semantic // "True"') \
     --appearance_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.appearance_nc // "10"') \
     --deep_buffer_nc=$(cat params.yaml | yq -r '.train_nriw_'$sub'.deep_buffer_nc // "4"') \
-    --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
+    --metadata_output_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.pretrain_metadata_output_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")') \
     --vgg16_path="${WORKSPACE}/vgg16_weights/vgg16.npy" \
     --appearance_pretrain_steps=${PT_STEPS}
 
@@ -91,9 +93,9 @@ echo "Running"
 echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir')"
-echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")')"
+echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-fixed_appearance")')"
 echo "    --load_pretrained_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_pretrained_app_encoder // "True"')"
-echo "    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_pretrain_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")')"
+echo "    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_pretrain_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")')"
 echo "    --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_app_encoder // "False"')"
 echo "    --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_from_another_ckpt // "False"')"
 echo "    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_train_dir // ""')"
@@ -109,9 +111,9 @@ echo
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir') \
-    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")') \
+    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-fixed_appearance")') \
     --load_pretrained_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_pretrained_app_encoder // "True"') \
-    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_pretrain_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-app_pretrain")') \
+    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_pretrain_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-app_pretrain")') \
     --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_train_app_encoder // "False"') \
     --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_load_from_another_ckpt // "False"') \
     --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.fixed_appearance_train_dir // ""') \
@@ -129,12 +131,12 @@ echo "Running"
 echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py"
 echo "    --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name')"
 echo "    --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir')"
-echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-finetune_appearance")')"
+echo "    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-finetune_appearance")')"
 echo "    --load_pretrained_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_pretrained_app_encoder // "False"')"
 echo "    --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_appearance_pretrain_dir // ""')"
 echo "    --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_app_encoder // "True"')"
 echo "    --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_from_another_ckpt // "True"')"
-echo "    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")')"
+echo "    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-fixed_appearance")')"
 echo "    --total_kimg=${FT_KIMG}"
 echo "    --batch_size=${FT_BS}"
 echo "    --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"')"
@@ -147,12 +149,12 @@ echo
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/neural_rerendering.py \
     --dataset_name=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_name') \
     --dataset_parent_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.dataset_parent_dir') \
-    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-finetune_appearance")') \
+    --train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-finetune_appearance")') \
     --load_pretrained_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_pretrained_app_encoder // "False"') \
     --appearance_pretrain_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_appearance_pretrain_dir // ""') \
     --train_app_encoder=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_train_app_encoder // "True"') \
     --load_from_another_ckpt=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_load_from_another_ckpt // "True"') \
-    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${TIMESTAMP}'-fixed_appearance")') \
+    --fixed_appearance_train_dir=$(cat params.yaml | yq -r '.train_nriw_'$sub'.finetune_fixed_appearance_train_dir // (.train_nriw_'$sub'.model_parent_dir + .train_nriw_'$sub'.dataset_name | . += "-" | . += "'${STAMP}'-fixed_appearance")') \
     --total_kimg=${FT_KIMG} \
     --batch_size=${FT_BS} \
     --use_buffer_appearance=$(cat params.yaml | yq -r '.train_nriw_'$sub'.use_buffer_appearance // "True"') \
