@@ -4,6 +4,9 @@ This repository is a fork of https://github.com/google/neural_rerendering_in_the
 extended with codes for experiments from https://github.com/Auratons/master_thesis,
 targeting multiple datasets.
 
+The repository contains git submodules, so either clone the repository
+with `--recurse-submodules` option or inside of the folder run
+`git submodule init && git subbmodule update --recursive`.
 
 ## Repository structure
 

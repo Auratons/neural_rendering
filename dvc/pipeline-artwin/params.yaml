@@ -227,6 +227,22 @@ cpp_render_thesis_spheres_candidates_53:
   renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
   matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders/matrices_for_rendering_53.json"
 
+cpp_render_thesis_splatting_candidates_29_spheres:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders_spheres"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_08.31.29/2019-09-28_08.31.29.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders_spheres/matrices_for_rendering_29.json"
+
+cpp_render_thesis_splatting_candidates_53_spheres:
+  type: "CANDIDATES"
+  root_to_process: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders_spheres"
+  ply_path: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/2019-09-28_16.11.53/2019-09-28_16.11.53.ply"
+  max_radius: "0.01"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+  matrices: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-splatting/candidate_renders_spheres/matrices_for_rendering_53.json"
+
 dataset_utils_1:
   dataset_name: artwin_colmap
   dataset_parent_dir: /nfs/projects/artwin/experiments/as_colmap_60_fov_pyrender/joined_dataset
@@ -315,6 +331,17 @@ train_nriw_thesis_pyrender:
 
   finetune_batch_size: "32"
   finetune_total_kimg: "3800"
+
+
+infer_nriw_on_subfolders_thesis_spheres:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders_neural"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-artwin-conv5-spheres/candidate_renders_neural-out2"
+  trained_model_dir: "/nfs/projects/artwin/experiments/thesis/artwin_as_inloc/model-spheresartwin_marched-2022-12-21-02-12-23-finetune_appearance"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+  train_resolution: "1600"
+  use_buffer_appearance: "True"
 
 
 train_nriw_1:

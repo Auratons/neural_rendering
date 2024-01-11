@@ -2,7 +2,7 @@
 #SBATCH --job-name=infer_nriw_on_subfolders_%j
 #SBATCH --output=logs/infer_nriw_on_subfolders_%j.log
 #SBATCH --mem=8G
-#SBATCH --time=0-06:00:00
+#SBATCH --time=0-12:00:00
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-gpu=1
@@ -33,8 +33,7 @@ WORKSPACE="$(realpath "${SCRIPT_DIR}/../../")"
 INPUT_FOLDER="$(realpath "$(cat params.yaml | yq -r '.infer_nriw_on_subfolders_'$sub'.input_dir')")"
 OUTPUT_FOLDER="$(cat params.yaml | yq -r '.infer_nriw_on_subfolders_'$sub'.output_dir')"
 
-for subfolder in $(ls "${INPUT_FOLDER}"); do
-
+for subfolder in $(find "${INPUT_FOLDER}" -mindepth 1 -maxdepth 1 -type d -printf '%f\n'); do
     echo
     echo "Running:"
     echo "    python ../../neural_rerendering.py"
@@ -49,6 +48,10 @@ for subfolder in $(ls "${INPUT_FOLDER}"); do
     echo "        --deep_buffer_nc=$(cat params.yaml | yq -r '.infer_nriw_on_subfolders_'$sub'.deep_buffer_nc // "4"')"
     echo
 
+    if ls "${OUTPUT_FOLDER}/${subfolder}"
+    then
+        continue
+    fi
     mkdir -p "${OUTPUT_FOLDER}/${subfolder}"
 
     ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python ../../neural_rerendering.py \

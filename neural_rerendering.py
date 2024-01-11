@@ -555,6 +555,11 @@ def infer_dir(model_dir, input_dir, output_dir):
     base_paths = [x[:-10] for x in file_paths]  # remove the '_depth.png' suffix
     for inp_base_path in base_paths:
         est_inp_fn = get_inference_input_fn(inp_base_path, inp_base_path)
+        basename = osp.basename(inp_base_path)
+        output_img_path = osp.join(output_dir, basename + opts.infer_dir_output_suffix)
+        if os.path.exists(output_img_path):
+            print(f'File {output_img_path} exists, skipping.', flush=True)
+            continue
 
         # Return the value (in fractional seconds) of the sum of the system
         # and user CPU time of the current thread. It does not include time
@@ -572,8 +577,6 @@ def infer_dir(model_dir, input_dir, output_dir):
         thread_end = time.clock_gettime(time.CLOCK_THREAD_CPUTIME_ID)
         process_end = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
-        basename = osp.basename(inp_base_path)
-        output_img_path = osp.join(output_dir, basename + opts.infer_dir_output_suffix)
         print(
             f"CPU thread time ({opts.train_resolution} resolution): {(thread_end - thread_start) * 1000:.2f} ms"
         )

@@ -3,10 +3,90 @@ render_inloc_1:
   point_size: "2.0"
   bg_color: "0.0,0.0,0.0"
 
+render_inloc_base:
+  n_max_per_scan: "4000000"
+  point_size: "3.0"
+  bg_color: "0.0,0.0,0.0"
+  max_depth: 100
+  width: 1600
+
+render_inloc_pyrender:
+  n_max_per_scan: "4000000"
+  point_size: "3.0"
+  bg_color: "0.0,0.0,0.0"
+  width: 1600
+
 dataset_utils_1:
   dataset_name: "inloc"
   dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_1"
   output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_1"
+
+dataset_utils_spheres:
+  dataset_name: "inloc_spheres"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_spheres"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_spheres"
+
+dataset_utils_splatting:
+  dataset_name: "inloc_splatting"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_splatting"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting"
+
+dataset_utils_pyrender:
+  dataset_name: "inloc_pyrender"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_pyrender"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_pyrender"
+
+dataset_utils_splatting_no_semantic:
+  dataset_name: "inloc_splatting"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/inloc_rendered_splatting"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting_no_semantic"
+  use_semantic: "False"
+
+cpp_render_thesis_spheres:
+  type: "INLOC"
+  root_to_process: "/home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_spheres"
+  ply_glob: "*_scan_*_30M.ptx.ply"
+  max_radius: "0.1"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+cpp_render_thesis_spheres_recomputed:
+  type: "INLOC"
+  root_to_process: "/home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_spheres_recomputed"
+  ply_glob: "*_scan_*_30M.ptx.ply"
+  max_radius: "0.1"
+  renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+cpp_render_thesis_splatting:
+  type: "INLOC"
+  root_to_process: "/home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_splatting"
+  ply_glob: "*_scan_*_30M.ptx.ply"
+  max_radius: "0.1"
+  renderer_executable: "/home/kremeto1/containers/splatter-app.executable"
+
+inloc_cutouts_thesis_pyrender:
+  type: "INLOC"
+  input_root_renderer: pyrender
+  input_root: /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_pyrender
+  output_root: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_pyrender-inloc_format
+
+inloc_cutouts_thesis_pyrender_lifted:
+  type: "INLOC"
+  input_root_renderer: pyrender
+  input_root: /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_pyrender
+  output_root: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_pyrender_lifted-inloc_format
+  lift: "true"
+
+inloc_cutouts_thesis_splatting:
+  type: "INLOC"
+  input_root_renderer: splatter
+  input_root: /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_splatting
+  output_root: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting-inloc_format
+
+inloc_cutouts_thesis_spheres:
+  type: "INLOC"
+  input_root_renderer: marcher
+  input_root: /home/kremeto1/neural_rendering/datasets/processed/inloc/inloc_rendered_spheres
+  output_root: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_spheres-inloc_format
 
 render_inloc_query_1:
   query_path: "/home/kremeto1/neural_rendering/datasets/raw/inloc/query/with_borders"
@@ -40,3 +120,136 @@ infer_nriw_on_subfolders_2:
   input_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/inloc/query_rendered_scaled"
   output_dir: "/home/kremeto1/neural_rendering/inferences/inloc/query_rendered_scaled"
   trained_model_dir: "/home/bdechamps/neural_rerendering_in_the_wild/train_models/inloc_db-staged-finetune_appearance"
+
+
+train_nriw_thesis_spheres:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/inloc/"
+  dataset_name: "inloc_spheres"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_spheres"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
+
+
+train_nriw_thesis_splatting:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/inloc/"
+  dataset_name: "inloc_splatting"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
+
+
+train_nriw_thesis_pyrender:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/inloc/"
+  dataset_name: "inloc_pyrender"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_pyrender"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+  pretrain_batch_size: "400"
+  pretrain_appearance_steps: "1300"
+
+  fixed_batch_size: "64"
+  fixed_total_kimg: "1900"
+
+  finetune_batch_size: "32"
+  finetune_total_kimg: "3800"
+
+evaluate_nriw_thesis_pyrender:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/inloc/
+  dataset_name: inloc_pyrender
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_pyrender
+  timestamp: 2023-05-20-13-57-14
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+evaluate_nriw_thesis_spheres:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/inloc/
+  dataset_name: inloc_spheres
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_spheres
+  timestamp: 2023-05-20-09-59-44
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+evaluate_nriw_thesis_splatting:
+  model_parent_dir: /home/kremeto1/neural_rendering/models/inloc/
+  dataset_name: inloc_splatting
+  dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting
+  timestamp: 2023-05-20-09-59-49
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+render_candidates_manual:
+  # src_output: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_pyrender2"
+  src_output: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual-neural/candidate_renders"
+  input_poses: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/densePE_top100_shortlist.mat"
+
+infer_nriw_on_subfolders_manual:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_neural"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_neural-out"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/inloc/inloc_pyrender-2023-05-20-13-57-14-finetune_appearance"
+
+infer_nriw_on_subfolders_manual2:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_neural"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_neural-out2"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/inloc/inloc_spheres-2023-05-20-09-59-44-finetune_appearance"
+  train_resolution: "1600"
+
+infer_nriw_on_subfolders_manual3:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_pyrender_1200_1600"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual/candidate_renders_neural-1200_1600"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/inloc/inloc_splatting-2023-05-20-09-59-49-finetune_appearance"
+  train_resolution: "1600"
+
+infer_nriw_on_subfolders_manual_splatting:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual-splatting/candidate_renders"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual-splatting/candidate_renders_neural"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/inloc/inloc_splatting-2023-05-20-09-59-49-finetune_appearance"
+  train_resolution: "1600"
+  use_buffer_appearance: "True"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+infer_nriw_on_subfolders_manual_spheres:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual-spheres/candidate_renders"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-inloc-manual-spheres/candidate_renders_neural"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/inloc/inloc_spheres-2023-05-20-09-59-44-finetune_appearance"
+  train_resolution: "1600"
+  use_buffer_appearance: "True"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"
+
+evaluate_nriw_thesis_bdechamps:
+  model_parent_dir: "/home/kremeto1/neural_rendering/models/inloc/"
+  dataset_name: "inloc_splatting"
+  dataset_parent_dir: "/home/kremeto1/neural_rendering/datasets/final/inloc/inloc_rendered_splatting"
+  train_dir: "/home/bdechamps/neural_rerendering_in_the_wild/train_models/inloc_db-staged-finetune_appearance"
+  use_buffer_appearance: "True"
+  use_semantic: "False"
+  appearance_nc: "7"
+  deep_buffer_nc: "4"

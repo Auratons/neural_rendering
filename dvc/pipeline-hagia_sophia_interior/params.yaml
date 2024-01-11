@@ -144,7 +144,7 @@ inloc_cutouts_thesis_test:
 # After InLoc runs, for pose verification renders must be generated. For splatting and spheres, --just_jsons is needed,
 # for pyrender this option is not used. Then, cpp renderers must be called below.
 
-# python ~/neural_rendering/colmap/render_test.py \
+# python ~/neural_rendering/colmap/render_candidates.py \
 # --src_colmap=/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/sparse \
 # --ply_path=/home/kremeto1/neural_rendering/datasets/processed/imc/hagia_sophia_interior/dense/dense/0/fused.ply \
 # --src_output=/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-splatting/candidate_renders \
@@ -152,7 +152,6 @@ inloc_cutouts_thesis_test:
 # --min_size="1248" \
 # --voxel_size="None" \
 # --bg_color="0,0,0" \
-# --test_size="50" \
 # --squarify="True" \
 # --input_poses="/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-splatting/densePE_top100_shortlist.mat" \
 # --just_jsons
@@ -260,6 +259,17 @@ train_nriw_6:
   dataset_parent_dir: /home/kremeto1/neural_rendering/datasets/final/imc/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused
   fixed_total_kimg: 400
   finetune_total_kimg: 100
+
+
+infer_nriw_on_subfolders_thesis_spheres:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-spheres/candidate_renders_neural"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-hagia-conv5-spheres/candidate_renders_neural-out"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/hagia_sophia_interior/hagia_sophia_interior_minsz-512_valr-0.2_pts-2.0_down-100_src-fused-2020-12-14-05-23-51-finetune_appearance"
+  train_resolution: "1248"
+  use_buffer_appearance: "True"
+  use_semantic: "True"
+  appearance_nc: "10"
+  deep_buffer_nc: "7"
 
 
 colmap_1:

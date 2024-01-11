@@ -167,6 +167,7 @@ if __name__ == "__main__":
 
     test_size = len(mat["ImgList"][0])
     matrices_dict = {"train": {}, "val": {}}
+    per_scan_matrices = {}
 
     k = np.array(
         [
@@ -177,7 +178,17 @@ if __name__ == "__main__":
         ]
     )
 
+    k2 = np.array(
+        [
+            [1385.0, 0.0, 600.0, 0.0],
+            [0.0, 1385.0, 800.0, 0.0],
+            [0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 0.0, 1.0],
+        ]
+    )
+
     r = pyrender.OffscreenRenderer(k[0, 2] * 2, k[1, 2] * 2, point_size=args.point_size)
+    r2= pyrender.OffscreenRenderer(k2[0, 2] * 2, k2[1, 2] * 2, point_size=args.point_size)
 
     for index in range(test_size):
         print("Processing image {}/{}".format(index + 1, test_size))
@@ -211,8 +222,8 @@ if __name__ == "__main__":
                 [[1, 0, 0], [0, -1, 0], [0, 0, -1]], dtype=np.float
             )
             if np.isnan(camera_pose).any():
+                print("DIVERGED")
                 continue
-            print("XXXXXXXXXXXXXXXXXX")
 
             # if camera_pose[2, -1] > (160 - 20):
             #     localized_scan = "CSE5"
@@ -247,12 +258,17 @@ if __name__ == "__main__":
                 / f"{building_shorcut}_scan_{db_scan_number}_30M.ptx.ply"
             )
 
+            if cv2.imread(f"/home/kremeto1/neural_rendering/datasets/raw/inloc/query/resized/{query_path.name}").shape[:2] == (1600, 1200):
+                usek2 = True
+            else:
+                usek2 = False
+
             # rendered image
             rendered_image_prefix = str(
                 args.src_output / query_path.stem / candidate_paths[tidx].stem
             )
             rendered_image_params = {
-                "calibration_mat": [list(l) for l in list(k)],
+                "calibration_mat": [list(l) for l in list(k2)] if usek2 else [list(l) for l in list(k)],
                 "camera_pose": [list(l) for l in list(camera_pose)],
                 "source_reference": str(query_path),
                 "retrieved_database_reference": str(candidate_paths[tidx]),
@@ -262,6 +278,12 @@ if __name__ == "__main__":
                 "localized_scan_ply_path": str(ply_path_for_localized_query),
             }
 
+            if str(ply_path_for_localized_query) not in per_scan_matrices:
+                per_scan_matrices[str(ply_path_for_localized_query)] = {"train": {}, "val": {}}
+
+            per_scan_matrices[str(ply_path_for_localized_query)]["train"][
+                f"{rendered_image_prefix}_color.png"
+            ] = rendered_image_params
             matrices_dict["train"][
                 f"{rendered_image_prefix}_color.png"
             ] = rendered_image_params
@@ -286,13 +308,18 @@ if __name__ == "__main__":
                 # observing the main thread.
                 process_start = time.clock_gettime(time.CLOCK_PROCESS_CPUTIME_ID)
 
-                camera = pyrender.camera.IntrinsicsCamera(
-                    k[0, 0], k[1, 1], k[0, 2], k[1, 2]
-                )
+                if usek2:
+                    camera = pyrender.camera.IntrinsicsCamera(
+                        k2[0, 0], k2[1, 1], k2[0, 2], k2[1, 2]
+                    )
+                else:
+                    camera = pyrender.camera.IntrinsicsCamera(
+                        k[0, 0], k[1, 1], k[0, 2], k[1, 2]
+                    )
                 try:
                     cam_node = scene.add(camera, pose=camera_pose)
                     # Offscreen rendering
-                    rgb_rendering, depth_rendering = r.render(scene, flags=flags)
+                    rgb_rendering, depth_rendering = r2.render(scene, flags=flags)
                 except np.linalg.LinAlgError:
                     print("Eigenvalues did not converge.", flush=True)
                     continue
@@ -360,5 +387,14 @@ if __name__ == "__main__":
             f"CPU process time (uses one core): {np.mean(process_times) * 1000:.2f} ms +- {np.std(process_times):.2f} ms) ms", flush=True
         )
 
-    with open(args.src_output / "matrices_for_rendering.json", "w") as ff:
-        json.dump(matrices_dict, ff, indent=4)
+    # with open(args.src_output / "matrices_for_rendering.json", "w") as ff:
+    #     json.dump(matrices_dict, ff, indent=4)
+
+    with open(args.src_output / "per_scan_matrices_for_rendering.json", "w") as ff:
+        json.dump(per_scan_matrices, ff, indent=4)
+    
+    for key in per_scan_matrices.keys():
+        with open(args.src_output / f"matrices_for_rendering-{str(Path(key).name)}.json", "w") as ff:
+            json.dump(per_scan_matrices[key], ff, indent=4)
+        with open(args.src_output / f"matrices_for_rendering-{str(Path(key).name)}.txt", "w") as ff:
+            print(key, file=ff)

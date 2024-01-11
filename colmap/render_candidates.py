@@ -239,7 +239,7 @@ if __name__ == "__main__":
     matrices_dict = {"train": {}, "val": {}}
 
     for index in range(test_size):
-        print("Processing image {}/{}".format(index + 1, test_size))
+        print("Processing image {}/{}".format(index + 1, test_size), flush=True)
         i = indices[index]
 
         # Camera intrisics and intrisics
@@ -330,7 +330,7 @@ if __name__ == "__main__":
                 try:
                     cam_node = scene.add(camera, pose=camera_pose)
                 except np.linalg.LinAlgError:
-                    print("Eigenvalues did not converge.")
+                    print("Eigenvalues did not converge.", flush=True)
                     continue
 
                 # Offscreen rendering
@@ -371,7 +371,7 @@ if __name__ == "__main__":
 
     if not args.just_jsons:
         times = np.array(times)
-        print(f"Rendering time per image was ({np.mean(times)} +- {np.std(times)}) s.")
+        print(f"Rendering time per image was ({np.mean(times)} +- {np.std(times)}) s.", flush=True)
 
     with open(Path(args.src_output) / "matrices_for_rendering.json", "w") as ff:
         json.dump(matrices_dict, ff, indent=4)

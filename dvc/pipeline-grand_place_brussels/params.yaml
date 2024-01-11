@@ -147,14 +147,13 @@ inloc_cutouts_thesis_spheres_squarify:
 # After InLoc runs, for pose verification renders must be generated. For splatting and spheres, --just_jsons is needed,
 # for pyrender this option is not used. Then, cpp renderers must be called below.
 
-# python ~/neural_rendering/colmap/render_test.py --src_colmap=/home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/sparse \
+# python ~/neural_rendering/colmap/render_candidates.py --src_colmap=/home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/sparse \
 # --ply_path=/home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/fused.ply \
 # --src_output=/home/kremeto1/inloc/datasets/pipeline-grand-conv5-pyrender/candidate_renders \
 # --point_size="2.0" \
 # --min_size="1168" \
 # --voxel_size="None" \
 # --bg_color="0,0,0" \
-# --test_size="50" \
 # --squarify="True" \
 # --input_poses="/home/kremeto1/inloc/datasets/pipeline-grand-conv5-pyrender/densePE_top100_shortlist.mat"
 
@@ -171,6 +170,23 @@ cpp_render_thesis_spheres_candidates:
   ply_path: "/home/kremeto1/neural_rendering/datasets/processed/imc/grand_place_brussels/dense/dense/fused.ply"
   max_radius: "0.01"
   renderer_executable: "/home/kremeto1/containers/renderer-app.executable"
+
+infer_nriw_25:
+  input_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_thesis_test_squarify-100_src-fused/val"
+  output_dir: "/home/kremeto1/neural_rendering/datasets/post_processed/imc/grand_place_brussels_thesis_test_squarify-100_src-fused-nriw/val"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/grand_place_brussels/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2021-01-05-23-23-46-finetune_appearance"
+  train_resolution: "1248"
+
+
+infer_nriw_on_subfolders_thesis_spheres:
+  input_dir: "/home/kremeto1/inloc/datasets/pipeline-grand-conv5-spheres/candidate_renders_neural"
+  output_dir: "/home/kremeto1/inloc/datasets/pipeline-grand-conv5-spheres/candidate_renders_neural-out"
+  trained_model_dir: "/home/kremeto1/neural_rendering/models/grand_place_brussels/grand_place_brussels_minsz-512_valr-0.2_pts-2.0_down-25_src-fused-2021-01-05-23-23-46-finetune_appearance"
+  train_resolution: "1248"
+  use_buffer_appearance: "True"
+  use_semantic: "True"
+  appearance_nc: "10"
+  deep_buffer_nc: "7"
 
 
 dataset_utils_1:

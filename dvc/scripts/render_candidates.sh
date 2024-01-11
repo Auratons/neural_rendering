@@ -6,9 +6,7 @@
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-gpu=2
-#SBATCH --exclude='dgx-[3,5],amd-[01-02],node-[12]'
-
-set -e
+#SBATCH --exclude='amd-[01-02],node-[12,14,15,16,17]'
 
 . /opt/ohpc/admin/lmod/lmod/init/bash
 ml purge
@@ -36,8 +34,40 @@ echo "Running:"
 echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/inloc/render_candidates.py"
 echo "    --src_output=$(cat params.yaml | yq -r '.render_candidates_'$sub'.src_output')"
 echo "    --input_poses=$(cat params.yaml | yq -r '.render_candidates_'$sub'.input_poses')"
+echo "    --just_jsons"
 echo
 
 ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' python $WORKSPACE/inloc/render_candidates.py \
     --src_output=$(cat params.yaml | yq -r '.render_candidates_'$sub'.src_output') \
-    --input_poses=$(cat params.yaml | yq -r '.render_candidates_'$sub'.input_poses')
+    --input_poses=$(cat params.yaml | yq -r '.render_candidates_'$sub'.input_poses') \
+    --just_jsons
+
+EXECUTABLE=$(cat params.yaml | ~/.homebrew/bin/yq -r '.render_candidates_'$sub'.renderer_executable')
+MAX_RADIUS=$(cat params.yaml | ~/.homebrew/bin/yq -r '.render_candidates_'$sub'.max_radius')
+OUTPUT_ROOT=$(cat params.yaml | ~/.homebrew/bin/yq -r '.render_candidates_'$sub'.output_root // ""')
+ROOT_TO_PROCESS=$(cat params.yaml | yq -r '.render_candidates_'$sub'.src_output')
+cd ${ROOT_TO_PROCESS}
+
+for i in `ls *.txt | tac`
+do
+    PLY_PATH=$(cat $i)
+    if [[ -z "${OUTPUT_ROOT}" ]]; then OUTPUT_ROOT="${ROOT_TO_PROCESS}"; fi
+
+    echo
+    echo "~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity"
+    echo "    exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif ${EXECUTABLE}"
+    echo "    --file=${PLY_PATH}"
+    echo "    --matrices=${ROOT_TO_PROCESS}/$(echo $i | sed 's/txt/json/')"
+    echo "    --output_path=${OUTPUT_ROOT}"
+    echo "    --headless"
+    echo "    --max_radius=${MAX_RADIUS}"
+    echo
+
+    ~/.homebrew/bin/time -f 'real\t%e s\nuser\t%U s\nsys\t%S s\nmemmax\t%M kB' singularity \
+        exec --nv --bind /nfs:/nfs ~/containers/splatter-app.sif "${EXECUTABLE}" \
+        --file="${PLY_PATH}" \
+        --matrices=${ROOT_TO_PROCESS}/$(echo $i | sed 's/txt/json/') \
+        --output_path="${OUTPUT_ROOT}" \
+        --headless \
+        --max_radius="${MAX_RADIUS}"
+done
